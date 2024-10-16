@@ -1,0 +1,138 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono:500|Titillium+Web:200,300&subset=latin-ext");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+:root {
+  --prim: #90a4ae;
+  --sec: #ef6c00;
+  --bg: #1b1b1b;
+  --bgl: #212121;
+  --img: url("https://image.ibb.co/g5sxUk/pobrane.png") center;
+  --none: transparent;
+  --sh1: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  --sh2: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+  --sh3: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --sh4: 0 8px 17px 2px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+  --sh5: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -7px rgba(0, 0, 0, 0.2);
+  --sh6: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: Titillium Web, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 18px;
+  height: 100vh;
+  width: 100vw;
+  background: var(--img);
+  color: var(--prim);
+}
+
+.window {
+  position: relative;
+  top: 10%;
+  left: 10%;
+  min-width: 300px;
+  min-height: 320px;
+  width: 80%;
+  height: 80%;
+  box-shadow: var(--sh3), var(--sh6);
+  overflow: hidden;
+}
+
+.form {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.register {
+  background: linear-gradient(40deg, #1b1b1b 0%, #212121 50%, #424242 100%);
+}
+
+.login {
+  background: linear-gradient(40deg, #546e7a 0%, #90a4ae 50%, #b0bec5 100%);
+  color: black;
+  transform: translateY(0);
+  transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+form {
+  height: 100%;
+  width: 80%;
+  max-width: 400px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  width: 100%;
+  border-bottom: 1px solid var(--prim);
+  font-size: 1rem;
+  line-height: 2rem;
+}
+
+label {
+  font-size: 0.7rem;
+  align-self: flex-start;
+  display: block;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+button[type] {
+  font-family: "Roboto Mono", monospace;
+  background: var(--bg);
+  color: inherit;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 36px;
+  box-shadow: var(--sh1);
+  border-radius: 2px;
+  
+}
+button[type]:hover {
+  box-shadow: var(--sh3);
+}
+
+.form p {
+  font-size: .7rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  background: transparent;
+  border-radius: 2px;
+  padding: 5px 14px ;
+  cursor: pointer;
+}
+
+.register p {
+  border: 1px solid var(--prim);
+  color: var(--prim);
+}
+
+.login p {
+  border: 1px solid var(--bg);
+  color: var(--bg);
+}
+
+.login button {
+  color: var(--prim);
+}
+
+.login input {
+  border-bottom: 1px solid var(--bg);
+}

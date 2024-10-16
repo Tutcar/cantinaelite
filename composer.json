@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"}
+    },
+    "require": {
+        "pagseguro/pagseguro-php-sdk": "^4.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

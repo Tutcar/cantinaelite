@@ -1,0 +1,657 @@
+/* styles.css */
+
+/* Botão personalizado para abrir o modal */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Estilizando o modal */
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Estilizando os itens do carrinho */
+.list-group-item {
+    font-size: 1rem;
+}
+
+.modal-body {
+    font-size: 1rem;
+}
+
+strong {
+    font-weight: bold;
+}
+/* Estilos para o modal */
+.modalcar {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalcar-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modalcar-content h2 {
+    color: #218838;;
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modalcar-content label p {
+    color: blue;
+    font-size: 2.1rem;
+    font-weight: bold;
+    
+}
+
+#cart {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espaçamento entre os itens */
+}
+
+#cart li {
+    color: #004085;
+    font-size: 2.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#cart li:last-child {
+    border-bottom: none;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Estilo para o nome e preço */
+.item-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+
+/* Estilo para o botão de remover */
+#cart li button {
+    font-size: 2.1rem;
+    color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+#cart li button i {
+    margin-right: 5px; /* Espaço entre o ícone e o texto */
+}
+
+#cart li button:hover {
+    background-color: #ff1a1a;
+    color: white;
+}
+
+#totalcart {
+    font-weight: bold;
+    font-size: 2.5rem;
+    color: darkred;
+    text-align: right;
+    display: block;
+    margin-top: 15px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: black;
+}
+.botao-pagamento {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 2.1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.botao-pagamento:hover {
+    background-color: #218838;
+}
+.cart-count {
+    position: absolute;
+    top: -5px; /* Posiciona o badge acima do ícone */
+    right: -10px; /* Posiciona o badge à direita do ícone */
+    background-color: red; /* Cor de fundo do badge */
+    color: white; /* Cor do texto no badge */
+    border-radius: 50%; /* Faz o badge circular */
+    padding: 2px 6px; /* Espaçamento interno do badge */
+    font-size: 12px; /* Tamanho do texto no badge */
+    display: none; /* Inicialmente escondido */
+    box-shadow: 0 0 2px rgba(0,0,0,0.5); /* Sombra para destacar o badge */
+}
+.carIt{
+color: #007bff;
+}
+#myModal {
+    display: none; /* Mantém o modal oculto ao carregar a página */
+}
+.ptrg{
+    color: darkgreen;
+    font-weight: bold;
+    font-size: 2rem;
+}
+.ptrg2{
+    color: #007bff;
+    font-weight: bold;
+    font-size: 2rem;
+}
+.ptpq{
+    color:  darkgreen;
+    font-weight: bold;
+    font-size: 2rem;
+}
+.ptpq2{
+    color:#007bff;
+    font-weight: bold;
+    font-size: 2rem;
+}
+.div-sp{
+    margin-top: 20px;
+    text-align: center;
+}
+.tabela-container {
+    overflow-x: auto; /* Adiciona barra de rolagem horizontal se necessário */
+}
+
+.tabela {
+    width: 100%; /* Garante que a tabela use o espaço disponível */
+    border-collapse: collapse; /* Remove espaçamento entre bordas */
+}
+
+.tabela th, .tabela td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+/* Estilo do botão de abrir o modal */
+#openModalBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* O modal (escondido por padrão) */
+.modalcarda {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+/* Conteúdo do modal */
+.modalcarda-content {
+    background-color:  darkslategray;
+    padding: 10px;
+    border: 1px solid #888;
+    width: 100%;
+    max-width: 500rem;
+    border-radius: 8px;
+}
+.itens-moralcada{
+    width: 90%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.modalcarda-content h2 {
+    text-align: center;
+}
+
+.h2carda{
+    color: #ddd;
+    font-size: 2.5rem;   
+    text-align: center;
+    font-weight: bold;
+}
+.h2span{
+    margin-top: -8rem;
+}
+.divt{
+    height: 3rem;
+}
+
+/* Botão de fechar */
+.closecarda {
+    color: #aaa;
+    float: right;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.closecarda:hover,
+.closecarda:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo da lista dentro do modal */
+.modalcarda-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.modalcarda-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modalcarda-list img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 4px;
+}
+
+.modalcarda-list p {
+    margin: 0;
+}
+
+/*us*/
+/* Estilos para o link (opcional) */
+.btnus {
+    color: white;
+    background-color: blue;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  /* Estilos do modal */
+  .modalus {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Conteúdo do modal */
+  .modalus-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+  }
+  .modalus-content h2{
+    color: #218838;
+    margin-top: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+.modalus-content h3{
+    color: #213e88;
+    margin-top: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+.modalus-content label{
+    color: #213e88;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+  
+  /* Botão de fechar */
+  .closeus {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeus:hover,
+  .closeus:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Estilos do formulário */
+  .mb-3 {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  button[type="submit"] {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 2.1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #218838;
+  }
+  
+  .text-danger {
+    color: red;
+    font-size: 14px;
+  }
+  .div-msg{
+  width: 40rem;
+  position: absolute;
+  top: 13%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/*cr*/
+/* Estilos para o link (opcional) */
+.btncr {
+    color: white;
+    background-color: blue;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  /* Estilos do modal */
+  .modalcr {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Conteúdo do modal */
+  .modalcr-content {
+    background-color:#fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+  }
+  .modalcr-content h2{
+    color: #218838;
+    margin-top: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+.modalcr-content h3{
+    color: #213e88;
+    margin-top: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+.modalcr-content label{
+    color: #213e88;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.modalcr-content label span{
+    color: grey;
+}
+  
+  /* Botão de fechar */
+  .closecr {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closecr:hover,
+  .closecr:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Estilos do formulário */
+  .mb-3 {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .form-label p{
+    color:#218838;
+}
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 2rem;
+    color: red;
+  }
+    
+  button[type="submit"] {
+    display: block;
+    width: 50%;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 2.1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin: 20px auto 0; /* margin-top modificado para centralizar */
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #218838;
+  }
+  
+  .text-danger {
+    color: red;
+    font-size: 14px;
+  }
+  .div-msg{
+  width: 40rem;
+  position: absolute;
+  top: 13%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/*modal pix*/
+/* Estilos básicos para o modal */
+.modalpix {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.4); 
+}
+
+.modalpix-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modalpix img {
+    max-width: 60%;
+    height: auto;
+}
+
+.copy-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.copy-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.copy-btn:hover {
+    background-color: #45a049;
+}
+
+.copy-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+.modalpix img {
+    display: block;
+    margin: 0 auto; /* Centraliza a imagem horizontalmente */
+    max-width: 70%;
+    height: auto;
+}
