@@ -82,7 +82,7 @@ class ClienteController extends Controller
         $cliente->sg_estado = $_POST["sg_estado"];
         $get_limite = $_POST["limite"];
         $cliente->limite = str_replace($source, $replace, $get_limite);
-        $cliente->e_mail = $_POST["e_mail"];
+        $cliente->e_mail = strtolower($_POST["e_mail"]);
 
         Flash::setForm($cliente);
 

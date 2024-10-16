@@ -619,6 +619,31 @@ $('#cadParcelas').submit(function () {
 	});
 });
 
+function verificarHorario() {
+	// Pega a hora atual
+	const agora = new Date();
+	const horas = agora.getHours();
+	const minutos = agora.getMinutes();
 
+	// Definir o horário limite 10:30 AM
+	const horaLimite = 10;
+	const minutoLimite = 30;
 
+	// Pega o botão com ID 'marmitex'
+	const botaoPedirMarmitex = document.getElementById('marmitex');
+	
+	// Verifica se o horário atual passou de 10:30 AM
+	if (horas > horaLimite || (horas === horaLimite && minutos >= minutoLimite)) {
+		// Desativa o botão 'marmitex'
+		botaoPedirMarmitex.disabled = true;
 
+		// Muda o texto do botão
+		botaoPedirMarmitex.textContent = 'Compra até 10:30';
+
+		// Exibe uma mensagem se quiser
+		alert('As compras de marmitex só podem ser feitas até 10:30 AM.');
+	}
+}
+
+// Chama a função assim que a página carrega
+window.onload = verificarHorario;

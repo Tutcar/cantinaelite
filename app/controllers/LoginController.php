@@ -31,8 +31,7 @@ class LoginController extends Controller
             if ($_SESSION[SESSION_LOGIN]->id_user === 1) {
                 $this->redirect(URL_BASE . "painel");
             } elseif ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
-                echo "Pagina em construção.";
-                // $this->redirect(URL_BASE . "homepage");
+                $this->redirect(URL_BASE . "homepage");
             } elseif ($_SESSION[SESSION_LOGIN]->tipo === "funcionario") {
                 $this->redirect(URL_BASE . "home");
             }
@@ -130,37 +129,36 @@ class LoginController extends Controller
         }
     }
     function enviarEmailRecuperacao($email, $token)
-{
-    // Configurações do PHPMailer
-    $mail = new PHPMailer(true);
+    {
+        // Configurações do PHPMailer
+        $mail = new PHPMailer(true);
 
-    try {
-        // Configurações do servidor de e-mail (SMTP)
-        $mail->isSMTP();
-        $mail->Host       = 'mail.cantinaelite.store'; // Servidor SMTP correto
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'contato@cantinaelite.store'; // Seu e-mail SMTP
-        $mail->Password   = '&0284TFVzV5S';             // Senha da conta de e-mail
-        $mail->SMTPSecure = 'ssl';                      // Usar SSL
-        $mail->Port       = 465;                        // Porta SSL
+        try {
+            // Configurações do servidor de e-mail (SMTP)
+            $mail->isSMTP();
+            $mail->Host       = 'mail.cantinaelite.store'; // Servidor SMTP correto
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'contato@cantinaelite.store'; // Seu e-mail SMTP
+            $mail->Password   = '&0284TFVzV5S';             // Senha da conta de e-mail
+            $mail->SMTPSecure = 'ssl';                      // Usar SSL
+            $mail->Port       = 465;                        // Porta SSL
 
-        // Remetente e destinatário
-        $mail->setFrom('noreply@cantinaelite.com', 'Cantina Elite');
-        $mail->addAddress($email);
+            // Remetente e destinatário
+            $mail->setFrom('noreply@cantinaelite.com', 'Cantina Elite');
+            $mail->addAddress($email);
 
-        // Conteúdo do e-mail
-        $mail->isHTML(true);  // Definir e-mail como HTML
-        $mail->Subject = 'Recuperação de Senha';
-        $link = "https://cantinaelite.store/cantinaelite/login/reset_senha/token/$token";
-        $mail->Body    = "Clique no link a seguir para redefinir sua senha: <a href='$link'>$link</a>";
+            // Conteúdo do e-mail
+            $mail->isHTML(true);  // Definir e-mail como HTML
+            $mail->Subject = 'Recuperação de Senha';
+            $link = "https://cantinaelite.store/cantinaelite/login/reset_senha/token/$token";
+            $mail->Body    = "Clique no link a seguir para redefinir sua senha: <a href='$link'>$link</a>";
 
-        // Enviar e-mail
-        return $mail->send();
-    } catch (Exception $e) {
-        // Registra o erro de envio do e-mail para fins de debugging
-        error_log("Erro ao enviar e-mail: {$mail->ErrorInfo}");
-        return false;
+            // Enviar e-mail
+            return $mail->send();
+        } catch (Exception $e) {
+            // Registra o erro de envio do e-mail para fins de debugging
+            error_log("Erro ao enviar e-mail: {$mail->ErrorInfo}");
+            return false;
+        }
     }
-}
-
 }

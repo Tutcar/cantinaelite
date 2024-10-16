@@ -83,14 +83,15 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
     <div class="modalpix-content">
         <span class="close">&times;</span>
         <h2>QR Code</h2>
-        <p>Digitalize o código QR abaixo ou copie o link:</p>< /br>
-        <img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
+        <p>Digitalize o código QR abaixo ou copie o link:</p>
+        < /br>
+            <img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
 
-        <!-- Seção de copiar o texto -->
-        <div class="copy-container">
-            <input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
-            <button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
-        </div>
+            <!-- Seção de copiar o texto -->
+            <div class="copy-container">
+                <input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                <button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
+            </div>
     </div>
 </div>
 <!-- fim modal pix -->
@@ -194,7 +195,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                                 </label>
                             </div>
                             <div class="col-3 div-sp">
-                                <button onclick="adicionarAoCarrinho(<?php echo $prato->id_produtos; ?>, 'cardapio', 'Prato -&nbsp;<?php echo $prato->descricao ?>', getSelectedPrice(<?php echo $prato->id_produtos; ?>), event); return false;" class="botao-personalizado">Pedir</button>
+                                <button id="marmitex" onclick="adicionarAoCarrinho(<?php echo $prato->id_produtos; ?>, 'cardapio', 'Prato -&nbsp;<?php echo $prato->descricao ?>', getSelectedPrice(<?php echo $prato->id_produtos; ?>), event); return false;" class="botao-personalizado">Pedir Marmitex</button>
                             </div>
                         </div>
                     </div>
