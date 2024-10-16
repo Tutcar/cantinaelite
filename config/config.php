@@ -1,5 +1,5 @@
 <?php
-// define("SERVIDOR", "localhost");
+// define("SERVIDOR", "localhost");;
 // define("BANCO", "tutca072_elite");
 // define("USUARIO", "tutca072_elite");
 // define("SENHA", "a_1t#lCD^esE");
