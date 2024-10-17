@@ -49,6 +49,7 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
         echo "Reference ID não encontrado no payload.";
     }
     try {
+        $crdPed = "";
         // Conexão com o banco de dados
         $pdo = new PDO('mysql:host=localhost;dbname=cantinamace', 'root', '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -60,30 +61,65 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
 
         // Executa a consulta passando o valor do payload
         $stmt->execute([':logPay' => $payload]);
-
+        $string = $referenceId;
+        $ultimos_tres_digitos = substr($string, -3);
+        $crdPed = $ultimos_tres_digitos; // Saída: CRD
         // Definir os valores a serem usados
-        $confirma = "S";
-        $nr_doc_pg = $referenceId; // Valor com letras e números, pois é VARCHAR
+        if ($crdPed == "CRD") {
 
-        // Verificar se o registro existe antes de atualizar
-        $stmt = $pdo->prepare("SELECT * FROM corrente WHERE nr_doc_pg = :nr_doc_pg");
-        $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR garante que seja tratado como string
-        $stmt->execute();
+            $confirma = "S";
+            $nr_doc_pg = $referenceId; // Valor com letras e números, pois é VARCHAR
 
-        if ($stmt->rowCount() > 0) {
-            // O registro existe, então faz o UPDATE
-            $stmt = $pdo->prepare("UPDATE corrente SET confirma = :confirma WHERE nr_doc_pg = :nr_doc_pg");
-            $stmt->bindParam(':confirma', $confirma);
-            $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
+            // Verificar se o registro existe antes de atualizar
+            $stmt = $pdo->prepare("SELECT * FROM corrente WHERE nr_doc_pg = :nr_doc_pg");
+            $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR garante que seja tratado como string
             $stmt->execute();
 
-            // Mensagem de sucesso
-            echo "Dados atualizados com sucesso!";
-            error_log("Dados atualizados com sucesso!"); // Exibe no console
+            if ($stmt->rowCount() > 0) {
+                // O registro existe, então faz o UPDATE
+                $stmt = $pdo->prepare("UPDATE corrente SET confirma = :confirma WHERE nr_doc_pg = :nr_doc_pg");
+                $stmt->bindParam(':confirma', $confirma);
+                $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
+                $stmt->execute();
+
+                // Mensagem de sucesso
+                echo "Dados atualizados com sucesso!";
+                error_log("Dados atualizados com sucesso!"); // Exibe no console
+            } else {
+                // Registro não encontrado
+                echo "Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg;
+                error_log("Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg); // Exibe no console
+            }
         } else {
-            // Registro não encontrado
-            echo "Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg;
-            error_log("Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg); // Exibe no console
+            $confirma = "S";
+            $nr_doc_pg = $referenceId; // Valor com letras e números, pois é VARCHAR
+
+            // Verificar se o registro existe antes de atualizar
+            $stmt = $pdo->prepare("SELECT * FROM corrente WHERE nr_doc_pg = :nr_doc_pg");
+            $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR garante que seja tratado como string
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                // O registro existe, então faz o UPDATE
+                $stmt = $pdo->prepare("UPDATE corrente SET confirma = :confirma WHERE nr_doc_pg = :nr_doc_pg");
+                $stmt->bindParam(':confirma', $confirma);
+                $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
+                $stmt->execute();
+
+                //quita pedido
+                $stmt = $pdo->prepare("UPDATE pedido SET confirma = :confirma WHERE nr_pedido = :nr_pedido");
+                $stmt->bindParam(':confirma', $confirma);
+                $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
+                $stmt->execute();
+
+                // Mensagem de sucesso
+                echo "Dados atualizados com sucesso!";
+                error_log("Dados atualizados com sucesso!"); // Exibe no console
+            } else {
+                // Registro não encontrado
+                echo "Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg;
+                error_log("Nenhum registro encontrado com nr_doc_pg = " . $nr_doc_pg); // Exibe no console
+            }
         }
     } catch (PDOException $e) {
         // Exibe erros no console e na tela

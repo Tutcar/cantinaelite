@@ -39,17 +39,10 @@ class AlunoController extends Controller
 
         $response = ReqPagSeguroPay::simulaPay();
     }
-    public function webhookPix()
-    {
-
-        $response = ReqPagSeguroWebhook::webhookPix();
-    }
     public function salvarAl()
     {
 
-        $tamanho = 6;
-        $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+<>?';
-        $token_credito_al = md5(substr(str_shuffle($caracteres), 0, $tamanho). $dataHora = date('YmdHis'));
+        $token_credito_al = rand(100000, 999999);
         $source = array('.', ',');
         $replace = array('', '.');
         //Dados do credito pag seguro

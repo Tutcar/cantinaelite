@@ -641,7 +641,7 @@ function verificarHorario() {
 		botaoPedirMarmitex.textContent = 'Compra até 10:30';
 
 		// Exibe uma mensagem se quiser
-		alert('As compras de marmitex só podem ser feitas até 10:30 AM.');
+		//alert('As compras de marmitex só podem ser feitas até 10:30 AM.');
 	}
 }
 
