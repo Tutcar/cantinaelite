@@ -146,10 +146,11 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
     <div class="modalcr-content">
         <span class="closecr">&times;</span>
         <h2>Cadastro de Créditos</h2><br />
+        <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Crédito&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
         <?php if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") : ?>
             <form id="formulario" action="<?php echo URL_BASE . "Aluno/salvarAl" ?>" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="senha" class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login ?></span></label>
+                    <label for="senha" class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login . $limite ?></span></label>
                     <label class="form-label">
                         <p> Saldo: R$&nbsp;
                             <?php echo moedaBR($saldoAluno) ?></p>

@@ -40,7 +40,8 @@ class HomepageController extends Controller
    {
 
       if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
-         $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj);
+         $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
+         $dados["limiteAluno"] = $_SESSION['CLIENTE']->limite;
          if ($dados["saldoAluno"] == "") {
             $dados["saldoAluno"] = 0;
          };
