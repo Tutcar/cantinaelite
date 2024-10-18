@@ -2,18 +2,12 @@
 
 namespace app\controllers;
 
-use App\Controllers\PagSeguro as ControllersPagSeguro;
 use app\core\Controller;
 use app\core\Conexao;
 use app\core\Flash;
-use app\models\pagseguro\ReqPagSeguro;
-use app\models\pagseguro\ReqPagSeguroCheckout;
 use app\models\pagseguro\ReqPagSeguroPix;
 use app\models\pagseguro\ReqPagSeguroPay;
-use app\models\pagseguro\ReqPagSeguroPix2;
-use app\public\ReqPagSeguroWebhook;
 use app\models\service\CorrenteService;
-use app\models\service\Service;
 use app\util\UtilService;
 use PDOException;
 

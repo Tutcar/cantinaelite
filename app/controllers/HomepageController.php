@@ -7,7 +7,6 @@ use PDOException;
 use app\core\Flash;
 use app\core\Conexao;
 use app\models\pagseguro\ReqPagSeguroPix;
-use app\models\pagseguro\ReqPagSeguroWebhook;
 use app\models\service\PedidosService;
 use app\models\service\Service;
 use app\util\UtilService;
@@ -106,7 +105,7 @@ class HomepageController extends Controller
          $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
          if ($saldoAluno < $total_p) {
             unset($_SESSION['carrinho']);
-            Flash::setMsg("Sem saldo para comprar." . $total_p, -1);
+            Flash::setMsg("Sem saldo para comprar de:." . moedaBr($total_p), -1);
             $this->redirect(URL_BASE . "homepage", $carrinho);
          }
       }
@@ -201,7 +200,7 @@ class HomepageController extends Controller
          $cod_despesa = $_SESSION['CLIENTE']->nr_cpf_cnpj;
          $data_cad = date('Y-m-d');
          $descricao = $_SESSION['CLIENTE']->nm_nome;
-         $nr_doc_pg = "Pedido -" . $nrPedido;
+         $nr_doc_pg =  $nrPedido;
          $valor_credito = 0;
          $get_valor = moedaBr($total_p ?? 0);
          $valor_debito = str_replace($source, $replace, $get_valor);
@@ -219,11 +218,9 @@ class HomepageController extends Controller
             $valorpag = new \stdClass();
             $valorpag->id_cliente = $_SESSION['CLIENTE']->id_cliente;
             $id = $valorpag->id_cliente;
-            $valorpag->produto = "Debito";
+            $valorpag->produto = "Credito";
             $valorpag->quantidade = 1;
-            $get_valor_credito = preg_replace('/[^\d,]/', '', $total_p);
-            $valorpag->valor_credito = str_replace($source, $replace, $get_valor_credito);
-            $valorpag->valorLimpo = preg_replace('/[,.]/', '', $valorpag->valor_credito);
+            $valorpag->valor_credito = $total_p;
             $alunopag = dadosAluno();
             $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $nr_doc_pg);
 

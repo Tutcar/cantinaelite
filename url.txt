@@ -1,1 +1,0 @@
-https://sandbox.pagseguro.uol.com.br/v3/transactions/notifications/6C66A2-9B561956196F-6AA4775FAD93-333AD6?email=contato@pantanaltubos.com&token=9027BDDEB627409AA2EB73E6E8C891ED

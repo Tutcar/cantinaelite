@@ -107,8 +107,8 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
                 $stmt->execute();
 
                 //quita pedido
-                $stmt = $pdo->prepare("UPDATE pedido SET confirma = :confirma WHERE nr_pedido = :nr_pedido");
-                $stmt->bindParam(':confirma', $confirma);
+                $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago WHERE nr_pedido = :nr_pedido");
+                $stmt->bindParam(':pago', $confirma);
                 $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
                 $stmt->execute();
 
