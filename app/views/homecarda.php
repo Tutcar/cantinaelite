@@ -63,8 +63,23 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                 }
             }
         }
+        // Função verificarHorario
+        verificarHorario();
     };
+    // Função verificarHorario para verificar o horário
+    function verificarHorario() {
+        const agora = new Date();
+        const horas = agora.getHours();
+        const minutos = agora.getMinutes();
+        const horaLimite = 10;
+        const minutoLimite = 30;
+        const botaoPedirMarmitex = document.getElementById('marmitex');
 
+        if (horas > horaLimite || (horas === horaLimite && minutos >= minutoLimite)) {
+            botaoPedirMarmitex.disabled = true;
+            botaoPedirMarmitex.textContent = 'Compra até 10:30';
+        }
+    }
     // Função para copiar o valor do input para a área de transferência
     function copyToClipboard() {
         var copyText = document.getElementById("qrcodeLink");
@@ -84,14 +99,12 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <span class="close">&times;</span>
         <h2>QR Code</h2>
         <p>Digitalize o código QR abaixo ou copie o link:</p>
-        < /br>
-            <img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
-
-            <!-- Seção de copiar o texto -->
-            <div class="copy-container">
-                <input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                <button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
-            </div>
+        <img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
+        <!-- Seção de copiar o texto -->
+        <div class="copy-container">
+            <input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+            <button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
+        </div>
     </div>
 </div>
 <!-- fim modal pix -->

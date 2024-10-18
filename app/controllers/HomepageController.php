@@ -6,6 +6,7 @@ use app\core\Controller;
 use PDOException;
 use app\core\Flash;
 use app\core\Conexao;
+use app\models\pagseguro\ReqPagSeguroPix;
 use app\models\pagseguro\ReqPagSeguroWebhook;
 use app\models\service\PedidosService;
 use app\models\service\Service;
@@ -40,7 +41,8 @@ class HomepageController extends Controller
    {
 
       if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
-         $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj);
+         $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
+         $dados["limiteAluno"] = $_SESSION['CLIENTE']->limite;
          if ($dados["saldoAluno"] == "") {
             $dados["saldoAluno"] = 0;
          };
@@ -90,9 +92,6 @@ class HomepageController extends Controller
 
    public function cadastrar_carrinho()
    {
-      // $cliente = Flash::cliente($this->db);
-      // Flash::novoCliAsass($cliente);
-      // die;
       $total_p = 0;
       $get_valor = 0;
       if (isset($_SESSION['carrinho'])) {
@@ -104,10 +103,10 @@ class HomepageController extends Controller
 
             $total_p += (float) $get_valor; // Soma o valor ao total
          }
-         $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj);
+         $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
          if ($saldoAluno < $total_p) {
             unset($_SESSION['carrinho']);
-            Flash::setMsg("Sem saldo." . $total_p, -1);
+            Flash::setMsg("Sem saldo para comprar." . $total_p, -1);
             $this->redirect(URL_BASE . "homepage", $carrinho);
          }
       }
@@ -210,11 +209,55 @@ class HomepageController extends Controller
          $confirma = "N";
          $obs = $texto;
          $tipo = null;
-         $cadDebPedido = Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
-         // Limpa a sessão após salvar no banco de dados
-         unset($_SESSION['carrinho']);
-         // Redireciona para a página inicial
-         $this->redirect(URL_BASE . "homepage", $carrinho);
+         try {
+            $cadDebPedido = Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
+            // Limpa a sessão após salvar no banco de dados
+            unset($_SESSION['carrinho']);
+            $source = array('.', ',');
+            $replace = array('', '.');
+            // Redireciona para a página inicial
+            $valorpag = new \stdClass();
+            $valorpag->id_cliente = $_SESSION['CLIENTE']->id_cliente;
+            $id = $valorpag->id_cliente;
+            $valorpag->produto = "Debito";
+            $valorpag->quantidade = 1;
+            $get_valor_credito = preg_replace('/[^\d,]/', '', $total_p);
+            $valorpag->valor_credito = str_replace($source, $replace, $get_valor_credito);
+            $valorpag->valorLimpo = preg_replace('/[,.]/', '', $valorpag->valor_credito);
+            $alunopag = dadosAluno();
+            $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $nr_doc_pg);
+
+            // Verifique se a resposta contém o QR Code
+            $qrcode_png_url = '';
+            $qrcode = '';
+
+            if (isset($response['qr_codes'][0]['links'])) {
+               // Seu array de exemplo
+
+               // Armazena o valor do ID na sessão
+               $_SESSION['id'] = $response['qr_codes'][0]['id'];
+
+
+
+               foreach ($response['qr_codes'][0]['links'] as $link) {
+                  if ($link['rel'] === 'QRCODE.PNG') {
+                     $qrcode_png_url = $link['href'];
+                     break;
+                  }
+               }
+            }
+            // Verifica se a URL foi capturada corretamente
+            if (empty($qrcode_png_url)) {
+               echo "Erro: QR Code não disponível.";
+            } else {
+               // Exibe a página HTML com o modal e o QR Code
+               // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
+               $_SESSION['qrcode_url'] = $qrcode_png_url;
+               $this->redirect(URL_BASE . "homepage", $carrinho);
+            }
+         } catch (PDOException $e) {
+            echo "Erro: " . $e->getMessage();
+         }
       }
    }
 }
