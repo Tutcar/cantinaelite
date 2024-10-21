@@ -246,7 +246,7 @@ color: #007bff;
     cursor: pointer;
 }
 
-/* O modal (escondido por padrão) */
+/* O modalcarda (escondido por padrão) */
 .modalcarda {
     display: none;
     position: fixed;

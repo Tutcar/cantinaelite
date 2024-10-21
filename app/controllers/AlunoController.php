@@ -33,6 +33,7 @@ class AlunoController extends Controller
 
         $response = ReqPagSeguroPay::simulaPay();
     }
+
     public function salvarAl()
     {
 

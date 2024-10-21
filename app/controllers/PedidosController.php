@@ -4,8 +4,8 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\models\service\Service;
-use app\core\Flash;
 use app\core\Conexao;
+use app\core\Flash;
 use app\models\service\PedidosService;
 use app\models\service\CompromissoService;
 use app\util\UtilService;
@@ -30,7 +30,7 @@ class PedidosController extends Controller
     }
     public function index()
     {
-        i('ok');
+
         $dados["lista"] = Service::lista($this->tabela);
         $dados["view"]  = "pedidos/index";
         $dados["tipo"] = Service::lista("tipo");
@@ -86,11 +86,21 @@ class PedidosController extends Controller
             }
         }
     }
-
-    public function excluir($id)
+    public function verPedido($id_pedido)
     {
-        Service::excluir($this->tabela, $this->campo, $id);
-        $this->redirect(URL_BASE . "home");
+        // Verifica se o ID do pedido é um número válido
+        if (!is_numeric($id_pedido)) {
+            echo json_encode(['erro' => 'ID do pedido inválido']);
+            return;
+        }
+
+        $itens = Flash::getItensPorPedido($this->db, $id_pedido);
+
+        if ($itens) {
+            echo json_encode($itens);
+        } else {
+            echo json_encode(['erro' => 'Itens não encontrados']);
+        }
     }
     public function filtro()
     {

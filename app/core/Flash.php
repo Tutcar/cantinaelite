@@ -7,6 +7,18 @@ use PDOException;
 
 class Flash
 {
+
+    // Função para obter os itens de um pedido específico
+    public static function getItensPorPedido($db, $nr_pedido)
+    {
+        $sql = "SELECT * FROM pedido WHERE nr_pedido = :nr_pedido";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':nr_pedido', $nr_pedido, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC); // Retorna os itens do pedido
+    }
+
     // Criar cliente asaas
     public static function novoCliAsass($cliente)
     {

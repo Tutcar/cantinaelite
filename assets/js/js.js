@@ -48,6 +48,55 @@ function pedidoEntregue(obj) {
 		window.location.href = base_url + entidade + "/confEntrega/" + id;
 	}
 }
+function pedidoVer(obj) {
+    var entidade = $(obj).attr('data-entidade');
+    var id = $(obj).attr('data-nr_pedido');
+
+    // Faz a chamada AJAX para buscar os itens do pedido
+    $.ajax({
+        url: base_url + entidade + "/verPedido/" + id,
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+			console.log(response); // Verifique os dados aqui
+		
+			if (response.erro) {
+				alert(response.erro);  // Exibe mensagem de erro se houver
+			} else {
+				var modalContent = '<h3>Itens do Pedido #' + id + '</h3>';
+				modalContent += '<table border="1" width="100%">';
+				modalContent += '<thead><tr><th>Produto</th><th>Quantidade</th><th>Valor (R$)</th></tr></thead>';
+				modalContent += '<tbody>';
+		
+				// Itera sobre o array de itens e exibe os campos específicos
+				response.forEach(function(item) {
+					// Verifica se o item contém os valores necessários
+					if (item.nome && item.quant && item.valor) {
+						modalContent += '<tr>';
+						modalContent += '<td>' + item.nome + '</td>';
+						modalContent += '<td>' + item.quant + '</td>';
+						modalContent += '<td>' + item.valor + '</td>';
+						modalContent += '</tr>';
+					}
+				});
+		
+				modalContent += '</tbody></table>';
+				modalContent += '<button onclick="$(\'#pedidoModal\').hide();">Fechar</button>'; // Adicione o botão aqui
+		
+				// Insere o conteúdo no modal
+				$('#pedidoModal').html(modalContent);
+		
+				// Exibe o modal
+				document.getElementById('pedidoModal').style.display = 'block';
+			}
+		}
+    });
+}
+
+// Função para fechar o modal
+function fecharModal() {
+    $('#pedidoModal').fadeOut();
+}
 function excluiritem(obj) {
 	var entidade = $(obj).attr('data-entidade');
 	var id = $(obj).attr('data-id');
