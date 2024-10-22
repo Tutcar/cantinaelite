@@ -118,7 +118,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 <div id="myModal" class="modalcar">
     <div class="modalcar-content">
         <span class="close" id="closeModal">&times;</span>
-        <h2>Carrinho de Compras</h2>
+        <h2>Carrinho de Compras</h2><br>
         <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Limite&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
         <?php if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") : ?>
             <input type="hidden" name="saldoal" value="<?php echo moedaBR($saldoAluno) ?>">
@@ -126,10 +126,20 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                 <p <?php echo ($saldoAluno == 0) ? "hidden" : "" ?>> Saldo: R$&nbsp;
                     <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?></p>
             </label>
+            <hr style="border: 1px solid black; width: 100%;">
         <?php endif; ?>
         <ul id="cart"></ul>
-        <p><span id="totalcart">0</span></p>
-        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Finalizar Compra</button>
+        <div>
+            <hr style="border: 1px solid black; width: 100%">
+            <h2 style="display: inline; ; color:blue">Total: </h2>
+            <span id="totalcart" style="display: inline;">0</span>
+        </div><br>
+        <h2 style="color:blue">Opção pagamento:</h2>
+        <div <?php echo ($saldoAluno == 0) ? "hidden" : "" ?>>
+            <button id="saldoAluno" <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Usar saldo</button>
+        </div>
+        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Com Pix</button>
+        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Com Cartão</button>
     </div>
 </div>
 
@@ -164,7 +174,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <?php if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") : ?>
             <form id="formulario" action="<?php echo URL_BASE . "Aluno/salvarAl" ?>" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="senha" class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login ?></span></label>
+                    <label class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login ?></span></label>
                     <label class="form-label">
                         <p> Saldo: R$&nbsp;
                             <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?></p>
@@ -200,13 +210,13 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                             <div class="col-3">
                                 <label>
                                     <input type="radio" name="preco_<?php echo $prato->id_produtos; ?>" value="<?php echo $prato->venda_g; ?>" checked>
-                                    <span class="ptrg">Prato grande: &nbsp;&nbsp;&nbsp;<span class="ptrg2">R$ <?php echo moedaBr($prato->venda_g); ?></span></span>
+                                    <span class="ptrg">Marmitex G: &nbsp;<span class="ptrg2">R$ <?php echo moedaBr($prato->venda_g); ?></span></span>
                                 </label>
                             </div>
                             <div class="col-3">
                                 <label>
                                     <input type="radio" name="preco_<?php echo $prato->id_produtos; ?>" value="<?php echo $prato->venda; ?>">
-                                    <span class="ptpq">Prato pequeno: <span class="ptpq2">R$ <?php echo moedaBr($prato->venda); ?></span></span>
+                                    <span class="ptpq">Marmitex P: &nbsp;<span class="ptpq2">R$ <?php echo moedaBr($prato->venda); ?></span></span>
                                 </label>
                             </div>
                             <div class="col-3 div-sp">

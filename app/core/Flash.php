@@ -179,10 +179,11 @@ class Flash
     {
         try {
             // Preparar a query SQL
-            $stmt = $pdo->prepare("SELECT (SUM(valor_credito) - SUM(valor_debito)) AS saldo FROM corrente WHERE cod_despesa = :cod_despesa");
+            $stmt = $pdo->prepare("SELECT (SUM(valor_credito) - SUM(valor_debito)) AS saldo FROM corrente WHERE cod_despesa = :cod_despesa AND confirma = :confirma");
 
             // Executar a consulta passando o parâmetro
             $stmt->execute([
+                'confirma' => "S",
                 'cod_despesa' => $cod_despesa
             ]);
 

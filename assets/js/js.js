@@ -63,26 +63,27 @@ function pedidoVer(obj) {
 			if (response.erro) {
 				alert(response.erro);  // Exibe mensagem de erro se houver
 			} else {
-				var modalContent = '<h3>Itens do Pedido #' + id + '</h3>';
+				var modalContent = '<h3>Itens do Pedido nr:' + id + '</h3>';
 				modalContent += '<table border="1" width="100%">';
-				modalContent += '<thead><tr><th>Produto</th><th>Quantidade</th><th>Valor (R$)</th></tr></thead>';
+				modalContent += '<thead><tr><th>Produto</th><th>Quant.</th><th>Valor</th></tr></thead>';
 				modalContent += '<tbody>';
 		
 				// Itera sobre o array de itens e exibe os campos específicos
-				response.forEach(function(item) {
-					// Verifica se o item contém os valores necessários
+				var rowClass = '';
+				response.forEach(function(item, index) {
+					// Alterna a classe com base no índice (par ou ímpar)
+					rowClass = (index % 2 === 0) ? 'even-row' : 'odd-row';
+
 					if (item.nome && item.quant && item.valor) {
-						modalContent += '<tr>';
+						modalContent += '<tr class="' + rowClass + '">';
 						modalContent += '<td>' + item.nome + '</td>';
-						modalContent += '<td>' + item.quant + '</td>';
-						modalContent += '<td>' + item.valor + '</td>';
+						modalContent += '<td style="text-align: center;">' + item.quant + '</td>';
+						modalContent += '<td style="text-align: right;">' + new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.valor) + '</td>';
 						modalContent += '</tr>';
 					}
 				});
-		
 				modalContent += '</tbody></table>';
-				modalContent += '<button onclick="$(\'#pedidoModal\').hide();">Fechar</button>'; // Adicione o botão aqui
-		
+				modalContent += '<button style="background-color: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 20px;" onclick="$(\'#pedidoModal\').hide();">Fechar</button>';		
 				// Insere o conteúdo no modal
 				$('#pedidoModal').html(modalContent);
 		

@@ -1,29 +1,7 @@
 <script>
     var coluOr = 1;
 </script>
-<style>
-    .modalverPedido {
-        display: none;
-        /* Certifique-se de que o modal começa oculto */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-        /* Fundo semitransparente */
-    }
 
-    .modalverPedido>div {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
-</style>
 <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
 <script src="<?php echo URL_BASE ?>assets/js/componentes/js_data_table2.js"></script>
 <section class="caixa">
@@ -65,7 +43,7 @@
 
                     <?php foreach ($lista as $compromisso) { ?>
                         <tr>
-                            <td align="center"><?php echo dateTime($compromisso->data_cad) ?></td>
+                            <td align="center"><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $compromisso->data_cad)->format('d/m/Y H:i:s'); ?></td>
                             <td align="center"><?php echo substr($compromisso->descricao, 0, 60) ?></td>
                             <td hidden><?php echo $compromisso->id_compromisso ?></td>
                             <?php preg_match('/nr:(\d+)/', $compromisso->descricao, $matches); ?>
@@ -89,6 +67,114 @@
     </div>
 
 </section>
+<style>
+    /*MOdal ver pedido*/
+    .modalverPedido {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        left: 50%;
+        /* Centraliza horizontalmente */
+        top: 50%;
+        /* Centraliza verticalmente */
+        width: 61%;
+        height: 61%;
+        overflow: auto;
+        background-color: white;
+        /* Fundo sólido, sem transparência */
+        transform: translate(-50%, -50%);
+        /* Ajusta a posição para o centro exato */
+    }
+
+    /* Conteúdo do modal */
+    .modalverPedido-content {
+        background-color: darkslategray;
+        padding: 10px;
+        border: 1px solid #888;
+        width: 100%;
+        max-width: 500rem;
+        border-radius: 8px;
+    }
+
+    .itens-moralcada {
+        width: 90%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .modalverPedido-content h2 {
+        text-align: center;
+    }
+
+    .h2carda {
+        color: #ddd;
+        font-size: 2.5rem;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .h2span {
+        margin-top: -8rem;
+    }
+
+    .divt {
+        height: 3rem;
+    }
+
+    /* Botão de fechar */
+    .closecarda {
+        color: #aaa;
+        float: right;
+        font-size: 4rem;
+        font-weight: bold;
+    }
+
+    .closecarda:hover,
+    .closecarda:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Estilo da lista dentro do modal */
+    .modalverPedido-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .modalverPedido-list li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .modalverPedido-list img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+        border-radius: 4px;
+    }
+
+    .modalverPedido-list p {
+        margin: 0;
+    }
+
+    .even-row {
+        background-color: #ffffff;
+
+        /* Cor para as linhas pares */
+    }
+
+    .odd-row {
+        background-color: #f2f2f2;
+        /* Cor para as linhas ímpares */
+    }
+</style>
 <div id="pedidoModal" class="modalverPedido" style="display:none;">
     <div>
 
