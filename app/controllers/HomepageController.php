@@ -88,6 +88,18 @@ class HomepageController extends Controller
          echo json_encode(['status' => 'error', 'message' => 'Dados do carrinho inválidos.']);
       }
    }
+   public function obter_total_carrinho()
+   {
+      // Configura o cabeçalho para JSON
+      header('Content-Type: application/json');
+
+      // Verifica se o carrinho existe e calcula o total
+      if (isset($_SESSION['total_carrinho'])) {
+         echo json_encode(['total' => $_SESSION['total_carrinho']]);
+      } else {
+         echo json_encode(['total' => 0]);
+      }
+   }
 
    public function cadastrar_carrinho()
    {
@@ -105,7 +117,6 @@ class HomepageController extends Controller
          $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
          if ($_GET['saldo'] == 1) {
             if ($saldoAluno < $total_p) {
-               unset($_SESSION['carrinho']);
                Flash::setMsg("Sem saldo para comprar de:." . moedaBr($total_p), -1);
                $this->redirect(URL_BASE . "homepage", $carrinho);
             }
@@ -132,6 +143,16 @@ class HomepageController extends Controller
          $pedidos->nr_pedido = $nrPedido;
          if ($_GET['saldo'] == 1) {
             $pedidos->pago = "S";
+            $pedidos->tipo_pg = "saldo";
+            $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
+         } elseif ($_GET['saldo'] == 2) {
+            $pedidos->pago = "N";
+            $pedidos->tipo_pg = "pix";
+            $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
+         } elseif ($_GET['saldo'] == 3) {
+            $pedidos->pago = "N";
+            $pedidos->tipo_pg = "cartao";
+            $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          } else {
             $pedidos->pago = "N";
          }
@@ -242,6 +263,9 @@ class HomepageController extends Controller
                $valorpag->quantidade = 1;
                $valorpag->valor_credito = $total_p;
                $alunopag = dadosAluno();
+               // if ($_GET['saldo'] == 1) {
+               //    $nr_doc_pg = $nr_doc_pg."CTD";
+               // }
                $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $nr_doc_pg);
 
                // Verifique se a resposta contém o QR Code

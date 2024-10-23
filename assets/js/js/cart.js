@@ -71,6 +71,7 @@ function removerDoCarrinho(index) {
     renderizarCarrinho();
     atualizarContador();
     salvarCarrinhoNaSessao(); // Salva o carrinho na sessão após remover um item
+    buscarTotalCarrinho();  // Chama a função para atualizar o total
 }
 
 // Função para renderizar os itens do carrinho no modal
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const botaoPagamento2 = document.getElementById('botaoPagamento2');
     botaoPagamento2.onclick = function() {
         if (total > 0) {
-            window.location.href =  base_url + "Homepage/cadastrar_carrinho/saldo"; // Altere para a URL real da página de pagamento
+            window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=2"; // Altere para a URL real da página de pagamento
         } else {
             alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
         }
@@ -161,6 +162,21 @@ function salvarCarrinhoNaSessao() {
     })
     .catch((error) => {
         console.error('Erro ao salvar o carrinho:', error);
+    });
+}
+
+function buscarTotalCarrinho() {
+    fetch(base_url + "Homepage/obter_total_carrinho", {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.total) {
+            document.getElementById('totalcart').textContent = data.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+    })
+    .catch((error) => {
+        console.error('Erro ao buscar o total do carrinho:', error);
     });
 }
 // Aguarde o carregamento do DOM
