@@ -136,10 +136,10 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         </div><br>
         <h2 style="color:blue">Opção pagamento:</h2>
         <div <?php echo ($saldoAluno == 0) ? "hidden" : "" ?>>
-            <button id="saldoAluno" <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Usar saldo</button>
+            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Usar saldo</button>
         </div>
-        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Com Pix</button>
-        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Com Cartão</button>
+        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento2" class="botao-pagamento">Com Pix</button>
+        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento3" class="botao-pagamento">Com Cartão</button>
     </div>
 </div>
 

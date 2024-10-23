@@ -126,10 +126,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Implementação do botão de pagamento
+        
     const botaoPagamento = document.getElementById('botaoPagamento');
     botaoPagamento.onclick = function() {
         if (total > 0) {
-            window.location.href =  base_url + "Homepage/cadastrar_carrinho/"; // Altere para a URL real da página de pagamento
+            window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=1"; // Altere para a URL real da página de pagamento
+        } else {
+            alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
+        }
+    }
+    const botaoPagamento2 = document.getElementById('botaoPagamento2');
+    botaoPagamento2.onclick = function() {
+        if (total > 0) {
+            window.location.href =  base_url + "Homepage/cadastrar_carrinho/saldo"; // Altere para a URL real da página de pagamento
         } else {
             alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
         }
