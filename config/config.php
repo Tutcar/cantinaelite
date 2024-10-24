@@ -19,9 +19,9 @@ define('CAMINHO', realpath('./'));
 define("TITULO_SITE", "Cantina Elite");
 
 
-define('URL_BASE', 'https://' . $_SERVER["HTTP_HOST"] . '/cantinaelite/');
-define('URL_IMAGEM', "https://" . $_SERVER['HTTP_HOST'] . "/cantinaelite/UP/");
-define('URL_IMAGEM_vaf', "https://" . $_SERVER['HTTP_HOST'] . "/cantinaelite/images/");
+define('URL_BASE', 'http://' . $_SERVER["HTTP_HOST"] . '/cantinaelite/');
+define('URL_IMAGEM', "http://" . $_SERVER['HTTP_HOST'] . "/cantinaelite/UP/");
+define('URL_IMAGEM_vaf', "http://" . $_SERVER['HTTP_HOST'] . "/cantinaelite/images/");
 
 
 

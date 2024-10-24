@@ -6,6 +6,8 @@ use app\core\Controller;
 use PDOException;
 use app\core\Flash;
 use app\core\Conexao;
+use app\models\pagseguro\ReqPagSeguroCartao;
+use app\models\pagseguro\ReqPagSeguroCartaoCredito;
 use app\models\pagseguro\ReqPagSeguroPix;
 use app\models\service\PedidosService;
 use app\models\service\Service;
@@ -70,7 +72,6 @@ class HomepageController extends Controller
    }
    public function salvar_carrinho()
    {
-
       // Configura o cabeçalho para JSON
       header('Content-Type: application/json');
 
@@ -81,8 +82,21 @@ class HomepageController extends Controller
       if (json_last_error() === JSON_ERROR_NONE) {
          // Salva os dados do carrinho na sessão
          $_SESSION['carrinho'] = $data;
-         // Retorna uma resposta de sucesso
-         echo json_encode(['status' => 'success', 'message' => 'Carrinho salvo com sucesso.']);
+
+         // Calcula o total do carrinho ou define como 0 se estiver vazio
+         if (!empty($data)) {
+            $total = 0;
+            foreach ($data as $item) {
+               $total += $item['preco'];
+            }
+            $_SESSION['total_carrinho'] = $total;
+         } else {
+            // Se o carrinho estiver vazio, o total é zerado
+            $_SESSION['total_carrinho'] = 0;
+         }
+
+         // Retorna uma resposta de sucesso com o valor total
+         echo json_encode(['status' => 'success', 'message' => 'Carrinho salvo com sucesso.', 'total' => $_SESSION['total_carrinho']]);
       } else {
          // Retorna uma resposta de erro se o JSON não for válido
          echo json_encode(['status' => 'error', 'message' => 'Dados do carrinho inválidos.']);
@@ -115,6 +129,7 @@ class HomepageController extends Controller
             $total_p += (float) $get_valor; // Soma o valor ao total
          }
          $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
+
          if ($_GET['saldo'] == 1) {
             if ($saldoAluno < $total_p) {
                Flash::setMsg("Sem saldo para comprar de:." . moedaBr($total_p), -1);
@@ -247,25 +262,23 @@ class HomepageController extends Controller
          try {
             // Limpa a sessão após salvar no banco de dados
             unset($_SESSION['carrinho']);
+            $source = array('.', ',');
+            $replace = array('', '.');
+            // Redireciona para a página inicial
+            $valorpag = new \stdClass();
+            $valorpag->id_cliente = $_SESSION['CLIENTE']->id_cliente;
+            $id = $valorpag->id_cliente;
+            $valorpag->produto = "Credito";
+            $valorpag->quantidade = 1;
+            $valorpag->valor_credito = $total_p;
+            $alunopag = dadosAluno();
             if ($_GET['saldo'] == 1) {
                $cadDebPedido = Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
                $this->redirect(URL_BASE . "homepage", $carrinho);
                header("Refresh: 0"); // Adiciona o refresh
                exit;
-            } else {
-               $source = array('.', ',');
-               $replace = array('', '.');
-               // Redireciona para a página inicial
-               $valorpag = new \stdClass();
-               $valorpag->id_cliente = $_SESSION['CLIENTE']->id_cliente;
-               $id = $valorpag->id_cliente;
-               $valorpag->produto = "Credito";
-               $valorpag->quantidade = 1;
-               $valorpag->valor_credito = $total_p;
-               $alunopag = dadosAluno();
-               // if ($_GET['saldo'] == 1) {
-               //    $nr_doc_pg = $nr_doc_pg."CTD";
-               // }
+            } elseif ($_GET['saldo'] == 2) {
+
                $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $nr_doc_pg);
 
                // Verifique se a resposta contém o QR Code
@@ -287,16 +300,25 @@ class HomepageController extends Controller
                      }
                   }
                }
-
-               //Verifica se a URL foi capturada corretamente
-               if (empty($qrcode_png_url)) {
-                  $this->redirect(URL_BASE . "homepage", $carrinho);
-               } else {
-                  //Exibe a página HTML com o modal e o QR Code
-                  //Redireciona para a página de confirmação de pagamento, passando o link do QR Code
-                  $_SESSION['qrcode_url'] = $qrcode_png_url;
-                  $this->redirect(URL_BASE . "homepage", $carrinho);
-               }
+            } elseif ($_GET['saldo'] == 3) {
+               $cardDetails = new \stdClass();
+               $cardDetails->brand = "VISA";
+               $cardDetails->number = "4111111111111111";
+               $cardDetails->number = "4111111111111111";
+               $cardDetails->exp_month = 12;
+               $cardDetails->exp_year = 2030;
+               $cardDetails->holder_name = "Joãozinho da Silva";
+               $cardDetails->holder_tax_id = "65544332211";
+               $response = ReqPagSeguroCartaoCredito::createCreditCardOrder($alunopag, $valorpag, $nr_doc_pg, $cardDetails);
+            }
+            //Verifica se a URL foi capturada corretamente
+            if (empty($qrcode_png_url)) {
+               $this->redirect(URL_BASE . "homepage", $carrinho);
+            } else {
+               //Exibe a página HTML com o modal e o QR Code
+               //Redireciona para a página de confirmação de pagamento, passando o link do QR Code
+               $_SESSION['qrcode_url'] = $qrcode_png_url;
+               $this->redirect(URL_BASE . "homepage", $carrinho);
             }
          } catch (PDOException $e) {
             echo "Erro: " . $e->getMessage();

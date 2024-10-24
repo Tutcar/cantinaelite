@@ -118,19 +118,12 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 <div id="myModal" class="modalcar">
     <div class="modalcar-content">
         <span class="close" id="closeModal">&times;</span>
-        <?php
-        if (isset($_SESSION['total_carrinho'])) {
-            $cartTot = $_SESSION['total_carrinho'];
-        } else {
-            $cartTot = 0;
-        }
-        ?>
         <h2>Carrinho de Compras</h2><br>
         <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Limite&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
         <?php if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") : ?>
             <input type="hidden" name="saldoal" value="<?php echo moedaBR($saldoAluno) ?>">
             <label class="form-label">
-                <p <?php echo ($saldoAluno > $cartTot) ? "" : "hidden" ?>> Saldo: R$&nbsp;
+                <p <?php echo ($saldoAluno == 0) ? "hidden" : "" ?>> Saldo: R$&nbsp;
                     <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?></p>
             </label>
             <hr style="border: 1px solid black; width: 100%;">
@@ -139,12 +132,11 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <div>
             <hr style="border: 1px solid black; width: 100%">
             <h2 style="display: inline; ; color:blue">Total: </h2>
-            <span style="display: inline;"><?php echo $cartTot; ?></span>
-            <span id="totalcart" style="display: inline;">0</span>
+            <span id="totalcart" style="display: inline;">0,00</span>
         </div><br>
         <h2 style="color:blue">Opção pagamento:</h2>
         <div style="display: flex; gap: 10px;">
-            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" <?php echo ($saldoAluno > $cartTot) ? 'class="botao-pagamento"' : "hidden" ?>>Saldo</button>
+            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Saldo</button>
             <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento2" class="botao-pagamento">Pix</button>
             <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento3" class="botao-pagamento">Cartão</button>
         </div>

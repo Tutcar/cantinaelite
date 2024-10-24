@@ -71,7 +71,7 @@ function removerDoCarrinho(index) {
     renderizarCarrinho();
     atualizarContador();
     salvarCarrinhoNaSessao(); // Salva o carrinho na sessão após remover um item
-    buscarTotalCarrinho();  // Chama a função para atualizar o total
+    //buscarTotalCarrinho();  // Chama a função para atualizar o total
 }
 
 // Função para renderizar os itens do carrinho no modal
@@ -140,6 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
     botaoPagamento2.onclick = function() {
         if (total > 0) {
             window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=2"; // Altere para a URL real da página de pagamento
+        } else {
+            alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
+        }
+    }
+    const botaoPagamento3 = document.getElementById('botaoPagamento3');
+    botaoPagamento3.onclick = function() {
+        if (total > 0) {
+            window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=3"; // Altere para a URL real da página de pagamento
         } else {
             alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
         }
