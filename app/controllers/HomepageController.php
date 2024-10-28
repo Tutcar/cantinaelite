@@ -117,6 +117,7 @@ class HomepageController extends Controller
 
    public function cadastrar_carrinho()
    {
+
       $total_p = 0;
       $get_valor = 0;
       if (isset($_SESSION['carrinho'])) {
@@ -302,13 +303,13 @@ class HomepageController extends Controller
                }
             } elseif ($_GET['saldo'] == 3) {
                $cardDetails = new \stdClass();
-               $cardDetails->brand = "VISA";
-               $cardDetails->number = "4111111111111111";
-               $cardDetails->number = "4111111111111111";
-               $cardDetails->exp_month = 12;
-               $cardDetails->exp_year = 2030;
-               $cardDetails->holder_name = "Joãozinho da Silva";
-               $cardDetails->holder_tax_id = "65544332211";
+               $cardDetails->brand = "visa";
+               $cardDetails->number = "4066699917608988";
+               $cardDetails->exp_month = 8;
+               $cardDetails->exp_year = 2032;
+               $cardDetails->security_code = "481";
+               $cardDetails->holder_name = "Carlos A Teixeira";
+               $cardDetails->holder_tax_id = "06201683828";
                $response = ReqPagSeguroCartaoCredito::createCreditCardOrder($alunopag, $valorpag, $nr_doc_pg, $cardDetails);
             }
             //Verifica se a URL foi capturada corretamente

@@ -7,33 +7,33 @@ use PDOException;
 
 
 if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
-    // $payload = $_POST;
-    // $payloadJson = json_encode($_POST);
+    $payload = $_POST;
+    $payloadJson = json_encode($_POST);
 
-    // $notificationCode = $_POST['notificationCode'];
-    // $token = '9027BDDEB627409AA2EB73E6E8C891ED';
-    // $credentials = "?email=contato@pantanaltubos.com&token={$token}";
-    // $url = "https://sandbox.pagseguro.uol.com.br/v3/transactions/notifications/{$payload['notificationCode']}{$credentials}";
+    $notificationCode = $_POST['notificationCode'];
+    $token = '9027BDDEB627409AA2EB73E6E8C891ED';
+    $credentials = "?email=contato@pantanaltubos.com&token={$token}";
+    $url = "https://sandbox.pagseguro.uol.com.br/v3/transactions/notifications/{$payload['notificationCode']}{$credentials}";
 
-    // $curl = curl_init();
-    // curl_setopt($curl, CURLOPT_URL, $url);
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-    // curl_setopt($curl, CURLOPT_CAINFO, "C:/xampp/htdocs/cantinaelite/cacert.pem");
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, [
-    //     'Content-Type:application/json',
-    //     'Authorization: Bearer ' . $token
-    // ]);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($curl, CURLOPT_CAINFO, "C:/xampp/htdocs/cantinaelite/cacert.pem");
+    curl_setopt($curl, CURLOPT_HTTPHEADER, [
+        'Content-Type:application/json',
+        'Authorization: Bearer ' . $token
+    ]);
 
-    // $response = curl_exec($curl);
-    // $error = curl_error($curl);
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
 
-    // curl_close($curl);
+    curl_close($curl);
 
-    // file_put_contents('logTransaction.txt', $response);
-    // file_put_contents('payload.txt', $payload);
-    // file_put_contents('url.txt', $url);
-    // file_put_contents('notification.txt', $payload['notificationCode']);
+    file_put_contents('logTransaction.txt', $response);
+    file_put_contents('payload.txt', $payload);
+    file_put_contents('url.txt', $url);
+    file_put_contents('notification.txt', $payload['notificationCode']);
 } else {
     $payload = @file_get_contents('php://input'); // Captura o payload bruto
     file_put_contents('logPay.txt', $payload); // Loga o payload para referência
@@ -66,9 +66,10 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
         $crdPed = $ultimos_tres_digitos; // Saída: CRD
         // Definir os valores a serem usados
         if ($crdPed == "CRD") {
-
+            $string = $referenceId;
+            $stringSemUltimosTres = substr($string, 0, -3);
             $confirma = "S";
-            $nr_doc_pg = $referenceId; // Valor com letras e números, pois é VARCHAR
+            $nr_doc_pg = $stringSemUltimosTres; // Valor com letras e números, pois é VARCHAR
 
             // Verificar se o registro existe antes de atualizar
             $stmt = $pdo->prepare("SELECT * FROM corrente WHERE nr_doc_pg = :nr_doc_pg");
@@ -95,17 +96,11 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
             $nr_doc_pg = $referenceId; // Valor com letras e números, pois é VARCHAR
 
             // Verificar se o registro existe antes de atualizar
-            $stmt = $pdo->prepare("SELECT * FROM corrente WHERE nr_doc_pg = :nr_doc_pg");
-            $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR garante que seja tratado como string
+            $stmt = $pdo->prepare("SELECT * FROM pedido WHERE nr_pedido = :nr_pedido");
+            $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR garante que seja tratado como string
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                // O registro existe, então faz o UPDATE
-                $stmt = $pdo->prepare("UPDATE corrente SET confirma = :confirma WHERE nr_doc_pg = :nr_doc_pg");
-                $stmt->bindParam(':confirma', $confirma);
-                $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
-                $stmt->execute();
-
                 //quita pedido
                 $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago WHERE nr_pedido = :nr_pedido");
                 $stmt->bindParam(':pago', $confirma);

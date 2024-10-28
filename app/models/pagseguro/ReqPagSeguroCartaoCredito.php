@@ -8,7 +8,6 @@ class ReqPagSeguroCartaoCredito
     {
         $endpoint = 'https://sandbox.api.pagseguro.com/orders';
         $token = '9027BDDEB627409AA2EB73E6E8C891ED';
-
         $body = [
             "reference_id" => $id,
             "customer" => [
@@ -17,16 +16,16 @@ class ReqPagSeguroCartaoCredito
                 "tax_id" => $alunopag->nrCpf,
                 "phones" => [
                     [
-                        "country" => "55",
-                        "area" => $alunopag->ddd,
-                        "number" => $alunopag->nr_fone,
+                        "country" => 55,
+                        "area" => (int)$alunopag->ddd,
+                        "number" => (int)$alunopag->nr_fone,
                         "type" => "MOBILE"
                     ]
                 ]
             ],
             "items" => [
                 [
-                    "reference_id" => "item_ref_" . $id,
+                    "reference_id" => $id,
                     "name" => $valorpag->produto,
                     "quantity" => $valorpag->quantidade,
                     "unit_amount" => (int)($valorpag->valor_credito * 100) // Em centavos
@@ -34,41 +33,43 @@ class ReqPagSeguroCartaoCredito
             ],
             "shipping" => [
                 "address" => [
-                    "street" => $alunopag->endereco->rua,
-                    "number" => $alunopag->endereco->numero,
-                    "complement" => $alunopag->endereco->complemento,
-                    "locality" => $alunopag->endereco->bairro,
-                    "city" => $alunopag->endereco->cidade,
-                    "region_code" => $alunopag->endereco->estado,
+                    "street" => $_SESSION['CLIENTE']->nm_rua,
+                    "number" => $_SESSION['CLIENTE']->nr_numero,
+                    "complement" => "N",
+                    "locality" => $_SESSION['CLIENTE']->nm_bairro,
+                    "city" => $_SESSION['CLIENTE']->nm_cidade,
+                    "region_code" => $_SESSION['CLIENTE']->sg_estado,
                     "country" => "BRA",
-                    "postal_code" => $alunopag->endereco->cep
+                    "postal_code" => $_SESSION['CLIENTE']->nr_cep
                 ]
             ],
             "charges" => [
                 [
-                    "reference_id" => "charge_ref_" . $id,
-                    "description" => "Pagamento com cartão de crédito",
+                    "reference_id" => $id,
+                    "description" => "Merenda",
                     "amount" => [
                         "value" => (int)($valorpag->valor_credito * 100),
                         "currency" => "BRL"
                     ],
                     "payment_method" => [
                         "type" => "CREDIT_CARD",
-                        "installments" => 1,  // Ou quantidade de parcelas
+                        "installments" => (int)1,  // Ou quantidade de parcelas
                         "capture" => true,
                         "card" => [
                             "brand" => $cardDetails->brand,
+                            "number" => $cardDetails->number,
                             "first_digits" => substr($cardDetails->number, 0, 6),
                             "last_digits" => substr($cardDetails->number, -4),
-                            "exp_month" => $cardDetails->exp_month,
-                            "exp_year" => $cardDetails->exp_year,
+                            "exp_month" => (int)$cardDetails->exp_month,
+                            "exp_year" => (int)$cardDetails->exp_year,
+                            "security_code" => $cardDetails->security_code,
                             "holder" => [
                                 "name" => $cardDetails->holder_name,
                                 "tax_id" => $cardDetails->holder_tax_id
                             ],
                             "store" => false
                         ],
-                        "soft_descriptor" => "cantinaelite.store"
+                        "soft_descriptor" => "IntegracaoPagsegu"
                     ]
                 ]
             ],

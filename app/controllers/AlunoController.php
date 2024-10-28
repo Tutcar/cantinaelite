@@ -106,7 +106,7 @@ class AlunoController extends Controller
             if (CorrenteService::salvar($corrente, $this->campo, $this->tabela)) {
                 Flash::setMsg("Crédito efetuado com sucesso!", 1);
                 // $response = ReqPagSeguroCheckout::checkoutPag($alunopag, $valorpag, $token_credito_al);
-                $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $token_credito_al);
+                $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $token_credito_al . "CRD");
 
                 // Verifique se a resposta contém o QR Code
                 $qrcode_png_url = '';
