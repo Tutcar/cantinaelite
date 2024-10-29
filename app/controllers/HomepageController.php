@@ -159,15 +159,15 @@ class HomepageController extends Controller
          $pedidos->nr_pedido = $nrPedido;
          if ($_GET['saldo'] == 1) {
             $pedidos->pago = "S";
-            $pedidos->tipo_pg = "saldo";
+            $pedidos->tipo_pg = "Outros";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          } elseif ($_GET['saldo'] == 2) {
             $pedidos->pago = "N";
-            $pedidos->tipo_pg = "pix";
+            $pedidos->tipo_pg = "Pix";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          } elseif ($_GET['saldo'] == 3) {
             $pedidos->pago = "N";
-            $pedidos->tipo_pg = "cartao";
+            $pedidos->tipo_pg = "Cartao";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          } else {
             $pedidos->pago = "N";
@@ -177,6 +177,7 @@ class HomepageController extends Controller
          $pedidos->data_ab_pedido = $today;
          $pedidos->id_caixaabre = $dados["idAbre"];
          $pedidos->encomendas = "S";
+         $pedidos->quant = 0;
          $pedidos->data_encomendas = $today;
          Flash::setForm($pedidos);
          if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {

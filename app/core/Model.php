@@ -3,6 +3,7 @@
 namespace app\core;
 
 use Exception;
+
 abstract class Model
 {
     protected $db;

@@ -44,6 +44,8 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
     // Verifica se o campo 'reference_id' existe no array
     if (isset($payloadData['reference_id'])) {
         $referenceId = $payloadData['reference_id'];
+        $total = $payloadData['charges'][0]['amount']['summary']['total'] / 100;
+        $total = number_format($total, 2, '.', '');
         echo "Reference ID: " . $referenceId; // Exibe o valor de reference_id
     } else {
         echo "Reference ID não encontrado no payload.";
@@ -102,9 +104,10 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
 
             if ($stmt->rowCount() > 0) {
                 //quita pedido
-                $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago WHERE nr_pedido = :nr_pedido");
+                $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago, valor = :valor WHERE nr_pedido = :nr_pedido AND quant = 0");
+                $stmt->bindParam(':valor', $total);
                 $stmt->bindParam(':pago', $confirma);
-                $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR); // PDO::PARAM_STR novamente
+                $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
                 $stmt->execute();
 
                 // Mensagem de sucesso
