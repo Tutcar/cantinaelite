@@ -7,6 +7,21 @@ use PDOException;
 
 class Flash
 {
+    public static function quitarPix($db, $nr_pedido)
+    {
+        $sql = "SELECT pago FROM pedido WHERE nr_pedido = :nr_pedido AND pago = :pago";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':pago', 'S');
+        $stmt->bindParam(':nr_pedido', $nr_pedido, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Verifica se há resultado
+        if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
+            return true; // Há resultado
+        } else {
+            return false; // Sem resultado
+        }
+    }
 
     // Função para obter os itens de um pedido específico
     public static function getItensPorPedido($db, $nr_pedido)

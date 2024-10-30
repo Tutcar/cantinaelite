@@ -95,6 +95,9 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 </script>
 <!-- Modal -->
 <div id="qrcodeModal" class="modalpix">
+    <form action="<?php echo URL_BASE . "Aluno/limparSessao" ?>" method="post">
+        <button type="submit">Limpar Sessão</button>
+    </form>
     <div class="modalpix-content">
         <span class="close">&times;</span>
         <h2>QR Code</h2>
@@ -105,6 +108,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
             <input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
             <button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
         </div>
+
     </div>
 </div>
 <!-- fim modal pix -->

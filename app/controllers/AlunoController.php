@@ -33,6 +33,17 @@ class AlunoController extends Controller
 
         $response = ReqPagSeguroPay::simulaPay();
     }
+    public function limparSessao()
+    {
+        // Remove a variável de sessão específica
+        if (isset($_SESSION['qrcode_url'])) {
+            unset($_SESSION['qrcode_url']);
+        }
+
+        // Redireciona de volta para a página anterior
+        $this->redirect(URL_BASE);
+        exit();
+    }
 
     public function salvarAl()
     {
@@ -136,6 +147,7 @@ class AlunoController extends Controller
 
                     // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                     $_SESSION['qrcode_url'] = $qrcode_png_url;
+
 
                     $this->redirect(URL_BASE);
                 }

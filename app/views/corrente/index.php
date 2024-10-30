@@ -89,8 +89,8 @@
                             <td align="center"><?php echo dataBr($corrente->data_cad) ?></td>
                             <td align="center"><?php echo substr($corrente->descricao, 0, 18) ?></td>
                             <td align="center"><?php echo substr($corrente->nr_doc_pg, 0, 10) ?></td>
-                            <td align="center"><?php echo $corrente->valor_debito ?></td>
-                            <td align="center"><?php echo $corrente->valor_credito ?></td>
+                            <td align="center"><?php echo moedaBr($corrente->valor_debito) ?></td>
+                            <td align="center"><?php echo moedaBr($corrente->valor_credito) ?></td>
                             <td align="center"><?php echo $corrente->confirma ?></td>
                             <td align="center">
                                 <a href="<?php echo URL_BASE . "corrente/edit/" . $corrente->id_corrente . "/" . $corretoras->id_corretora ?>"><img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . "editar.jpeg"; ?>"></a>

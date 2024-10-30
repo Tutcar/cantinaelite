@@ -47,6 +47,7 @@ class LoginController extends Controller
         unset($_SESSION["nr_ped"]);
         unset($_SESSION['qrcode_url']);
         unset($_SESSION['CLIENTE']);
+        unset($_SESSION["webhook"]);
         $this->redirect(URL_BASE . "login");
     }
     public function recuperar_senha()
