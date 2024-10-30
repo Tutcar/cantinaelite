@@ -477,17 +477,25 @@ function darTroco() {
 	id2('troco').value = formatar.format(total2 / 100);
 };
 
+// Função que retorna o elemento pelo ID
 function id3(valor_campo3) {
-	return document.getElementById(valor_campo3);
-};
-function getDif(valor_campo3) {
-	var valor3 = document.getElementById(valor_campo3).value.replace(',', '.');
-	return parseFloat(valor3) * 100;
-};
+    return document.getElementById(valor_campo3);
+}
 
+// Função que retorna o valor formatado no estilo "0,00"
+function getDif(valor_campo3) {
+    let valorElemento = document.getElementById(valor_campo3);
+    // Substitui a vírgula por ponto para garantir que parseFloat funcione corretamente
+    let valor3 = parseFloat(valorElemento?.value.replace(',', '.')) || 0;
+    return valor3;
+}
+
+// Função que calcula a diferença entre dois campos e exibe no campo de diferença
 function calcDif() {
-	var total3 = getDif('saldo_cx') - getDif('conferencia');
-	id3('diferenca').value = total3 / 100;
+    // Obtém os valores numéricos dos campos e faz a subtração
+    var total3 = getDif('saldo_cx') - getDif('conferencia');
+    // Formata o resultado final como "0,00" e atribui ao campo de diferença
+    id3('diferenca').value = total3.toFixed(2).replace('.', ',');
 }
 const formatar = new Intl.NumberFormat('pt-BR', {
 	style: "currency",
@@ -495,6 +503,8 @@ const formatar = new Intl.NumberFormat('pt-BR', {
 	minimumFractionDigits: 2,
 
 })
+
+
 
 
 function mostraAlerta(r) {

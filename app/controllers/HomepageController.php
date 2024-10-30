@@ -158,7 +158,12 @@ class HomepageController extends Controller
          $pedidos->cliente = $_SESSION[SESSION_LOGIN]->login;
          $pedidos->nr_pedido = $nrPedido;
          if ($_GET['saldo'] == 1) {
+            $correnteValor = 0;
+            $source = array('.', ',');
+            $replace = array('', '.');
             $pedidos->pago = "S";
+            $get_valor = $total_p;
+            $correnteValor = str_replace($source, $replace, $get_valor);
             $pedidos->tipo_pg = "Outros";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          } elseif ($_GET['saldo'] == 2) {
@@ -228,7 +233,6 @@ class HomepageController extends Controller
 
             $pedidos->valor = (float) $get_valor;
             $total_p = ++$produtos->venda;
-
             Flash::setForm($pedidos);
             PedidosService::salvar($pedidos, $this->campo, $this->tabela);
 
@@ -275,6 +279,7 @@ class HomepageController extends Controller
             $valorpag->valor_credito = $total_p;
             $alunopag = dadosAluno();
             if ($_GET['saldo'] == 1) {
+               $valor_debito = $correnteValor;
                $cadDebPedido = Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
                $this->redirect(URL_BASE . "homepage", $carrinho);
                header("Refresh: 0"); // Adiciona o refresh

@@ -28,7 +28,7 @@
                         <th align="left">Dinheiro</th>
                         <th align="left">Cartao</th>
                         <th align="left">Pix</th>
-                        <th align="left">Outros</th>
+                        <th align="left">Alunos</th>
                         <th align="left">Pedidos</th>
                         <th align="left">Saldo</th>
                         <th hidden align="left">ID</th>
@@ -49,6 +49,6 @@
             </table>
         </div>
     </div>
-    <a href="<?php echo URL_BASE . "Painel"?>"><img style="width: 30px; height: 30px"
-                src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+    <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
+            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 </section>

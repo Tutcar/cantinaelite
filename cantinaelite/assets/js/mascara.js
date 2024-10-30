@@ -22,13 +22,14 @@ $(function () {
     $('input[name=nf_desc]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor desconto nf" });
     $('input[name=ft_valor]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor desconto nf" });
     $('input[name=ft_valor_pg]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor pagamento" });
-    $('input[name=salario]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor salário" });
-    $('input[name=sl_comissao]').mask('00,00', { reverse: true, placeholder: "Percentual comissão" });
-    $('input[name=ac_valor]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor acréscimo" });
-    $('input[name=db_valor]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor débito" });
+    $('input[name=salario]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor sal锟斤拷rio" });
+    $('input[name=sl_comissao]').mask('00,00', { reverse: true, placeholder: "Percentual comiss锟�0锟�0o" });
+    $('input[name=ac_valor]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor acr锟斤拷scimo" });
+    $('input[name=db_valor]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor d锟斤拷bito" });
     $('input[name=aumento]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor aumento" });
     $('input[name=valorEnc]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor aumento" });
-     $('input[name=limite]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Limite aluno" });
+    $('input[name=limite]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Limite aluno" });
+    $('input[name=diferenca]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Diferen莽a caixa" });
 });
 function checkRodada(rodada) {
 

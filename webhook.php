@@ -110,6 +110,12 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
                 $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
                 $stmt->execute();
 
+                //quitar itens pdido
+                $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago WHERE nr_pedido = :nr_pedido AND quant > 0");
+                $stmt->bindParam(':pago', $confirma);
+                $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
+                $stmt->execute();
+
                 // Mensagem de sucesso
                 echo "Dados atualizados com sucesso!";
                 error_log("Dados atualizados com sucesso!"); // Exibe no console

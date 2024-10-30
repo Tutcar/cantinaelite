@@ -57,7 +57,7 @@
                                             class="form-campo">
                                     </div>
                                     <div class="col-6">
-                                        <label>Outros</label>
+                                        <label>Alunos</label>
                                         <input readonly name="outros"
                                             value="<?php echo isset($outros) ? moedaBr($outros) : moedaBr(0) ?>"
                                             type="text" class="form-campo">
@@ -115,6 +115,6 @@
 
         </div>
     </div>
-    <a href="<?php echo URL_BASE . "Caixafecha/index"?>"><img style="width: 30px; height: 30px"
-                src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+    <a href="<?php echo URL_BASE . "Caixafecha/index" ?>"><img style="width: 30px; height: 30px"
+            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 </section>

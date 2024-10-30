@@ -34,7 +34,7 @@
                                 <div class="rows">
                                     <div class="col-12">
                                         <label>Entrada</label>
-                                        <input id="entrada" name="entrada" value="<?php echo isset($caixaabre->entrada) ? moedaBr($caixaabre->entrada) : moedaBr($idAbreValor) ?>" type="text" placeholder="Insira o valor do caixa inicial" class="form-campo">
+                                        <input id="entrada" name="entrada" value="<?php echo isset($caixaabre->entrada) ? moedaBr($caixaabre->entrada) : (($idAbreValor > 0) ? moedaBr($idAbreValor) : moedaBr(0)) ?>" type="text" placeholder="Insira o valor do caixa inicial" class="form-campo">
                                     </div>
                                 </div>
                                 <div class="rows">
@@ -51,7 +51,7 @@
                 <input type="submit" value="<?php echo isset($caixaabre->data_ab_caixa) ? "Alterar" : "Cadastrar" ?>" class="btn">
             </form>
         </div>
-        <a href="<?php echo URL_BASE . "Caixaabre/index"?>"><img style="width: 30px; height: 30px"
+        <a href="<?php echo URL_BASE . "Caixaabre/index" ?>"><img style="width: 30px; height: 30px"
                 src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
     </div>
