@@ -14,26 +14,6 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
     $token = '9027BDDEB627409AA2EB73E6E8C891ED';
     $credentials = "?email=contato@pantanaltubos.com&token={$token}";
     $url = "https://sandbox.pagseguro.uol.com.br/v3/transactions/notifications/{$payload['notificationCode']}{$credentials}";
-
-    // $curl = curl_init();
-    // curl_setopt($curl, CURLOPT_URL, $url);
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-    // curl_setopt($curl, CURLOPT_CAINFO, "C:/xampp/htdocs/cantinaelite/cacert.pem");
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, [
-    //     'Content-Type:application/json',
-    //     'Authorization: Bearer ' . $token
-    // ]);
-
-    // $response = curl_exec($curl);
-    // $error = curl_error($curl);
-
-    // curl_close($curl);
-
-    // file_put_contents('logTransaction.txt', $response);
-    // file_put_contents('payload.txt', $payload);
-    // file_put_contents('url.txt', $url);
-    // file_put_contents('notification.txt', $payload['notificationCode']);
 } else {
     $payload = @file_get_contents('php://input'); // Captura o payload bruto
     file_put_contents('logPay.txt', $payload); // Loga o payload para referência
@@ -109,11 +89,13 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
                 $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
                 $stmt->execute();
 
-                //quitar itens pdido
+                //quitar itens pedido
                 $stmt = $pdo->prepare("UPDATE pedido SET pago = :pago WHERE nr_pedido = :nr_pedido AND quant > 0");
                 $stmt->bindParam(':pago', $confirma);
                 $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
                 $stmt->execute();
+                header("Location: http://localhost/cantinaelite/index.php");
+                exit;
                 // Mensagem de sucesso
                 echo "Dados atualizados com sucesso!";
                 error_log("Dados atualizados com sucesso!"); // Exibe no console

@@ -40,14 +40,6 @@ class HomepageController extends Controller
 
    public function index()
    {
-      // Remove a variável de sessão específica
-      if (isset($_SESSION['webhook'])) {
-         $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
-         if ($quitaPx == true) {
-            unset($_SESSION["webhook"]);
-            unset($_SESSION['qrcode_url']);
-         }
-      }
 
       if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
          $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
@@ -334,6 +326,15 @@ class HomepageController extends Controller
                //Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                $_SESSION['qrcode_url'] = $qrcode_png_url;
                $_SESSION['webhook'] = $nrPedido;
+               // sleep(15);
+               // // Remove a variável de sessão específica
+               // if (isset($_SESSION['webhook'])) {
+               //    $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
+               //    if ($quitaPx == true) {
+               //       unset($_SESSION["webhook"]);
+               //       unset($_SESSION['qrcode_url']);
+               //    }
+               // }
                $this->redirect(URL_BASE . "homepage", $carrinho);
             }
          } catch (PDOException $e) {
