@@ -147,9 +147,12 @@ class AlunoController extends Controller
 
                     // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                     $_SESSION['qrcode_url'] = $qrcode_png_url;
-
-
+                    $nr_doc_pg = $token_credito_al;
+                    $_SESSION['webhook'] = $nr_doc_pg;
+                    $quitaCredito = Flash::quitarCredito($this->db, $_SESSION['webhook']);
                     $this->redirect(URL_BASE);
+                    header("Refresh: 0"); // Adiciona o refresh
+                    exit;
                 }
             }
         } catch (PDOException $e) {

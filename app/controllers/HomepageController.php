@@ -317,6 +317,11 @@ class HomepageController extends Controller
                $cardDetails->holder_name = "Carlos A Teixeira";
                $cardDetails->holder_tax_id = "06201683828";
                $response = ReqPagSeguroCartaoCredito::createCreditCardOrder($alunopag, $valorpag, $nr_doc_pg, $cardDetails);
+               $_SESSION['webhook'] = $nrPedido;
+               $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
+               $this->redirect(URL_BASE . "homepage", $carrinho);
+               header("Refresh: 0"); // Adiciona o refresh
+               exit;
             }
             //Verifica se a URL foi capturada corretamente
             if (empty($qrcode_png_url)) {
@@ -326,16 +331,10 @@ class HomepageController extends Controller
                //Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                $_SESSION['qrcode_url'] = $qrcode_png_url;
                $_SESSION['webhook'] = $nrPedido;
-               // sleep(15);
-               // // Remove a variável de sessão específica
-               // if (isset($_SESSION['webhook'])) {
-               //    $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
-               //    if ($quitaPx == true) {
-               //       unset($_SESSION["webhook"]);
-               //       unset($_SESSION['qrcode_url']);
-               //    }
-               // }
+               $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
                $this->redirect(URL_BASE . "homepage", $carrinho);
+               header("Refresh: 0"); // Adiciona o refresh
+               exit;
             }
          } catch (PDOException $e) {
             echo "Erro: " . $e->getMessage();

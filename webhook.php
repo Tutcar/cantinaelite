@@ -94,8 +94,6 @@ if (isset($_POST['notificationCode'], $_POST['notificationType'])) {
                 $stmt->bindParam(':pago', $confirma);
                 $stmt->bindParam(':nr_pedido', $nr_doc_pg, PDO::PARAM_STR);
                 $stmt->execute();
-                header("Location: http://localhost/cantinaelite/index.php");
-                exit;
                 // Mensagem de sucesso
                 echo "Dados atualizados com sucesso!";
                 error_log("Dados atualizados com sucesso!"); // Exibe no console

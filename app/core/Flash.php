@@ -7,19 +7,58 @@ use PDOException;
 
 class Flash
 {
+    public static function quitarCredito($db, $nr_doc_pg)
+    {
+        $sleepInterval = 5; // Intervalo de 5 segundos
+        $maxTime = 60; // Tempo máximo de 20 segundos
+
+        for ($elapsedTime = 0; $elapsedTime < $maxTime; $elapsedTime += $sleepInterval) {
+            // Verifica se a variável de sessão existe
+            if (isset($_SESSION['webhook'])) {
+                // Executa a função
+                $sql = "SELECT confirma FROM corrente WHERE nr_doc_pg = :nr_doc_pg AND confirma = :confirma";
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':confirma', 'S');
+                $stmt->bindParam(':nr_doc_pg', $nr_doc_pg, \PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Se a função retornar true, remove as variáveis de sessão e encerra o loop
+                if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
+                    unset($_SESSION["webhook"]);
+                    unset($_SESSION['qrcode_url']);
+                    break;
+                }
+            }
+
+            // Aguarda 5 segundos antes da próxima execução
+            sleep($sleepInterval);
+        }
+    }
     public static function quitarPix($db, $nr_pedido)
     {
-        $sql = "SELECT pago FROM pedido WHERE nr_pedido = :nr_pedido AND pago = :pago";
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(':pago', 'S');
-        $stmt->bindParam(':nr_pedido', $nr_pedido, \PDO::PARAM_INT);
-        $stmt->execute();
+        $sleepInterval = 5; // Intervalo de 5 segundos
+        $maxTime = 60; // Tempo máximo de 20 segundos
 
-        // Verifica se há resultado
-        if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
-            return true; // Há resultado
-        } else {
-            return false; // Sem resultado
+        for ($elapsedTime = 0; $elapsedTime < $maxTime; $elapsedTime += $sleepInterval) {
+            // Verifica se a variável de sessão existe
+            if (isset($_SESSION['webhook'])) {
+                // Executa a função
+                $sql = "SELECT pago FROM pedido WHERE nr_pedido = :nr_pedido AND pago = :pago";
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':pago', 'S');
+                $stmt->bindParam(':nr_pedido', $nr_pedido, \PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Se a função retornar true, remove as variáveis de sessão e encerra o loop
+                if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
+                    unset($_SESSION["webhook"]);
+                    unset($_SESSION['qrcode_url']);
+                    break;
+                }
+            }
+
+            // Aguarda 5 segundos antes da próxima execução
+            sleep($sleepInterval);
         }
     }
 
