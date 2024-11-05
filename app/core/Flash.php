@@ -7,6 +7,22 @@ use PDOException;
 
 class Flash
 {
+
+    public static function quitarPgComSaldo($db, $valor, $nr_pedido)
+    {
+
+        try {
+            $sql = "UPDATE pedido SET valor = :valor WHERE nr_pedido = :nr_pedido AND quant = 0";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':valor', $valor);
+            $stmt->bindValue(':nr_pedido', $nr_pedido);
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+        return false;
+    }
     public static function quitarCredito($db, $nr_doc_pg)
     {
         $sleepInterval = 5; // Intervalo de 5 segundos
@@ -26,6 +42,8 @@ class Flash
                 if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
                     unset($_SESSION["webhook"]);
                     unset($_SESSION['qrcode_url']);
+                    unset($_SESSION['formapix']);
+
                     break;
                 }
             }
@@ -53,6 +71,7 @@ class Flash
                 if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
                     unset($_SESSION["webhook"]);
                     unset($_SESSION['qrcode_url']);
+                    unset($_SESSION['formapix']);
                     break;
                 }
             }

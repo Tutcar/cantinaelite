@@ -95,8 +95,8 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 </script>
 <!-- Modal -->
 <div id="qrcodeModal" class="modalpix">
-    <form action="<?php echo URL_BASE . "Aluno/limparSessao" ?>" method="post">
-        <button type="submit">Limpar Sessão</button>
+    <form action="<?php echo URL_BASE . "Homepage/simularPay" ?>" method="post">
+        <button type="submit">Pagar</button>
     </form>
     <div class="modalpix-content">
         <span class="close">&times;</span>

@@ -28,11 +28,7 @@ class AlunoController extends Controller
         }
     }
     public function index() {}
-    public function simularPay()
-    {
-
-        $response = ReqPagSeguroPay::simulaPay();
-    }
+    public function simularPay() {}
     public function limparSessao()
     {
         // Remove a variável de sessão específica
@@ -147,9 +143,9 @@ class AlunoController extends Controller
 
                     // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                     $_SESSION['qrcode_url'] = $qrcode_png_url;
+                    $_SESSION['formapix'] = "crd";
                     $nr_doc_pg = $token_credito_al;
                     $_SESSION['webhook'] = $nr_doc_pg;
-                    $quitaCredito = Flash::quitarCredito($this->db, $_SESSION['webhook']);
                     $this->redirect(URL_BASE);
                     header("Refresh: 0"); // Adiciona o refresh
                     exit;

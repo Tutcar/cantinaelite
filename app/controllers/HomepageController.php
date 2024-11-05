@@ -70,6 +70,17 @@ class HomepageController extends Controller
       $dados["view"]       = "homecarda";
       $this->load("homepage", $dados);
    }
+   public function simularPay()
+   {
+      if ($_SESSION['formapix'] == "crd") {
+         Flash::quitarCredito($this->db, $_SESSION['webhook']);
+      } else {
+         Flash::quitarPix($this->db, $_SESSION['webhook']);
+      }
+      $this->redirect(URL_BASE);
+      header("Refresh: 0"); // Adiciona o refresh
+      exit;
+   }
    public function salvar_carrinho()
    {
       // Configura o cabeçalho para JSON
@@ -281,6 +292,7 @@ class HomepageController extends Controller
             if ($_GET['saldo'] == 1) {
                $valor_debito = $correnteValor;
                $cadDebPedido = Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
+               Flash::quitarPgComSaldo($this->db, $total_p, $nrPedido);
                $this->redirect(URL_BASE . "homepage", $carrinho);
                header("Refresh: 0"); // Adiciona o refresh
                exit;
@@ -331,10 +343,8 @@ class HomepageController extends Controller
                //Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                $_SESSION['qrcode_url'] = $qrcode_png_url;
                $_SESSION['webhook'] = $nrPedido;
-               $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
+               $_SESSION['formapix'] = "pix";
                $this->redirect(URL_BASE . "homepage", $carrinho);
-               header("Refresh: 0"); // Adiciona o refresh
-               exit;
             }
          } catch (PDOException $e) {
             echo "Erro: " . $e->getMessage();
