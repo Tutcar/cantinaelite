@@ -28,8 +28,24 @@ class HomepageController extends Controller
       5 => "Sexta-feira",
       6 => "Sábado"
    ];
+   private $meses = [
+      1 => "Janeiro",
+      2 => "Fevereiro",
+      3 => "Março",
+      4 => "Abril",
+      5 => "Maio",
+      6 => "junho",
+      7 => "Julho",
+      8 => "Agosto",
+      9 => "Setembro",
+      10 => "Outubro",
+      11 => "Novembro",
+      12 => "Dezembro",
+   ];
+   private $anos;
    public function __construct()
    {
+      $this->anos = gerarAnos();
       $this->db = Conexao::getConexao();
       $this->usuario = UtilService::getUsuario();
       if (!$this->usuario) {
@@ -40,7 +56,6 @@ class HomepageController extends Controller
 
    public function index()
    {
-
       if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
          $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
          $dados["limiteAluno"] = $_SESSION['CLIENTE']->limite;
@@ -67,6 +82,8 @@ class HomepageController extends Controller
       }
       $dados["produtos"] = Service::lista("produtos");
       $dados['num_visitas'] = Flash::contador($this->db);
+      $dados['anos'] = $this->anos;
+      $dados['meses'] = $this->meses;
       $dados["view"]       = "homecarda";
       $this->load("homepage", $dados);
    }

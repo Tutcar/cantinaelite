@@ -119,10 +119,13 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <span id="cart-count" class="cart-count">0</span>
     </button>
 </div>
+<!-- Modal Carrinho-->
 <div id="myModal" class="modalcar">
     <div class="modalcar-content">
         <span class="close" id="closeModal">&times;</span>
         <h2>Carrinho de Compras</h2><br>
+
+        <!-- Informações do limite e saldo -->
         <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Limite&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
         <?php if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") : ?>
             <input type="hidden" name="saldoal" value="<?php echo moedaBR($saldoAluno) ?>">
@@ -132,20 +135,123 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
             </label>
             <hr style="border: 1px solid black; width: 100%;">
         <?php endif; ?>
+
+        <!-- Lista do carrinho e total -->
         <ul id="cart"></ul>
         <div>
             <hr style="border: 1px solid black; width: 100%">
-            <h2 style="display: inline; ; color:blue">Total: </h2>
+            <h2 style="display: inline; color:blue">Total: </h2>
             <span id="totalcart" style="display: inline;">0,00</span>
         </div><br>
+
+        <!-- Opção de pagamento -->
         <h2 style="color:blue">Opção pagamento:</h2>
         <div style="display: flex; gap: 10px;">
             <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento" class="botao-pagamento">Saldo</button>
             <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento2" class="botao-pagamento">Pix</button>
-            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento3" class="botao-pagamento">Cartão</button>
+            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento4" class="botao-pagamento">Cartão</button>
+        </div>
+
+        <!-- Formulário de pagamento com cartão, oculto por padrão -->
+        <div id="cartaoForm" style="display: none; margin-top: 20px;">
+            <h2 style="color:blue">Informações do Cartão</h2>
+            <input required="required" type="text" id="brand" name="brand" placeholder="Bandeira: VISA, MASTERCARD ..."><br>
+            <input
+                type="text"
+                id="number"
+                name="number"
+                placeholder="Número do cartão"
+                oninput="mascaraCartao(this)"
+                maxlength="19"><br>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label>
+                    <h2 style="color:blue">Expiração:</h2>
+                </label>
+                <select id="exp_month" name="exp_month" style="font-size: 16px;">
+                    <option value="">Mês</option>
+                    <?php foreach ($meses as $key => $value) { ?>
+                        <option value="<?php echo $key; ?>"><?php echo $key; ?></option>
+                    <?php } ?>
+                </select>
+                <select id="exp_year" name="exp_year" style="font-size: 16px;">
+                    <option value="">Ano</option>
+                    <?php foreach ($anos as $ano) { ?>
+                        <option value="<?php echo $ano; ?>"><?php echo $ano; ?></option>
+                    <?php } ?>
+                </select>
+                <input
+                    type="text"
+                    id="security_code"
+                    name="security_code"
+                    style="width: 100%; max-width: 400px; font-size: 16px;"
+                    placeholder="Código de Segurança:">
+            </div>
+            <input type="text" id="holder_name" name="holder_name" placeholder="Nome do títular"><br>
+            <input
+                type="text"
+                id="holder_tax_id"
+                name="holder_tax_id"
+                placeholder="CPF do titular"
+                oninput="mascaraCPF(this)"
+                maxlength="14"><br>
+            <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento3" class="botao-pagamento">Pagar</button>
         </div>
     </div>
 </div>
+
+<script>
+    // Abrir o modal e exibir formulário de cartão quando o botão "Cartão" for clicado
+    document.getElementById("botaoPagamento4").onclick = function() {
+        document.getElementById("myModal").style.display = "block";
+        document.getElementById("cartaoForm").style.display = "block";
+    };
+
+    // Fechar o modal
+    document.getElementById("closeModal").onclick = function() {
+        document.getElementById("myModal").style.display = "none";
+        document.getElementById("cartaoForm").style.display = "none"; // Ocultar o formulário ao fechar o modal
+    };
+
+    // Fechar o modal ao clicar fora dele
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal")) {
+            document.getElementById("myModal").style.display = "none";
+            document.getElementById("cartaoForm").style.display = "none";
+        }
+    };
+
+    function mascaraCPF(campo) {
+        let valor = campo.value;
+        // Remove qualquer caractere que não seja dígito
+        valor = valor.replace(/\D/g, "");
+
+        // Aplica a máscara de CPF: 000.000.000-00
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+        // Atualiza o campo com o valor formatado
+        campo.value = valor;
+    }
+
+    function mascaraCartao(campo) {
+        let valor = campo.value;
+        // Remove qualquer caractere que não seja dígito
+        valor = valor.replace(/\D/g, "");
+
+        // Aplica a máscara de cartão: 0000-0000-0000-0000
+        valor = valor.replace(/(\d{4})(?=\d)/g, "$1-");
+
+        // Limita ao formato de 16 dígitos com três traços
+        valor = valor.substring(0, 19);
+
+        // Atualiza o campo com o valor formatado
+        campo.value = valor;
+    }
+</script>
+
+
+
 
 <!-- Modal -->
 <div id="changePasswordModal" class="modalus">

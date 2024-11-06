@@ -32,7 +32,6 @@
     <?php include_once 'cabecalhocarda.php'; ?>
     <!-- conteudo -->
     <div class="conteudo">
-
         <?php $this->load($view, $viewData) ?>
     </div>
     <!-- Rodapé -->
