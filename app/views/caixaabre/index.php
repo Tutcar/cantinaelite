@@ -21,7 +21,9 @@
                         <th align="center">Entrada</th>
                         <th align="center">Retirada</th>
                         <th align="center">Caixa Fechado</th>
-                        <th align="center">Ação</th>
+                        <?php if ($idAbre > 0) : ?>
+                            <th align="center">Ação</th>
+                        <?php endif; ?>
                         <th hidden align="left">ID</th>
                     </tr>
                 </thead>
@@ -33,15 +35,16 @@
                             <td align="center"><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $caixaabre->data_ab_caixa)->format('d/m/Y H:i:s'); ?></td>
                             <td align="right"><?php echo moedaBr($caixaabre->entrada) ?></td>
                             <td align="right"><?php echo moedaBr($caixaabre->retirada) ?></td>
-                            <td align="right"><?php echo $caixaabre->fechado ?></td>
+                            <td align="center"><?php echo $caixaabre->fechado ?></td>
                             <td hidden><?php echo $caixaabre->id_caixaabre ?></td>
-                            <td align="center">
-                                <?php if ($caixaabre->fechado == "N") : ?>
+                            <?php if ($caixaabre->fechado == "N") : ?>
+                                <td align="center">
+
                                     <a href="<?php echo URL_BASE . "Caixaabre/edit/" . $caixaabre->id_caixaabre ?>"
                                         class="btn btn-verde">Editar</a>
                                     <!--<a href="javascript:;" onclick="excluir3(this)" data-entidade="caixaabre" data-id="<?php echo $caixaabre->id_caixaabre ?>" class="btn btn-vermelho">Excluir</a>-->
-                                <?php endif; ?>
-                            </td>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     <?php } ?>
                 </tbody>
