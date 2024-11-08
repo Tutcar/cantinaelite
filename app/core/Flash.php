@@ -43,14 +43,14 @@ class Flash
                     unset($_SESSION["webhook"]);
                     unset($_SESSION['qrcode_url']);
                     unset($_SESSION['formapix']);
-
-                    break;
+                    return true;
                 }
             }
 
             // Aguarda 5 segundos antes da próxima execução
             sleep($sleepInterval);
         }
+        return false;
     }
     public static function quitarPix($db, $nr_pedido)
     {
@@ -72,13 +72,14 @@ class Flash
                     unset($_SESSION["webhook"]);
                     unset($_SESSION['qrcode_url']);
                     unset($_SESSION['formapix']);
-                    break;
+                    return true;
                 }
             }
 
             // Aguarda 5 segundos antes da próxima execução
             sleep($sleepInterval);
         }
+        return false;
     }
 
     // Função para obter os itens de um pedido específico

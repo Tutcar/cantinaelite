@@ -144,15 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
         }
     }
+    // const botaoPagamento3 = document.getElementById('botaoPagamento3');
+    // botaoPagamento3.onclick = function() {
+    //     if (total > 0) {
+    //         window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=3"; // Altere para a URL real da página de pagamento
+    //     } else {
+    //         alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
+    //     }
+    // }
     const botaoPagamento3 = document.getElementById('botaoPagamento3');
     botaoPagamento3.onclick = function() {
-        if (total > 0) {
-            window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=3"; // Altere para a URL real da página de pagamento
-        } else {
-            alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
-        }
+    if (total > 0) {
+        alert(`${base_url}Homepage/cadastrar_carrinho`);
+        // Dados do formulário
+        const dados = {
+            saldo: 3,
+            brand: document.getElementById('brand').value,
+            number: document.getElementById('number').value,
+            exp_month: document.getElementById('exp_month').value,
+            exp_year: document.getElementById('exp_year').value,
+            security_code: document.getElementById('security_code').value,
+            holder_name: document.getElementById('holder_name').value,
+            holder_tax_id: document.getElementById('holder_tax_id').value
+        };
+
+        // Enviando via AJAX
+        fetch(`${base_url}Homepage/cadastrar_carrinho`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        }).catch(error => console.error('Erro:', error));
+    } else {
+        alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
     }
-});
+};
+
+ });
 
 function salvarCarrinhoNaSessao() {
     // Envia os dados do carrinho via AJAX para o PHP

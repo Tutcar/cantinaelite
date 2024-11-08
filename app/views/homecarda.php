@@ -195,6 +195,9 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                 oninput="mascaraCPF(this)"
                 maxlength="14"><br>
             <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoPagamento3" class="botao-pagamento">Pagar</button>
+            <form action="<?php echo URL_BASE . "Homepage/simularPay" ?>" method="post">
+                <button type="submit">ver</button>
+            </form>
         </div>
     </div>
 </div>

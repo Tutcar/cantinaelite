@@ -73,7 +73,7 @@ class CaixaabreController extends Controller
             $caixaabre->id_caixaabre = null;
         }
 
-        $caixaabre->data_ab_caixa = $_POST["data_ab_caixa"];
+        $caixaabre->data_ab_caixa = dateTime($_POST["data_ab_caixa"]);
         $get_entrada = $_POST["entrada"];
         $caixaabre->entrada = str_replace($source, $replace, $get_entrada);
         $get_retirada = $_POST["retirada"];

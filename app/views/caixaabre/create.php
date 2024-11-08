@@ -34,7 +34,7 @@
                                 <div class="rows">
                                     <div class="col-12">
                                         <label>Entrada</label>
-                                        <input id="entrada" name="entrada" value="<?php echo isset($caixaabre->entrada) ? moedaBr($caixaabre->entrada) : (($idAbreValor > 0) ? moedaBr($idAbreValor) : moedaBr(0)) ?>" type="text" placeholder="Insira o valor do caixa inicial" class="form-campo">
+                                        <input id="entrada" name="entrada" value="<?php echo isset($caixaabre->entrada) ? moedaBr($caixaabre->entrada) : (($idAbreValor > 0) ? moedaBr($idAbreValor) : moedaBr(30)) ?>" type="text" placeholder="Insira o valor do caixa inicial" class="form-campo">
                                     </div>
                                 </div>
                                 <div class="rows">

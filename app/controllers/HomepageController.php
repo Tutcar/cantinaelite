@@ -89,6 +89,7 @@ class HomepageController extends Controller
    }
    public function simularPay()
    {
+      // i($_SESSION['webhook']);
       if ($_SESSION['formapix'] == "crd") {
          Flash::quitarCredito($this->db, $_SESSION['webhook']);
       } else {
@@ -198,12 +199,19 @@ class HomepageController extends Controller
             $pedidos->pago = "N";
             $pedidos->tipo_pg = "Pix";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
-         } elseif ($_GET['saldo'] == 3) {
+         } else {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $saldo = $data['saldo'];
+            $brand = $data['brand'];
+            $number = $data['number'];
+            $exp_month = $data['exp_month'];
+            $exp_year = $data['exp_year'];
+            $security_code = $data['security_code'];
+            $holder_name = $data['holder_name'];
+            $holder_tax_id = $data['holder_tax_id'];
             $pedidos->pago = "N";
             $pedidos->tipo_pg = "Cartao";
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
-         } else {
-            $pedidos->pago = "N";
          }
 
          $today = date("Y-m-d H:i:s");
@@ -336,21 +344,18 @@ class HomepageController extends Controller
                      }
                   }
                }
-            } elseif ($_GET['saldo'] == 3) {
+            } elseif ($saldo == 3) {
                $cardDetails = new \stdClass();
-               $cardDetails->brand = "visa";
-               $cardDetails->number = "4066699917608988";
-               $cardDetails->exp_month = 8;
-               $cardDetails->exp_year = 2032;
-               $cardDetails->security_code = "481";
-               $cardDetails->holder_name = "Carlos A Teixeira";
-               $cardDetails->holder_tax_id = "06201683828";
+               $cardDetails->brand = $brand; //"visa";
+               $cardDetails->number = tira_mascara($number); //"4066699917608988";
+               $cardDetails->exp_month = intval($data['exp_month']); //8;
+               $cardDetails->exp_year = intval($data['exp_year']); //2032;
+               $cardDetails->security_code = $security_code; //"481";
+               $cardDetails->holder_name = $holder_name; //"Carlos A Teixeira";
+               $cardDetails->holder_tax_id = tira_mascara($holder_tax_id); //"06201683828";
                $response = ReqPagSeguroCartaoCredito::createCreditCardOrder($alunopag, $valorpag, $nr_doc_pg, $cardDetails);
                $_SESSION['webhook'] = $nrPedido;
-               $quitaPx = Flash::quitarPix($this->db, $_SESSION['webhook']);
                $this->redirect(URL_BASE . "homepage", $carrinho);
-               header("Refresh: 0"); // Adiciona o refresh
-               exit;
             }
             //Verifica se a URL foi capturada corretamente
             if (empty($qrcode_png_url)) {

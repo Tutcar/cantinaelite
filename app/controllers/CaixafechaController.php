@@ -90,7 +90,7 @@ class CaixafechaController extends Controller
         $source = array('.', ',');
         $replace = array('', '.');
         $caixafecha->id_caixafecha = null;
-        $caixafecha->data_fecha = date("Y-m-d");
+        $caixafecha->data_fecha = dateTime(hoje());
         $get_dinheiro = $_POST["dinheiro"];
         $caixafecha->dinheiro = str_replace($source, $replace, $get_dinheiro);
         $get_cartao = $_POST["cartao"];
