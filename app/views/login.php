@@ -37,7 +37,6 @@
 						<span class="d-block text-label">Senha</span>
 						<input type="password" name="senha" placeholder="Senha" class="form-campo" required minlength="6">
 					</label>
-
 					<input type="submit" value="Entrar" class="btn btn-tutaLogin d-table m-auto width-100 h5">
 					<br /><br />
 

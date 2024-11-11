@@ -59,6 +59,26 @@ class CaixaabreController extends Controller
         $dados["view"]      = "caixaabre/create";
         $this->load("template", $dados);
     }
+    public function salvarAutCxAbre()
+    {
+        $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "S");
+        $caixaabre = new \stdClass();
+        $source = array('.', ',');
+        $replace = array('', '.');
+        $caixaabre->id_caixaabre = null;
+
+        $caixaabre->data_ab_caixa = dateTime(hoje());
+        $get_entrada = 30.00;
+        $caixaabre->entrada = str_replace($source, $replace, $get_entrada);
+        $get_retirada = 0.00;
+        $caixaabre->retirada = str_replace($source, $replace, $get_retirada);
+        Flash::setForm($caixaabre);
+        if (CaixaabreService::salvar($caixaabre, $this->campo, $this->tabela)) {
+            if (!$caixaabre->id_caixaabre) {
+                $_SESSION["verifCx"] =  Flash::maximo($this->db, "caixaabre", "fechado", "N");
+            }
+        }
+    }
 
     public function salvar()
     {
@@ -78,7 +98,6 @@ class CaixaabreController extends Controller
         $caixaabre->entrada = str_replace($source, $replace, $get_entrada);
         $get_retirada = $_POST["retirada"];
         $caixaabre->retirada = str_replace($source, $replace, $get_retirada);
-
         Flash::setForm($caixaabre);
         if (CaixaabreService::salvar($caixaabre, $this->campo, $this->tabela)) {
             if (!$caixaabre->id_caixaabre) {

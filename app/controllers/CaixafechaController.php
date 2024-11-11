@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\models\service\Service;
 use app\core\Flash;
 use app\core\Conexao;
+use app\models\service\CaixaabreService;
 use app\models\service\CaixafechaService;
 use app\util\UtilService;
 
@@ -122,6 +123,25 @@ class CaixafechaController extends Controller
                 Flash::caixaFecha($this->db, $id);
                 Flash::fechaItens($this->db, $dt);
                 unset($_SESSION["verifCx"]);
+
+                $caixaabre = new \stdClass();
+                $source = array('.', ',');
+                $replace = array('', '.');
+                $caixaabre->id_caixaabre = null;
+                $caixaabre->data_ab_caixa = dateTime(hoje());
+                $get_entrada = 30.00;
+                $caixaabre->entrada = str_replace($source, $replace, $get_entrada);
+                $get_retirada = 0.00;
+                $caixaabre->retirada = str_replace($source, $replace, $get_retirada);
+                $tabela = "caixaabre";
+                $campo = "id_caixaabre";
+                Flash::setForm($caixaabre);
+                if (CaixaabreService::salvar($caixaabre, $campo, $tabela)) {
+                    if (!$caixaabre->id_caixaabre) {
+                        $_SESSION["verifCx"] =  Flash::maximo($this->db, "caixaabre", "fechado", "N");
+                    }
+                }
+
                 $this->redirect(URL_BASE . "painel");
             }
         }

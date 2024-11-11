@@ -5,7 +5,7 @@
     <div class="base-form">
         <div class="caixa-form">
 
-            <div class="thead">Fechar Caixa do Dia - <?php echo dataBr($dataCx->data_ab_caixa); ?></div>
+            <div class="thead">Fechar Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
 
             <form action="<?php echo URL_BASE . "caixafecha/salvar" ?>" method="POST" enctype="multipart/form-data">
 

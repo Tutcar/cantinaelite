@@ -3,12 +3,12 @@
 </script>
 <section class="caixa">
     <?php if ($_SESSION["verifCx"] > 0) : ?>
-        <div class="thead">Fechar Caixa do Dia - <?php echo dataBr($dataCx->data_ab_caixa); ?></div>
+        <div class="thead">Fechar Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
     <?php endif; ?>
     <?php if ($idAbre == 0) : ?>
         <p><?php $this->verMsg(); ?> </p>
     <?php elseif ($idAbre == 1) : ?>
-        <div class="thead"><i class="ico lista"></i> Valor inicial:<?php echo moedaBr($dataCx->entrada); ?> - Venda do dia:<?php echo moedaBr($dinheiro); ?> - Retirada:<?php echo moedaBr($dataCx->retirada); ?> - Caixa final:<?php echo moedaBr($idAbreValor + $dinheiro); ?> - Data Abertura:<?php echo isset($dataCx->data_ab_caixa) ? databr($dataCx->data_ab_caixa) : null; ?> </div>
+        <div class="thead"><i class="ico lista"></i> Valor inicial:<?php echo moedaBr($dataCx->entrada); ?> - Venda do dia:<?php echo moedaBr($dinheiro); ?> - Retirada:<?php echo moedaBr($dataCx->retirada); ?> - Caixa final:<?php echo moedaBr($idAbreValor + $dinheiro); ?></div>
     <?php endif; ?>
     <div class="base-lista">
         <div>
