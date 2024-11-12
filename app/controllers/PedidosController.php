@@ -301,6 +301,15 @@ class PedidosController extends Controller
         $pedidos->quant = 0;
         $today = date("Y-m-d H:i:s");
         $pedidos->data_fch_pedido = $today;
+        $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
+
+        if ($pedidos->tipo_pg == "Outros") {
+            if ($saldoAluno < 0) {
+                Flash::setMsg("Sem saldo para comprar de:." . moedaBr(0), -1);
+                echo json_encode('Sem Saldo.');
+                exit();
+            }
+        }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             unset($_SESSION["nr_ped"]);

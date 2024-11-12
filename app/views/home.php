@@ -1,5 +1,5 @@
 <section class="caixa">
-	<div class="thead"><i class="ico home"></i> Caixa do Dia : <?php echo date('d/m/Y'); ?></div>
+	<div class="thead"><i class="ico home"></i> Caixa do Dia : <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $datacxab->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
 	<div class="base-home">
 		<div class="grade">
 			<div class="rows">
@@ -77,6 +77,9 @@
 							<div class="base-lista">
 
 								<div class="col-12">
+									<div class="div-msg">
+										<?php $this->verMsg() ?>
+									</div>
 									<button class="btn novo" ref="javascript:;" id="fechaPedidos" onclick="abrirModal('#janela2')">Fechar Pedido:<?php echo isset($somaPedido) ? "   -   R$ " . moedaBr($somaPedido) : null; ?></button>
 								</div>
 								<div class="tabela-responsiva">
@@ -180,7 +183,7 @@
 						<option value="Dinheiro">Dinheiro</option>
 						<option value="Cartao">Cartão</option>
 						<option value="Pix">Pix</option>
-						<option value="Outros">Outros</option>
+						<option value="Outros">Saldo</option>
 					</select>
 				</div>
 				<div id="mostra" class="col-12">

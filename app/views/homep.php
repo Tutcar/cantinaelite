@@ -24,13 +24,24 @@
                 <ul class="submenu">
                     <li><a href="<?php echo URL_BASE . "Caixaabre/index" ?>">Abrir</a></li>
                     <li><a href="<?php echo URL_BASE . "Caixafecha/index" ?>">Fechar</a></li>
+                    <li><a href="<?php echo URL_BASE . "Relatorios/areceber" ?>">A receber</a></li>
                     <li><a href="<?php echo URL_BASE . "Encomendas/index" ?>">Encomendas</a></li>
+                    <li><a href="<?php echo URL_BASE . "Relatorios/index" ?>">Relatório</a></li>
                 </ul>
             </li>
             <li>
                 <div class="link"><i class="fa fa-database"></i>Créditos Alunos<i class="fa fa-chevron-down"></i></div>
                 <ul class="submenu">
                     <li><a href="<?php echo URL_BASE . "corretora/index" ?>">Contas</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="link"><i class="fa fa-database"></i>Utilitários<i class="fa fa-chevron-down"></i></div>
+                <ul class="submenu">
+                    <!-- <li><a href="<?php echo URL_BASE . "corretora/index" ?>">Bancos</a></li>
+                    <li><a href="<?php echo URL_BASE . "compromisso/index" ?>">Compromissos</a></li>
+                    <li><a href="<?php echo URL_BASE . "agenda/index" ?>">Agenda</a></li> -->
+                    <li><a href="<?php echo URL_BASE . "Balanco/index" ?>">Balanço</a></li>
                 </ul>
             </li>
             <li>
