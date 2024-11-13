@@ -349,6 +349,12 @@ abstract class Model
                 $valor = $_SESSION["idFuncFh"];
                 $isLista = true;
                 $sql = "SELECT * FROM " . $tabela . " WHERE db_data_deb = " . "'$dataFh' AND " . $campo . " =:campo ";
+            } else if ($tabela == "pedidoSaldo") {
+                $tabela = "pedido";
+                $campo = "nr_pedido";
+                $valor = $_SESSION["nr_ped"];
+                $isLista = false;
+                $sql = "SELECT * FROM " . $tabela . " WHERE " . $campo . " =:campo ";
             } else {
                 $sql = "SELECT * FROM " . $tabela . " WHERE " . $campo . " =:campo ";
             }
@@ -664,7 +670,10 @@ abstract class Model
                 $sql = "SELECT min($campoAgregacao) as min FROM " . $tabela . $condicao;
             }
             $stmt = $conn->prepare($sql);
-            //$stmt->bindValue(":campo", $valor);
+            //$sql = "SELECT min($campoAgregacao) as min FROM " . $tabela . $condicao;
+            if ($tabela == "corrente") {
+                $stmt->bindValue(":campo", $valor);
+            }
             $stmt->execute();
             return $stmt->fetch(\PDO::FETCH_OBJ);
         } catch (\PDOException $e) {

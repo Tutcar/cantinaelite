@@ -281,8 +281,9 @@ class PedidosController extends Controller
     }
     public function salvarFechaPedido()
     {
+
         $id_caixaAbre = Service::get("caixaabre", "fechado", "N");
-        $dados["pedidos"] = Flash::fechaCx($this->db);
+        // $dados["pedidos"] = Flash::fechaCx($this->db);
         $pedidos = Service::get("pedido", "pago", $_SESSION["nr_ped"]);
         $pedidos = new \stdClass();
         $pedidos->id_caixaabre  = $id_caixaAbre->id_caixaabre;
@@ -301,17 +302,46 @@ class PedidosController extends Controller
         $pedidos->quant = 0;
         $today = date("Y-m-d H:i:s");
         $pedidos->data_fch_pedido = $today;
-        $saldoAluno = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
 
         if ($pedidos->tipo_pg == "Outros") {
-            if ($saldoAluno < 0) {
-                Flash::setMsg("Sem saldo para comprar de:." . moedaBr(0), -1);
-                echo json_encode('Sem Saldo.');
+
+            $saldoAluno = 0;
+            $saldoTotalAluno = 0;
+            $pedido = Service::get("pedidoSaldo", "nr_pedido", $_SESSION["nr_ped"], false);
+            $cliente = $pedido->cliente;
+            $aluno = Service::get("cliente", "nm_nome", $cliente, false);
+            $alunoNaoInfo = substr($cliente, 0, 5);
+            if ($alunoNaoInfo == "Cli -") {
+                Flash::setMsg("O pedido tem que estar com o nome do aluno.", -1);
+                echo json_encode('O pedido tem que estar com o nome do aluno.');
                 exit();
+            }
+            $saldoAluno = floatval(Service::getSoma("corrente", "valor_credito - valor_debito", "cod_despesa", $aluno->nr_cpf_cnpj, true));
+            $saldoTotalAluno = $aluno->limite + $saldoAluno;
+            if ($pedidos->valor > $saldoTotalAluno) {
+                Flash::setMsg("Saldo aluno" . $saldoTotalAluno);
+                echo json_encode('Sem saldo para esta comprar.');
+                exit();
+            } else {
+                $id_user = 1;
+                $id_corretora = 1;
+                $nr_doc_banco = "Cli-" . $aluno->id_cliente;
+                $cod_despesa = $aluno->nr_cpf_cnpj;
+                $data_cad = dateTime(hoje());
+                $descricao = $aluno->nm_nome;
+                $nr_doc_pg =  $_SESSION["nr_ped"];
+                $valor_credito = 0;
+                $valor_debito = $pedidos->valor;
+                $data_confirma = dateTime(hoje());
+                $confirma = "S";
+                $obs = "Compra com saldo direto no caixa, pedido Nr. " . $nr_doc_pg;
+                $tipo = null;
+                Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
             }
         }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
+            $dados["pedidos"] = Flash::fechaCx($this->db);
             unset($_SESSION["nr_ped"]);
             echo json_encode('Pedido fechado.');
         } else {

@@ -214,7 +214,7 @@ class HomepageController extends Controller
             $pedidos->id_cliente = $_SESSION['CLIENTE']->id_cliente;
          }
 
-         $today = date("Y-m-d H:i:s");
+         $today = dateTime(hoje());
          $pedidos->data_ab_pedido = $today;
          $pedidos->id_caixaabre = $dados["idAbre"];
          $pedidos->encomendas = "S";
@@ -287,13 +287,13 @@ class HomepageController extends Controller
          $id_corretora = 1;
          $nr_doc_banco = "Cli-" . $_SESSION['CLIENTE']->id_cliente;
          $cod_despesa = $_SESSION['CLIENTE']->nr_cpf_cnpj;
-         $data_cad = date('Y-m-d');
+         $data_cad = dateTime(hoje());
          $descricao = $_SESSION['CLIENTE']->nm_nome;
          $nr_doc_pg =  $nrPedido;
          $valor_credito = 0;
          $get_valor = moedaBr($total_p ?? 0);
          $valor_debito = str_replace($source, $replace, $get_valor);
-         $data_confirma = date('Y-m-d');
+         $data_confirma = dateTime(hoje());
          if ($_GET['saldo'] == 1) {
             $confirma = "S";
          } else {

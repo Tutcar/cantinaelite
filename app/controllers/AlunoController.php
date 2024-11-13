@@ -86,7 +86,7 @@ class AlunoController extends Controller
         $corrente->nr_doc_banco = "Cli - " . $_SESSION['CLIENTE']->id_cliente;
         $cdesp = $_SESSION['CLIENTE']->nr_cpf_cnpj;
         $corrente->cod_despesa = $cdesp;
-        $corrente->data_cad = date('Y-m-d');
+        $corrente->data_cad = dateTime(hoje());
         $corrente->descricao = $_SESSION['CLIENTE']->nm_nome;
         $corrente->nr_doc_pg = $token_credito_al;
 
