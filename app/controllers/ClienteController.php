@@ -69,7 +69,8 @@ class ClienteController extends Controller
             $cliente->id_cliente = null;
         }
         $cliente->nm_nome = $_POST["nm_nome"];
-        $cliente->nm_short = $_POST["nm_short"];
+        $cliente->nm_short = "";
+        $cliente->nome_resp = $_POST["nome_resp"];
         $cliente->serie = $_POST["serie"];
         $cliente->nr_fone = $_POST["nr_fone"];
         $cliente->nr_cpf_cnpj = $_POST["nr_cpf_cnpj"];

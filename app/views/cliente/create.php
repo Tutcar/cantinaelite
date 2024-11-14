@@ -35,10 +35,10 @@
                             </div>
                             <div class="col-6">
                                 <label>Respponsável</label>
-                                <input name="nm_short" required="required" value="<?php echo isset($cliente->nm_short) ? $cliente->nm_short : null ?>" type="text" placeholder="Responsável pelo aluno" class="form-campo">
+                                <input name="nome_resp" required="required" value="<?php echo isset($cliente->nome_resp) ? $cliente->nome_resp : null ?>" type="text" placeholder="Responsável pelo aluno" class="form-campo">
                             </div>
                             <div class="col-4">
-                                <label>CPF/CNPJ</label>
+                                <label>CPF/Responsável</label>
                                 <input name="nr_cpf_cnpj" required="required" value="<?php echo isset($cliente->nr_cpf_cnpj) ? $cliente->nr_cpf_cnpj : null ?>" type="number" placeholder="CPF/CNPJ responável" class="form-campo">
                             </div>
                             <div class="col-3">
@@ -76,7 +76,7 @@
                             <div class="col-2">
                                 <label>UF</label>
                                 <input id="sg_estado" name="sg_estado" value="<?php echo isset($cliente->sg_estado) ? $cliente->sg_estado : null ?>" type="text" placeholder="UF" class="form-campo">
-                            </div> 
+                            </div>
                             <div class="col-4">
                                 <label>Limite</label>
                                 <input id="limite" name="limite"
