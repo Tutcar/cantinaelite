@@ -83,7 +83,7 @@ class UserController extends Controller
         $user = new \stdClass();
         // Alteração pelo usuario
         $user->id_user = $_SESSION[SESSION_LOGIN]->id_user;
-        $user->login = $_SESSION[SESSION_LOGIN]->login;
+        $user->login = $_SESSION[SESSION_LOGIN]->login_login_cli;
         $senha =  $_POST["senha"];
         $confirmPassword =  $_POST["confirmPassword"];
         $user->senha = md5($senha);

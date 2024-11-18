@@ -86,6 +86,11 @@ class PedidosController extends Controller
             }
         }
     }
+    public function excluir($id)
+    {
+        Service::excluir($this->tabela, $this->campo, $id);
+        $this->redirect(URL_BASE . "home");
+    }
     public function verPedido($id_pedido)
     {
         // Verifica se o ID do pedido é um número válido

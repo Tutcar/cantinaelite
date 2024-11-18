@@ -1,17 +1,17 @@
 <script>
-var coluOr = 1;
+    var coluOr = 1;
 </script>
 <section class="caixa">
     <div class="thead"><i class="ico lista"></i> Caixas Fechados -
         Vendas:<?php echo isset($vendaTotal) ? moedaBR($vendaTotal) : null; ?> -
         Custo:<?php echo isset($custoTotal) ? moedaBR($custoTotal) : null; ?> -
-        Margem:<?php echo ($vendaTotal > 0) ? number_format(($vendaTotal / $custoTotal), 2, '.', ',') * 100 . "%" : ""; ?>
+        Margem:<?php echo ($vendaTotal > 0 && $custoTotal > 0) ? number_format(($vendaTotal / $custoTotal), 2, '.', ',') * 100 . "%" : ""; ?>
     </div>
     <div class="base-lista">
 
         <div>
             <div class="text-end d-flex">
-                <a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i  aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>" title="Filtrar Por Data"></a>
+                <a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>" title="Filtrar Por Data"></a>
             </div>
         </div>
         <div id="minhaDiv" class="lst">
@@ -58,22 +58,22 @@ var coluOr = 1;
 
 
                     <?php foreach ($lista as $relatorios) { ?>
-                    <tr>
-                        <td><?php echo dataBr($relatorios->data_ab_caixa) ?></td>
-                        <td align="right"><?php echo moedaBr($relatorios->entrada) ?></td>
-                        <td align="right"><?php echo moedaBr($relatorios->retirada) ?></td>
-                        <td align="right"><?php echo $relatorios->fechado ?></td>
-                        <td align="right"><?php echo ($relatorios->valor) ? moedaBr($relatorios->valor) : moedaBr(0) ?></td>
-                        <td align="right"><?php echo ($relatorios->custo) ? moedaBr($relatorios->custo) : moedaBr(0) ?></td>
-                        <td align="right">
-                                <?php echo ($relatorios->valor && $relatorios->custo) ? number_format(($relatorios->valor / $relatorios->custo) * 100).  "%" : '0%'  ?></td>
-                        <td hidden><?php echo $relatorios->id_relatorios ?></td>
-                        <td align="center">
-                            <a href="<?php echo URL_BASE . "Relatorios/relatDia/" . $relatorios->id_caixaabre ?>">&nbsp;&nbsp;<img
-                                    style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>" title="Vendas Diárias"></a>
-                            <a href="<?php echo URL_BASE . "Relatorios/listadia/" . $relatorios->data_ab_caixa ?>">&nbsp;&nbsp;<img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lista.png"; ?>" title="Produtos Diários"></a>        
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><?php echo dataBr($relatorios->data_ab_caixa) ?></td>
+                            <td align="right"><?php echo moedaBr($relatorios->entrada) ?></td>
+                            <td align="right"><?php echo moedaBr($relatorios->retirada) ?></td>
+                            <td align="right"><?php echo $relatorios->fechado ?></td>
+                            <td align="right"><?php echo ($relatorios->valor) ? moedaBr($relatorios->valor) : moedaBr(0) ?></td>
+                            <td align="right"><?php echo ($relatorios->custo) ? moedaBr($relatorios->custo) : moedaBr(0) ?></td>
+                            <td align="right">
+                                <?php echo ($relatorios->valor && $relatorios->custo) ? number_format(($relatorios->valor / $relatorios->custo) * 100) .  "%" : '0%'  ?></td>
+                            <td hidden><?php echo $relatorios->id_relatorios ?></td>
+                            <td align="center">
+                                <a href="<?php echo URL_BASE . "Relatorios/relatDia/" . $relatorios->id_caixaabre ?>">&nbsp;&nbsp;<img
+                                        style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>" title="Vendas Diárias"></a>
+                                <a href="<?php echo URL_BASE . "Relatorios/listadia/" . $relatorios->data_ab_caixa ?>">&nbsp;&nbsp;<img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lista.png"; ?>" title="Produtos Diários"></a>
+                            </td>
+                        </tr>
                     <?php } ?>
                 </tbody>
 

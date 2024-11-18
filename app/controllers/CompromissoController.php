@@ -39,6 +39,12 @@ class CompromissoController extends Controller
         $dados["view"]  = "compromisso/pedidosdia";
         $this->load("template", $dados);
     }
+    public function pedidosPendentes()
+    {
+        $dados["lista"] = Flash::compromissosPendentes($this->db);
+        $dados["view"]  = "compromisso/pedidosdia";
+        $this->load("template", $dados);
+    }
 
     public function create()
     {

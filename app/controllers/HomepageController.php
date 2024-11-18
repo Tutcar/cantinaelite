@@ -184,7 +184,7 @@ class HomepageController extends Controller
          $pedidos = new \stdClass();
          $nrPedido = $dados["nr_pedido"] = Service::getMaximo("pedido", "nr_pedido", $campo, $valor) + 1;
          $pedidos->id_pedidos = null;
-         $pedidos->cliente = $_SESSION[SESSION_LOGIN]->login;
+         $pedidos->cliente = $_SESSION[SESSION_LOGIN]->login_cli;
          $pedidos->nr_pedido = $nrPedido;
          if ($_GET['saldo'] == 1) {
             $correnteValor = 0;
@@ -224,7 +224,7 @@ class HomepageController extends Controller
          if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             if ($pedidos->encomendas == "S") {
                $id_user = $_SESSION['CLIENTE']->id_cliente;
-               $descricao = "Pedido Site nr:" . $nrPedido . " - Cliente:" . $_SESSION[SESSION_LOGIN]->login;
+               $descricao = "Pedido Site nr:" . $nrPedido . " - Cliente:" . $_SESSION[SESSION_LOGIN]->login_cli;
                $data_comp = $today;
                Flash::salvaEncomendas($this->db, $id_user, $nrPedido, $descricao, $data_comp);
             }

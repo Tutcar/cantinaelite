@@ -285,6 +285,21 @@ class Flash
             return "Erro: " . $e->getMessage();
         }
     }
+    public static function compromissosPendentes($pdo)
+    {
+        try {
+            // Preparar a query SQL
+            $stmt = $pdo->prepare("SELECT * FROM compromisso WHERE nr_pedido > 0  AND data_entrega IS NULL");
+
+            // Executar a consulta passando o parâmetro
+            $stmt->execute([]);
+
+            // Retornar os resultados
+            return $stmt->fetchAll(\PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            return "Erro: " . $e->getMessage();
+        }
+    }
     public static function compromissosDia($pdo)
     {
         try {

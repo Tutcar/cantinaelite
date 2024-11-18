@@ -7,6 +7,11 @@
 <section class="caixa">
     <div class="thead"><i class="ico lista"></i> Pedidos Site</div>
     <div class="base-lista">
+        <div>
+            <div class="text-end d-flex">
+                <a href="<?php echo URL_BASE . "Compromisso/pedidosPendentes" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Pedidos Pendentes</a>
+            </div>
+        </div>
         <div id="minhaDiv" class="lst">
             <form action="<?php echo URL_BASE . "compromisso/filtro"; ?>" method="post">
                 <div class="rows">
