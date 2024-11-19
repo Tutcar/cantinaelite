@@ -16,6 +16,7 @@
                     <li><a href="<?php echo URL_BASE . "Produtos/index" ?>">Produtos</a></li>
                     <li><a href="<?php echo URL_BASE . "Cardapio/index" ?>">Cardápio</a></li>
                     <li><a href="<?php echo URL_BASE . "Cliente/index" ?>">Alunos</a></li>
+                    <li><a href="<?php echo URL_BASE . "Restricao/index" ?>">Restrições</a></li>
                     <li><a href="<?php echo URL_BASE . "User/index" ?>">Usuário</a></li>
                 </ul>
             </li>

@@ -7,6 +7,31 @@ use PDOException;
 
 class Flash
 {
+    public static function restricaoAluno($db, $id_cliente)
+    {
+        try {
+            // Consulta com placeholder nomeado
+            $sql = "SELECT * FROM produtos WHERE id_produtos NOT IN (SELECT id_produtos FROM restricoes WHERE id_cliente = :id_cliente)";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro nomeado
+            $stmt->bindValue(':id_cliente', $id_cliente, \PDO::PARAM_INT);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Obter os resultados
+            $produtosDisponiveis = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            return $produtosDisponiveis;
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 
     public static function quitarPgComSaldo($db, $valor, $nr_pedido)
     {
