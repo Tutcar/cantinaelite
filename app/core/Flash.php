@@ -7,6 +7,63 @@ use PDOException;
 
 class Flash
 {
+    public static function restricoesAlunoCad($db, $id_cliente, $id_produto)
+    {
+        try {
+            // Verificar se a restrição já existe
+            $sqlVerifica = "
+            SELECT COUNT(*) as total 
+            FROM restricoes 
+            WHERE id_cliente = :id_cliente AND id_produtos = :id_produto
+        ";
+            $stmtVerifica = $db->prepare($sqlVerifica);
+            $stmtVerifica->bindValue(':id_cliente', $id_cliente, \PDO::PARAM_INT);
+            $stmtVerifica->bindValue(':id_produto', $id_produto, \PDO::PARAM_INT);
+            $stmtVerifica->execute();
+
+            $result = $stmtVerifica->fetch(\PDO::FETCH_ASSOC);
+
+            if ($result['total'] > 0) {
+                // Retorna uma mensagem indicando que já existe
+                return true;
+            }
+            return false;
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public static function restricoesAluno($db, $id_cliente)
+    {
+        try {
+            // Query SQL para pegar as restrições do aluno
+            $sql = "
+            SELECT r.id_produtos, p.nome 
+            FROM restricoes r
+            JOIN produtos p ON r.id_produtos = p.id_produtos
+            WHERE r.id_cliente = :id_cliente
+        ";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Associar o parâmetro id_cliente ao valor fornecido
+            $stmt->bindValue(':id_cliente', $id_cliente, \PDO::PARAM_INT);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Obter os resultados
+            $restricoes = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+            return $restricoes;
+        } catch (\PDOException $e) {
+            // Lançar exceção em caso de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public static function restricaoAluno($db, $id_cliente)
     {
         try {
@@ -23,7 +80,7 @@ class Flash
             $stmt->execute();
 
             // Obter os resultados
-            $produtosDisponiveis = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $produtosDisponiveis = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
             return $produtosDisponiveis;
         } catch (\PDOException $e) {
