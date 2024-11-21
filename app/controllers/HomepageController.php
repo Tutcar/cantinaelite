@@ -63,11 +63,20 @@ class HomepageController extends Controller
             $dados["saldoAluno"] = 0;
          };
       }
-
+      $produtos  = Flash::restricaoAluno($this->db, $_SESSION['CLIENTE']->id_cliente);
       $dados["carrinho"] = isset($_SESSION['carrinho']) ? $_SESSION['carrinho'] : [];
-      $dados["salgados"] = Service::get("produtos", "categorias", "salgados", true);
-      $dados["outros"] = Service::get("produtos", "categorias", "outros", true);
-      $dados["bebidas"] = Service::get("produtos", "categorias", "bebidas", true);
+      $categoria = "salgados";
+      $dados["salgados"] = $filtrados = array_filter($produtos, function ($produto) use ($categoria) {
+         return $produto->categorias === $categoria;
+      });
+      $categoria = "outros";
+      $dados["outros"] =  $filtrados = array_filter($produtos, function ($produto) use ($categoria) {
+         return $produto->categorias === $categoria;
+      });
+      $categoria = "bebidas";
+      $dados["bebidas"] = $filtrados = array_filter($produtos, function ($produto) use ($categoria) {
+         return $produto->categorias === $categoria;
+      });
       $dados["dia"] = diasemanaExtenso(date(hoje()));
       $dados["pratos"] = Service::get("produtos", "dia", $diaSemanaNumero = date('w', strtotime(hoje())), true);
       $dados["pratoss"] = Service::get("produtos", "categorias", "prato", true);

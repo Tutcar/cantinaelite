@@ -39,7 +39,7 @@ class Flash
         try {
             // Query SQL para pegar as restrições do aluno
             $sql = "
-            SELECT r.id_produtos, p.nome 
+            SELECT id_restricoes, r.id_produtos, p.nome 
             FROM restricoes r
             JOIN produtos p ON r.id_produtos = p.id_produtos
             WHERE r.id_cliente = :id_cliente

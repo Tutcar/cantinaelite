@@ -3,8 +3,6 @@
 	<div class="base-home">
 		<div class="grade">
 			<div class="rows">
-
-
 				<div class="col-6">
 					<article class="cx-home">
 						<div class="thead">Cardápio</div>
@@ -12,9 +10,7 @@
 							var coluOr = 1;
 						</script>
 						<section class="caixa">
-
 							<div class="base-lista">
-
 								<div class="tabela-responsiva">
 									<table width="100%" border="0" cellspacing="0" cellpadding="0" id="dataTable">
 										<thead>
@@ -25,9 +21,8 @@
 												<th hidden align="left">ID</th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody id="tbodyId">
 											<?php foreach ($lista as $produtos) { ?>
-
 												<tr>
 													<td id="idNome"><?php echo substr($produtos->nome, 0, 20) ?></td>
 													<td id="idVenda" align="right"><?php echo moedaBR($produtos->venda) ?></td>
@@ -39,22 +34,18 @@
 													<td><a href="javascript:;" onclick="cadPedido(<?php echo $produtos->id_produtos ?>)"><img style="width: 50px; height: 50px" src="<?php echo URL_IMAGEM . $imagem ?>"></a></td>
 													<td id="idId" hidden><?php echo $produtos->id_produtos ?></td>
 												</tr>
-
 											<?php } ?>
 										</tbody>
-
 									</table>
 								</div>
 							</div>
 						</section>
-
 					</article>
 				</div>
 				<div class="col-6">
 					<article class="cx-home">
 						<div class="thead">
 							<div class="col-12">
-
 								<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janela1')">Novo Pedidos</label>
 								<select onchange="mostraAlerta(this.value)" id="novoPed" name="nr_pedidos" class="form-campo">
 									<option value="novo"></option>
@@ -118,20 +109,13 @@
 									</table>
 								</div>
 							</div>
-
 						</section>
 					</article>
-
-
 				</div>
-
 			</div>
-
 		</div>
 	</div>
-
 	</div>
-
 </section>
 <script>
 	var novoPedido = "<?php echo $nr_pedido + 1; ?>";

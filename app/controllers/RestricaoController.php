@@ -12,7 +12,7 @@ use app\models\service\RestricoesService;
 class RestricaoController extends Controller
 {
     private $tabela = "restricoes";
-    private $campo = "id_restricao";
+    private $campo = "id_restricoes";
     private $usuario = "";
     protected $db;
     public function __construct()
@@ -29,7 +29,6 @@ class RestricaoController extends Controller
 
     public function index($id = null)
     {
-        Flash::restricoesAluno($this->db, $id);
         $selectedCliente = null;
         if (isset($id)) {
             $selectedCliente = $id;
@@ -48,6 +47,39 @@ class RestricaoController extends Controller
         $dados["view"]  = "restricao/index";
         $this->load("template", $dados);
     }
+    public function listar($id_cliente)
+    {
+        // Substitua pelo método que busca as restrições no banco de dados
+        $restricoes = $dados["restricoes"]  = Flash::restricoesAluno($this->db, $id_cliente);
+
+        echo json_encode($restricoes);
+    }
+    public function listarRestricoes()
+    {
+        header('Content-Type: application/json; charset=utf-8'); // Define o cabeçalho como JSON
+
+        // Verifica se clienteId está presente na requisição
+        if (!isset($_GET['clienteId']) || empty($_GET['clienteId'])) {
+            echo json_encode(['error' => 'ID do cliente não foi fornecido.']);
+            return;
+        }
+
+        // Obtém o cliente
+        $cliente = Service::get("cliente", "nm_nome", $_GET["clienteId"], false);
+
+        if (!$cliente) {
+            echo json_encode(['error' => 'Cliente não encontrado.']);
+            return;
+        }
+
+        // Busca as restrições no banco de dados
+        $id = $cliente->id_cliente;
+        $restricoes = Flash::restricaoAluno($this->db, $id);
+
+        // Converte para JSON e retorna
+        echo json_encode($restricoes);
+    }
+
     public function salvar()
     {
         $dados["selectedCliente"] = $_POST['id_cliente'] ?? null;
@@ -69,5 +101,11 @@ class RestricaoController extends Controller
                 $this->redirect(URL_BASE . "restricao/index/" . $dados["selectedCliente"]);
             }
         }
+    }
+    public function excluir($id)
+    {
+        $id2 = Service::get($this->tabela, $this->campo, $id, false);
+        Service::excluir($this->tabela, $this->campo, $id);
+        $this->redirect(URL_BASE . "restricao/index/" . $id2->id_cliente);
     }
 }
