@@ -27,16 +27,30 @@ class RestricaoController extends Controller
         }
     }
 
-    public function index()
+    public function index($id = null)
     {
-        i($prod = Flash::restricaoAluno($this->db, 1));
-        $dados["produtos"] = Service::lista("produtos");
+        Flash::restricoesAluno($this->db, $id);
+        $selectedCliente = null;
+        if (isset($id)) {
+            $selectedCliente = $id;
+            $dados["restricoes"]  = Flash::restricoesAluno($this->db, $id);
+        }
+
+        $dados["selectedCliente"] = $selectedCliente;
+        if ($id == null) {
+            $dados["produtos"] = Service::lista("produtos");
+            $dados["restricoes"] = Flash::restricoesAluno($this->db, 0);
+        } else {
+            $dados["produtos"]  = Flash::restricaoAluno($this->db, $id);
+        }
+
         $dados["clientes"] = Service::lista("cliente");
         $dados["view"]  = "restricao/index";
         $this->load("template", $dados);
     }
     public function salvar()
     {
+        $dados["selectedCliente"] = $_POST['id_cliente'] ?? null;
         $restricoes = new \stdClass();
         if ($_POST["id_restricoes"] || "") {
             $restricoes->id_restricoes = ($_POST["id_restricoes"]);
@@ -45,14 +59,14 @@ class RestricaoController extends Controller
         }
         $restricoes->id_produtos = $_POST["id_produtos"];
         $restricoes->id_cliente = $_POST["id_cliente"];
-        Flash::setForm($restricoes);
-        if (RestricoesService::salvar($restricoes, $this->campo, $this->tabela)) {
-            $this->redirect(URL_BASE . "restricao");
+        $jaCad = Flash::restricoesAlunoCad($this->db, $restricoes->id_cliente, $restricoes->id_produtos);
+        if ($jaCad == 1) {
+            Flash::setMsg("Restrição ja cadastrada para este aluno!", 1);
+            $this->redirect(URL_BASE . "restricao/index/" . $dados["selectedCliente"]);
         } else {
-            if (!$restricoes->id_jg) {
-                $this->redirect(URL_BASE . "restricao");
-            } else {
-                $this->redirect(URL_BASE . "restricao" . $restricoes->id_restricoes);
+            Flash::setForm($restricoes);
+            if (RestricoesService::salvar($restricoes, $this->campo, $this->tabela)) {
+                $this->redirect(URL_BASE . "restricao/index/" . $dados["selectedCliente"]);
             }
         }
     }
