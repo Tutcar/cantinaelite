@@ -7,6 +7,29 @@ use PDOException;
 
 class Flash
 {
+    public static function restricaoAlunoPedido($db, $id_cliente, $id_produtos)
+    {
+        try {
+            // Consulta com placeholder nomeado
+            $sql = "SELECT * FROM restricoes WHERE id_produtos =:id_produtos AND id_cliente =:id_cliente";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro nomeado
+            $stmt->bindValue(':id_produtos', $id_produtos, \PDO::PARAM_INT);
+            $stmt->bindValue(':id_cliente', $id_cliente, \PDO::PARAM_INT);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Obter os resultados
+            return $stmt->rowCount();
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
     public static function restricoesAlunoCad($db, $id_cliente, $id_produto)
     {
         try {

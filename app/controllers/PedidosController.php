@@ -207,6 +207,12 @@ class PedidosController extends Controller
     {
         $_SESSION["nr_ped"] = $_POST["nr_pedido"];
         $Cli_p = Service::get("pedidoCli_p", "nr_pedido", $_POST["nr_pedido"]);
+        $cliente = Service::get("cliente", "nm_nome", $Cli_p->cliente, false);
+        if ($cliente <> "") {
+            $id_cli = $cliente->id_cliente;
+        } else {
+            $id_cli = -1;
+        }
         $produtos = new \stdClass();
         $source = array('.', ',');
         $replace = array('', '.');
@@ -224,6 +230,12 @@ class PedidosController extends Controller
         $pedidos->custo = str_replace($source, $replace, $get_custo);
         $get_valor = moedaBr($produtos->venda);
         $pedidos->valor = str_replace($source, $replace, $get_valor);
+        $restricaoAlunoPedido = Flash::restricaoAlunoPedido($this->db, $id_cli, $pedidos->id_produto);
+        if ($restricaoAlunoPedido > 0) {
+            Flash::setMsg("Produto com restrição de venda.!", -1);
+            echo json_encode('Produto com restrição de venda.');
+            die();
+        }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             $tabela = "pedidoo";
