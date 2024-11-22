@@ -42,8 +42,15 @@ class HomeController extends Controller
       $dados["pedidos"] = Service::lista("pedidoo");
       $valor = $dados["nr_pedido"] + 1;
       $operador = " = ";
+      $dados["saldoAluno"] = 0;
       if (isset($_SESSION["nr_ped"])) {
          $valor = $_SESSION["nr_ped"];
+         $clienteNome = Service::get("pedido", "nr_pedido", $_SESSION["nr_ped"], false);
+         $primeirosCinco = substr($clienteNome->cliente, 0, 5);
+         if ($primeirosCinco <> "Cli -") {
+            $clienteCpf = Service::get("cliente", "nm_nome", $clienteNome->cliente, false);
+            $dados["saldoAluno"] = Flash::saldoCantina($this->db, $clienteCpf->nr_cpf_cnpj) + $clienteCpf->limite;
+         }
          $dados["somaPedido"] = Service::getSoma("pedido", "quant * valor", "nr_pedido", null, true);
       } else {
          $_SESSION["nr_ped"] = 0;
@@ -59,3 +66,12 @@ class HomeController extends Controller
       $this->load("template", $dados);
    }
 }
+// $dados["saldoAluno"] = 0;
+//       if (isset($dados["nr_pedido"])) {
+//          $valor = $_SESSION["nr_ped"];
+//          $clienteNome = Service::get("pedido", "nr_pedido", $dados["nr_pedido"], false);
+//          $clienteCpf = Service::get("cliente", "nm_nome", $clienteNome->cli_p, false);
+//          if ($clienteCpf <> "") {
+//             $cod_despesa = $clienteCpf->nr_cpf_cnpj;
+//             $dados["saldoAluno"] = Flash::saldoCantina($this->db, $cod_despesa) + $clienteCpf->limite;
+//          }
