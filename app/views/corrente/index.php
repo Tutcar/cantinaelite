@@ -107,7 +107,7 @@
             </table>
 
         </div>
-        <a href="<?php echo URL_BASE . "corretora/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+        <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
     </div>
 
 </section>

@@ -7,6 +7,7 @@ use app\models\service\Service;
 use app\core\Flash;
 use app\models\service\CorrenteService;
 use app\util\UtilService;
+use Exception;
 use PDOException;
 use stdClass;
 
@@ -27,6 +28,7 @@ class CorrenteController extends Controller
     }
     public function index()
     {
+
         $dados = array(
             'saldo' => "",
             'compenssar' => "",
@@ -54,8 +56,38 @@ class CorrenteController extends Controller
         $dados['saldoLq'] = $credito->soma - $compensar->soma - $debito->soma;
         $dados['corretoras'] = Service::get($tabela, $campo, $id_corretora);
         $dados["lista"] = Service::listaCorr($this->tabela, $id_corretora);
-        $dados["view"]  = "corrente/index";
+        $dados["clientes"] = Service::lista("cliente");
+        $dados["correntes"] = Service::get("corrente", "descricao", 0, true);
+        $dados["view"]  = "corrente/alunos";
         $this->load("template", $dados);
+    }
+    public function obterCorrentes($idCliente = null)
+    {
+
+        header('Content-Type: application/json; charset=utf-8');
+        try {
+            $correntes = Service::get("corrente", "descricao", $idCliente, true);
+
+            if (!$correntes) {
+                echo json_encode(['error' => "Nenhuma corrente encontrada para o cliente $idCliente."]);
+                return;
+            }
+
+            echo json_encode($correntes); // Retorna JSON puro
+        } catch (Exception $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
+    public function obterCorrentesSjson($idCliente = null)
+    {
+        try {
+            $dados["correntes"] = Service::get("corrente", "descricao", $idCliente, true);
+            $dados["clientes"] = Service::lista("cliente");
+            $dados["view"]  = "corrente/alunos";
+            $this->load("template", $dados);
+        } catch (Exception $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -105,6 +137,49 @@ class CorrenteController extends Controller
         $dados["corrente"] = $corrente;
         $dados["view"]      = "corrente/create";
         $this->load("template", $dados);
+    }
+    public function salvarCrd()
+    {
+
+        $token_credito_al = rand(100000, 999999);
+        $id_cli = Service::get("cliente", "nm_nome", $_POST["nome"]);
+        $corrente = new \stdClass();
+        $corrente->id_corrente = null;
+
+
+        $corrente->id_user = 1;
+        $corrente->id_corretora = 1;
+        $corrente->nr_doc_banco = "Cli - " . $id_cli->id_cliente;
+        $corrente->cod_despesa = $id_cli->nr_cpf_cnpj;
+        $corrente->data_cad = dateTime(hoje());
+        $corrente->descricao = $_POST["nome"];
+        $corrente->nr_doc_pg = $token_credito_al;
+        $source = array('.', ',');
+        $replace = array('', '.');
+        if ($_POST["valorCredito"] != null) {
+            $get_valor_credito = $_POST["valorCredito"];
+            $corrente->valor_credito = str_replace($source, $replace, $get_valor_credito);
+        } else {
+            $corrente->valor_credito = 0;
+        }
+        // if ($_POST["valor_debito"] != null) {
+        //     $get_valor_debito = $_POST["valor_debito"];
+        //     $corrente->valor_debito = str_replace($source, $replace, $get_valor_debito);
+        // } else {
+        //     $corrente->valor_debito = 0;
+        // }
+        $corrente->confirma = "S";
+        $corrente->data_confirma = dateTime(hoje());
+        $corrente->obs = "Crédito para : " . $_POST["nome"];
+        $corrente->tipo = 0;
+        Flash::setForm($corrente);
+        if (CorrenteService::salvar($corrente, $this->campo, $this->tabela)) {
+            $this->redirect(URL_BASE . "corrente/index/?id_corretora=" . $corrente->id_corretora);
+        } else {
+            if (!$corrente->id_corrente) {
+                $this->redirect(URL_BASE . "Relatorios/index");
+            }
+        }
     }
 
     public function salvar()

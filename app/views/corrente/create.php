@@ -67,9 +67,13 @@
 
                             <div class="col-4">
                                 <label style="height: 23px;">Data</label>
-                                <input name="data_cad"
-                                    value="<?php echo isset($corrente->data_cad) ? $corrente->data_cad : "S" ?>"
-                                    type="date" placeholder="Insira data de cadastro" class="form-campo">
+                                <input
+                                    name="data_cad"
+                                    value="<?php echo isset($corrente->data_cad) ? date('Y-m-d', strtotime($corrente->data_cad)) : '' ?>"
+                                    type="date"
+                                    placeholder="Insira data de cadastro"
+                                    class="form-campo">
+
                             </div>
                             <div class="col-8">
                                 <label>Descriminação</label>

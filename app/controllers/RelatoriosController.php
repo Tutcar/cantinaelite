@@ -62,7 +62,7 @@ class RelatoriosController extends Controller
         $dados["view"]  = "relatorios/relatdia";
         $this->load("template", $dados);
     }
-    public function itensPedido($id, $cli, $dat)
+    public function itensPedido($id, $cli, $dat, $extrato = null)
     {
         $dados["relatItem"] = Service::get("pedidodia", "nr_pedido", $id, true);
         $dados["cliente"] = $cli;
@@ -96,12 +96,24 @@ class RelatoriosController extends Controller
             }
         );
         $dados["relatItem"];
-        $dados["view"]  = "relatorios/itenspedido";
+        if ($extrato == "ext") {
+            $dados["view"]  = "relatorios/itensextrato";
+        } else {
+            $dados["view"]  = "relatorios/itenspedido";
+        }
+
         $this->load("template", $dados);
     }
-    public function todosItens($cli)
+    public function todosItens($cli, $extrato = null)
     {
         $dados["todosItens"] = Service::get("pedido", "cli_p", $cli, true);
+        if ($extrato == "ext") {
+            $dados["view"]  = "relatorios/itensclienteExt";
+        } else {
+            $dados["view"]  = "relatorios/itenscliente";
+        }
+
+
         $dados["view"]  = "relatorios/itenscliente";
         $this->load("template", $dados);
     }

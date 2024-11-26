@@ -167,7 +167,9 @@
 						<option value="Dinheiro">Dinheiro</option>
 						<option value="Cartao">Cartão</option>
 						<option value="Pix">Pix</option>
-						<option value="Outros">Saldo <?php echo ($saldoAluno) ? moedaBr($saldoAluno) : "0"; ?></option>
+						<?php if ($somaPedido < $saldoAluno) : ?>
+							<option value="Outros">Saldo <?php echo ($saldoAluno) ? moedaBr($saldoAluno) : "0"; ?></option>
+						<?php endif; ?>
 					</select>
 				</div>
 				<div id="mostra" class="col-12">

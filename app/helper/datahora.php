@@ -12,6 +12,11 @@ function dateTime()
 {
     return date("Y-m-d H:i:s");
 }
+function formatarDataBr($dataISO)
+{
+    $data = new DateTime($dataISO);
+    return $data->format('d/m/Y H:i:s');
+}
 function extrair_data($data, $opcao = 1)
 {
     //Opção 1-EN 2-BR

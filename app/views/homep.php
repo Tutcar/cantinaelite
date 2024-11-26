@@ -33,7 +33,7 @@
             <li>
                 <div class="link"><i class="fa fa-database"></i>Créditos Alunos<i class="fa fa-chevron-down"></i></div>
                 <ul class="submenu">
-                    <li><a href="<?php echo URL_BASE . "corretora/index" ?>">Contas</a></li>
+                    <li><a href="<?php echo URL_BASE . "corrente/index/?id_corretora=1" ?>">Contas</a></li>
                 </ul>
             </li>
             <li>

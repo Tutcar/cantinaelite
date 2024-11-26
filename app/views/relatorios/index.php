@@ -71,7 +71,6 @@
                             <td align="center">
                                 <a href="<?php echo URL_BASE . "Relatorios/relatDia/" . $relatorios->id_caixaabre ?>">&nbsp;&nbsp;<img
                                         style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>" title="Vendas Diárias"></a>
-                                <a href="<?php echo URL_BASE . "Relatorios/listadia/" . $relatorios->data_ab_caixa ?>">&nbsp;&nbsp;<img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lista.png"; ?>" title="Produtos Diários"></a>
                             </td>
                         </tr>
                     <?php } ?>

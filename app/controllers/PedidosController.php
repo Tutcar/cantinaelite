@@ -336,7 +336,7 @@ class PedidosController extends Controller
             $saldoAluno = floatval(Service::getSoma("corrente", "valor_credito - valor_debito", "cod_despesa", $aluno->nr_cpf_cnpj, true));
             $saldoTotalAluno = $aluno->limite + $saldoAluno;
             if ($pedidos->valor > $saldoTotalAluno) {
-                Flash::setMsg("Saldo aluno" . $saldoTotalAluno);
+                Flash::setMsg("Saldo insuficiente : " . moedaBr($saldoTotalAluno), -1);
                 echo json_encode('Sem saldo para esta comprar.');
                 exit();
             } else {

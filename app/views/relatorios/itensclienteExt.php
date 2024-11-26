@@ -2,7 +2,7 @@
     var coluOr = 1;
 </script>
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Itens Deste Pedido</div>
+    <div class="thead"><i class="ico lista"></i> Todos as Compras Deste Cliente</div>
     <div class="base-lista">
         <?php $this->verMsg() ?>
         <div class="tabela-responsiva">
@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($relatItem as $relatorios) { ?>
+                    <?php foreach ($todosItens as $relatorios) { ?>
                         <tr>
                             <td align="left"><?php echo $relatorios->nome ?></td>
                             <td align="center"><?php echo dataBr($relatorios->data_ab_pedido) ?></td>
@@ -34,14 +34,14 @@
                             </td>
                             <td hidden><?php echo $relatorios->id_pedidos ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "Relatorios/todosItens/" . $relatorios->cliente ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>"></a>
+                                <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
-
     </div>
+    <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+
 </section>

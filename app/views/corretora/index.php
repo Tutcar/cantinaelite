@@ -2,7 +2,7 @@
     var coluOr = 0;
 </script>
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Lista de bancos</div>
+    <div class="thead"><i class="ico lista"></i> Creditos</div>
     <div class="base-lista">
 
         <div>
