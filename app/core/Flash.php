@@ -7,6 +7,30 @@ use PDOException;
 
 class Flash
 {
+    public static function  CreditoAluno($conn, $idCliente)
+    {
+        try {
+            $campoAgregacao = "valor_credito";
+            $sql = "SELECT sum($campoAgregacao) as soma FROM corrente WHERE descricao = '" . $idCliente . "' AND id_corretora = 1 AND confirma = 'S'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetch(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+    public static function findDebito($conn, $tabela, $campoAgregacao, $campo, $valor, $id_corretora)
+    {
+
+        try {
+            $sql = "SELECT sum($campoAgregacao) as soma FROM " . $tabela . " WHERE id_user = " . $_SESSION[SESSION_LOGIN]->id_user . " AND id_corretora = " . $id_corretora . " AND confirma = 'S'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetch(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
     public static function restricaoAlunoPedido($db, $id_cliente, $id_produtos)
     {
         try {

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\core\Conexao;
 use app\core\Controller;
 use app\models\service\Service;
 use app\core\Flash;
@@ -13,11 +14,13 @@ use stdClass;
 
 class CorrenteController extends Controller
 {
+    protected $db;
     private $tabela = "corrente";
     private $campo = "id_corrente";
     private $usuario = "";
     public function __construct()
     {
+        $this->db = Conexao::getConexao();
         $this->usuario = UtilService::getUsuario();
         if (!$this->usuario) {
             $this->redirect(URL_BASE . "login");
@@ -28,7 +31,8 @@ class CorrenteController extends Controller
     }
     public function index()
     {
-
+        $idCliente = "Carlos Alberto Teixeira";
+        i(Flash::CreditoAluno($this->db, $idCliente));
         $dados = array(
             'saldo' => "",
             'compenssar' => "",
@@ -63,11 +67,17 @@ class CorrenteController extends Controller
     }
     public function obterCorrentes($idCliente = null)
     {
-
+        $tabela = "corrente";
+        $campo = "descricao";
+        $campoAgregacao = "valor_credito";
+        $valor = "";
         header('Content-Type: application/json; charset=utf-8');
         try {
             $correntes = Service::get("corrente", "descricao", $idCliente, true);
-
+            $credito = Flash::CreditoAluno($this->db, $idCliente);
+            // $campoAgregacao = "valor_debito";
+            // $debito = Service::getDebito($tabela, $campoAgregacao, $campo, $valor, $idCliente, false);
+            // $saldo = $credito->soma - $debito->soma;
             if (!$correntes) {
                 echo json_encode(['error' => "Nenhuma corrente encontrada para o cliente $idCliente."]);
                 return;

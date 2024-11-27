@@ -94,18 +94,30 @@
     function atualizarTabela(correntes) {
         const tbody = document.querySelector("#dataTable tbody");
 
+        const formatarMoeda = valor => {
+            // Verifica se o valor é null ou 0 e retorna vazio
+            if (valor === null || valor === 0) {
+                return "";
+            }
+            // Formata o valor como número com separadores de milhares e casas decimais
+            return new Intl.NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(valor);
+        };
+
         correntes.forEach(corrente => {
             const row = `
-            <tr>
-                <td align="left">${corrente.data_cad}</td>
-                <td align="right">${corrente.valor_credito}</td>
-                <td align="right">${corrente.valor_debito}</td>
-                <td align="left">${corrente.obs}</td>
-                <td hidden>${corrente.nr_doc_pg}</td>
-                <td align="center">
-                    ${corrente.valor_credito == 0 ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png"></a>` : ""}
-                </td>
-            </tr>
+        <tr>
+            <td align="left">${corrente.data_cad}</td>
+            <td align="right">${formatarMoeda(corrente.valor_credito)}</td>
+            <td align="right">${formatarMoeda(corrente.valor_debito)}</td>
+            <td align="left">${corrente.obs}</td>
+            <td hidden>${corrente.nr_doc_pg}</td>
+            <td align="center">
+                ${corrente.valor_credito == 0 ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png"></a>` : ""}
+            </td>
+        </tr>
         `;
             tbody.insertAdjacentHTML("beforeend", row);
         });
