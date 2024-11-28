@@ -2,7 +2,7 @@
     var coluOr = 0;
 </script>
 <section class="caixa">
-    <div class="thead">Extrato Alunos</div>
+    <div class="thead">Saldo : <?php echo (isset($credito)) ? moedaBr($credito) : moedaBr(0); ?> Limite: <?php echo (isset($limite)) ? moedaBr($limite) : moedaBr(0); ?> Total: <?php echo moedaBr($credito + $limite); ?></div>
     <?php $this->verMsg() ?>
     <div class="base-lista">
         <div class="tabela-responsiva">
@@ -23,7 +23,6 @@
                 </div>
                 <input type="hidden" name="id_restricoes" value="" />
                 <button id="openMdCreditos" class="btn mt-3" style="display: none;">Creditar</button>
-
             </div>
 
         </div>
@@ -68,20 +67,35 @@
                 .then(response => response.json()) // Processa como JSON
                 .then(data => {
                     const tbody = document.querySelector("#dataTable tbody");
+                    const saldoDisplay = document.querySelector(".thead");
 
                     // Limpa a tabela antes de processar novos dados
+                    saldoDisplay.innerHTML = "";
+                    saldoDisplay.innerHTML = `
+    Saldo: ${moedaBr(data?.credito || 0)} 
+    Limite: ${moedaBr(data?.limite || 0)} 
+    Total: ${moedaBr((data?.credito || 0) + (data?.limite || 0))}
+`;
                     tbody.innerHTML = "";
 
                     if (data.error) {
                         console.warn(`Erro do servidor: ${data.error}`);
-                        // Opcional: Exibe uma mensagem na tabela ou em outro local
+                        // Exibe mensagem de erro na tabela
                         tbody.insertAdjacentHTML("beforeend", `
                         <tr>
-                            <td colspan="5" align="center">Nenhum registro encontrado para este cliente.</td>
+                            <td colspan="6" align="center">${data.error}</td>
                         </tr>
                     `);
                     } else {
-                        atualizarTabela(data);
+                        // Atualiza a tabela com os dados recebidos
+                        atualizarTabela(data.correntes);
+
+                        // Atualiza o saldo, limite e total na interface
+                        saldoDisplay.innerHTML = `
+                        Saldo: ${moedaBr(data.credito)} 
+                        Limite: ${moedaBr(data.limite)} 
+                        Total: ${moedaBr(data.credito + data.limite)}
+                    `;
                     }
                 })
                 .catch(error => {
@@ -93,34 +107,43 @@
 
     function atualizarTabela(correntes) {
         const tbody = document.querySelector("#dataTable tbody");
-
-        const formatarMoeda = valor => {
-            // Verifica se o valor é null ou 0 e retorna vazio
-            if (valor === null || valor === 0) {
-                return "";
-            }
-            // Formata o valor como número com separadores de milhares e casas decimais
-            return new Intl.NumberFormat('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(valor);
-        };
-
         correntes.forEach(corrente => {
-            const row = `
-        <tr>
-            <td align="left">${corrente.data_cad}</td>
-            <td align="right">${formatarMoeda(corrente.valor_credito)}</td>
-            <td align="right">${formatarMoeda(corrente.valor_debito)}</td>
-            <td align="left">${corrente.obs}</td>
-            <td hidden>${corrente.nr_doc_pg}</td>
-            <td align="center">
-                ${corrente.valor_credito == 0 ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png"></a>` : ""}
-            </td>
-        </tr>
-        `;
-            tbody.insertAdjacentHTML("beforeend", row);
+            tbody.insertAdjacentHTML("beforeend", `
+            <tr>
+                <td align="left">${corrente.data_cad ? formatarDataBr(corrente.data_cad) : ""}</td>
+                <td align="right">${corrente.valor_credito ? moedaBr(corrente.valor_credito) : ""}</td>
+                <td align="right">${corrente.valor_debito ? moedaBr(corrente.valor_debito) : ""}</td>
+                <td align="left">${corrente.obs || ""}</td>
+                <td hidden>${corrente.nr_doc_pg || ""}</td>
+                <td align="center">
+                    ${corrente.valor_credito == 0 ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png"></a>` : ""}
+                </td>
+            </tr>
+        `);
         });
+    }
+
+    const moedaBr = valor => {
+        if (valor === null || valor === undefined || isNaN(valor)) {
+            return ""; // Retorna vazio para valores inválidos
+        }
+        return new Intl.NumberFormat('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(valor);
+    };
+
+    // Atualiza o saldo, limite e total na interface
+    saldoDisplay.innerHTML = ""; // Garante que o campo será limpo antes de atualizar
+    saldoDisplay.innerHTML = `
+    Saldo: ${moedaBr(data?.credito || 0)} 
+    Limite: ${moedaBr(data?.limite || 0)} 
+    Total: ${moedaBr((data?.credito || 0) + (data?.limite || 0))}
+`;
+
+    function formatarDataBr(data) {
+        const date = new Date(data);
+        return date.toLocaleDateString('pt-BR');
     }
 </script>
 <!-- Modal -->
@@ -209,75 +232,13 @@
     const modalCrdAl = document.getElementById('modalCrdAl');
     const openModalCreditos = document.getElementById('openMdCreditos');
     const closeModalCrdAl = document.getElementById('closeModalCrdAl');
-
-    // Abrir o modal
-    openModalCreditos.onclick = function() {
-        modalCrdAl.style.display = 'block';
-    }
-
-    // Fechar o modal
-    closeModalCrdAl.onclick = function() {
-        modalCrdAl.style.display = 'none';
-    }
-
-    // Fechar o modal clicando fora do conteúdo
-    window.onclick = function(event) {
-        if (event.target === modalCrdAl) {
-            modalCrdAl.style.display = 'none';
-        }
-    }
-
-    // Exemplo de manipulação do envio do formulário
-    document.getElementById('valorCredito').addEventListener('input', function(event) {
-        let value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-        value = (value / 100).toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        });
-        event.target.value = value;
-    });
-
-    // Elementos HTML
     const selectCliente = document.getElementById('id_cliente');
-    const btnCreditar = document.getElementById('openMdCreditos');
-    const modal = document.getElementById('modalCrdAl');
-    const closeModal = document.getElementById('closeModalCrdAl');
     const inputNome = document.getElementById('nome');
-
-    // Mostrar botão ao selecionar cliente
-    selectCliente.addEventListener('change', function() {
-        if (this.value) {
-            btnCreditar.style.display = 'block';
-        } else {
-            btnCreditar.style.display = 'none';
-        }
-    });
-
-    // Abrir modal e passar valor do select
-    btnCreditar.addEventListener('click', function() {
-        const nomeSelecionado = selectCliente.value;
-        if (nomeSelecionado) {
-            inputNome.value = nomeSelecionado; // Passa o nome selecionado para o campo do modal
-            modal.style.display = 'block'; // Exibe o modal
-        }
-    });
-
-    // Fechar modal
-    closeModal.addEventListener('click', function() {
-        modal.style.display = 'none'; // Esconde o modal
-    });
-
-    // Fechar modal ao clicar fora dele
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
     const inputValorCredito = document.getElementById('valorCredito');
 
     // Função para formatar como moeda
     function formatarMoeda(valor) {
-        const numeroLimpo = valor.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        const numeroLimpo = valor.replace(/\D/g, ''); // Remove caracteres não numéricos
         const numeroFormatado = (numeroLimpo / 100).toLocaleString('pt-BR', {
             style: 'decimal',
             minimumFractionDigits: 2,
@@ -291,16 +252,46 @@
         this.value = formatarMoeda(this.value);
     });
 
-    // Foca automaticamente no campo ao abrir o modal
-    btnCreditar.addEventListener('click', function() {
-        modal.style.display = 'block'; // Abre o modal
-        inputNome.value = selectCliente.value; // Passa o nome selecionado
+    // Função para limpar campos do modal
+    function limparCamposModal() {
+        console.log("Limpando campos do modal...");
+        inputNome.value = ''; // Limpa o nome
+        inputValorCredito.value = ''; // Limpa o valor do crédito
+    }
+
+    // Abrir o modal
+    openModalCreditos.onclick = function() {
+        console.log("Abrindo modal...");
+        limparCamposModal(); // Limpa os campos antes de abrir
+        modalCrdAl.style.display = 'block';
         setTimeout(() => {
             inputValorCredito.focus(); // Foca no campo de valor
-        }, 100); // Adiciona pequeno atraso para garantir que o modal foi exibido
-    });
-    closeModal.addEventListener('click', function() {
-        modal.style.display = 'none'; // Esconde o modal
-        inputValorCredito.value = ''; // Limpa o campo de valor
+        }, 100); // Garante o foco após exibir o modal
+    };
+
+    // Fechar o modal
+    closeModalCrdAl.onclick = function() {
+        console.log("Fechando modal...");
+        modalCrdAl.style.display = 'none'; // Esconde o modal
+        limparCamposModal(); // Garante a limpeza ao fechar
+    };
+
+    // Fechar o modal clicando fora do conteúdo
+    window.onclick = function(event) {
+        if (event.target === modalCrdAl) {
+            console.log("Fechando modal ao clicar fora...");
+            modalCrdAl.style.display = 'none';
+            limparCamposModal(); // Garante a limpeza ao clicar fora
+        }
+    };
+
+    // Mostrar botão ao selecionar cliente
+    selectCliente.addEventListener('change', function() {
+        const btnCreditar = document.getElementById('openMdCreditos');
+        if (this.value) {
+            btnCreditar.style.display = 'block';
+        } else {
+            btnCreditar.style.display = 'none';
+        }
     });
 </script>

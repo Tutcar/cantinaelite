@@ -31,8 +31,8 @@ class CorrenteController extends Controller
     }
     public function index()
     {
-        $idCliente = "Carlos Alberto Teixeira";
-        i(Flash::CreditoAluno($this->db, $idCliente));
+
+
         $dados = array(
             'saldo' => "",
             'compenssar' => "",
@@ -62,37 +62,54 @@ class CorrenteController extends Controller
         $dados["lista"] = Service::listaCorr($this->tabela, $id_corretora);
         $dados["clientes"] = Service::lista("cliente");
         $dados["correntes"] = Service::get("corrente", "descricao", 0, true);
+        $dados["limite"] = 0;
+        $dados["credito"] = 0;
+
         $dados["view"]  = "corrente/alunos";
         $this->load("template", $dados);
     }
     public function obterCorrentes($idCliente = null)
     {
-        $tabela = "corrente";
-        $campo = "descricao";
-        $campoAgregacao = "valor_credito";
-        $valor = "";
         header('Content-Type: application/json; charset=utf-8');
+
         try {
+            // Buscar dados no banco
             $correntes = Service::get("corrente", "descricao", $idCliente, true);
             $credito = Flash::CreditoAluno($this->db, $idCliente);
-            // $campoAgregacao = "valor_debito";
-            // $debito = Service::getDebito($tabela, $campoAgregacao, $campo, $valor, $idCliente, false);
-            // $saldo = $credito->soma - $debito->soma;
+            $credito = $credito->soma ?? 0;
+            $limite = Service::get("cliente", "nm_nome", $idCliente);
+            $limite = $limite->limite ?? 0;
+
             if (!$correntes) {
+                // Retorna erro caso não encontre registros
                 echo json_encode(['error' => "Nenhuma corrente encontrada para o cliente $idCliente."]);
                 return;
             }
 
-            echo json_encode($correntes); // Retorna JSON puro
+            // Dados a serem enviados ao JavaScript
+            $response = [
+                'correntes' => $correntes,
+                'credito' => $credito,
+                'limite' => $limite,
+            ];
+
+            echo json_encode($response);
         } catch (Exception $e) {
             echo json_encode(['error' => $e->getMessage()]);
         }
     }
+
     public function obterCorrentesSjson($idCliente = null)
     {
         try {
             $dados["correntes"] = Service::get("corrente", "descricao", $idCliente, true);
             $dados["clientes"] = Service::lista("cliente");
+            $credito = Flash::CreditoAluno($this->db, $idCliente);
+            $limite = Service::get("cliente", "nm_nome", $idCliente);
+            $dados["credito"] = $credito->soma;
+            $dados["limite"] = $limite->limite;
+
+
             $dados["view"]  = "corrente/alunos";
             $this->load("template", $dados);
         } catch (Exception $e) {
