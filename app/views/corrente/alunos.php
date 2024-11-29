@@ -9,16 +9,8 @@
             <div class="col-12">
                 <div class="rows">
                     <div class="col-6">
-                        <label for="id_cliente">Aluno:</label>
-                        <!-- <select class="form-campo mt-3" name="id_cliente" id="id_cliente" required>
-                            <option value="">Selecione um aluno</option>
-                            <?php foreach ($clientes as $aluno): ?>
-                                <option value="<?= $aluno->nm_nome; ?>"
-                                    <?= isset($selectedCliente) && $selectedCliente == $aluno->id_cliente ? 'selected' : ''; ?>>
-                                    <?= $aluno->nm_nome; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select> -->
+                        <label for="id_cliente">Aluno: <?php echo (isset($clienteAl)) ? $clienteAl : ""; ?></label>
+
                         <select class="form-campo mt-3" name="id_cliente" id="id_cliente" required>
                             <option value="">Selecione um aluno</option>
                             <?php foreach ($clientes as $aluno): ?>
@@ -71,6 +63,11 @@
 <script>
     document.getElementById("id_cliente").addEventListener("change", function() {
         const clienteNome = this.value;
+        // Atualiza o nome do aluno no label
+        const labelAluno = document.querySelector('label[for="id_cliente"]');
+        if (labelAluno) {
+            labelAluno.innerHTML = `Aluno: ${clienteNome || ""}`;
+        }
 
         if (clienteNome) {
             fetch(`<?php echo URL_BASE; ?>Corrente/obterCorrentes/${clienteNome}`)

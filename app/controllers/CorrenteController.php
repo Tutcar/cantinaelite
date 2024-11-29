@@ -101,6 +101,7 @@ class CorrenteController extends Controller
 
     public function obterCorrentesSjson($idCliente = null)
     {
+
         try {
             $dados["correntes"] = Service::get("corrente", "descricao", $idCliente, true);
             $dados["clientes"] = Service::lista("cliente");
@@ -108,7 +109,7 @@ class CorrenteController extends Controller
             $limite = Service::get("cliente", "nm_nome", $idCliente);
             $dados["credito"] = $credito->soma;
             $dados["limite"] = $limite->limite;
-
+            $dados["clienteAl"] = $idCliente;
 
             $dados["view"]  = "corrente/alunos";
             $this->load("template", $dados);

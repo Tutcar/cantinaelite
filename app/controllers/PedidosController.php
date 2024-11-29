@@ -31,6 +31,7 @@ class PedidosController extends Controller
     public function index()
     {
 
+
         $dados["lista"] = Service::lista($this->tabela);
         $dados["view"]  = "pedidos/index";
         $dados["tipo"] = Service::lista("tipo");
@@ -325,6 +326,8 @@ class PedidosController extends Controller
             $saldoAluno = 0;
             $saldoTotalAluno = 0;
             $pedido = Service::get("pedidoSaldo", "nr_pedido", $_SESSION["nr_ped"], false);
+            $saldoAlunos = Flash::CreditoAluno($this->db, $pedido->cliente);
+            $saldoAlunos =  floatval($saldoAlunos->soma);
             $cliente = $pedido->cliente;
             $aluno = Service::get("cliente", "nm_nome", $cliente, false);
             $alunoNaoInfo = substr($cliente, 0, 5);
@@ -333,8 +336,8 @@ class PedidosController extends Controller
                 echo json_encode('O pedido tem que estar com o nome do aluno.');
                 exit();
             }
-            $saldoAluno = floatval(Service::getSoma("corrente", "valor_credito - valor_debito", "cod_despesa", $aluno->nr_cpf_cnpj, true));
-            $saldoTotalAluno = $aluno->limite + $saldoAluno;
+            $saldoAluno = floatval(Service::getSoma("corrente", "valor_credito - valor_debito", "cod_despesa", $aluno->nr_cpf_cnpj));
+            $saldoTotalAluno = $aluno->limite + $saldoAlunos;
             if ($pedidos->valor > $saldoTotalAluno) {
                 Flash::setMsg("Saldo insuficiente : " . moedaBr($saldoTotalAluno), -1);
                 echo json_encode('Sem saldo para esta comprar.');
