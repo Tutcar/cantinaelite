@@ -10,6 +10,15 @@
                 <div class="rows">
                     <div class="col-6">
                         <label for="id_cliente">Aluno:</label>
+                        <!-- <select class="form-campo mt-3" name="id_cliente" id="id_cliente" required>
+                            <option value="">Selecione um aluno</option>
+                            <?php foreach ($clientes as $aluno): ?>
+                                <option value="<?= $aluno->nm_nome; ?>"
+                                    <?= isset($selectedCliente) && $selectedCliente == $aluno->id_cliente ? 'selected' : ''; ?>>
+                                    <?= $aluno->nm_nome; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select> -->
                         <select class="form-campo mt-3" name="id_cliente" id="id_cliente" required>
                             <option value="">Selecione um aluno</option>
                             <?php foreach ($clientes as $aluno): ?>
@@ -22,7 +31,8 @@
                     </div>
                 </div>
                 <input type="hidden" name="id_restricoes" value="" />
-                <button id="openMdCreditos" class="btn mt-3" style="display: none;">Creditar</button>
+                <button id="openMdCreditos" class="btn mt-3">Creditar</button>
+                <!-- <button id="openMdCreditos" class="btn mt-3" style="display: none;">Creditar</button> -->
             </div>
 
         </div>
@@ -72,10 +82,10 @@
                     // Limpa a tabela antes de processar novos dados
                     saldoDisplay.innerHTML = "";
                     saldoDisplay.innerHTML = `
-    Saldo: ${moedaBr(data?.credito || 0)} 
-    Limite: ${moedaBr(data?.limite || 0)} 
-    Total: ${moedaBr((data?.credito || 0) + (data?.limite || 0))}
-`;
+                    Saldo: ${moedaBr(data?.credito || 0)} 
+                    Limite: ${moedaBr(data?.limite || 0)} 
+                    Total: ${moedaBr((data?.credito || 0) + (data?.limite || 0))}
+                `;
                     tbody.innerHTML = "";
 
                     if (data.error) {
@@ -293,5 +303,29 @@
         } else {
             btnCreditar.style.display = 'none';
         }
+    });
+</script>
+<script>
+    // Capturar o botão e o select
+    document.getElementById('openMdCreditos').addEventListener('click', function() {
+        // Obtém o valor selecionado no select
+        const alunoSelecionado = document.getElementById('id_cliente').value;
+
+        // Verifica se um valor foi selecionado
+        if (!alunoSelecionado) {
+            alert("Por favor, selecione um aluno!");
+            return;
+        }
+
+        // Define o valor no campo do modal
+        document.getElementById('nome').value = alunoSelecionado;
+
+        // Exibe o modal
+        document.getElementById('modalCrdAl').style.display = 'block';
+    });
+
+    // Fechar o modal
+    document.getElementById('closeModalCrdAl').addEventListener('click', function() {
+        document.getElementById('modalCrdAl').style.display = 'none';
     });
 </script>
