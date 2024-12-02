@@ -43,7 +43,7 @@
 
 					<?php foreach ($lista as $user) { ?>
 						<tr>
-							<td><?php echo $user->login ?></td>
+							<td><?php echo $user->login_cli ?></td>
 							<td hidden><?php echo $user->id_user ?></td>
 
 							<td align="center">

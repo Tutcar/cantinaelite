@@ -7,6 +7,17 @@ use PDOException;
 
 class Flash
 {
+    public static function UltimoIdUser($conn)
+    {
+        $sql = "SELECT IFNULL(MAX(id_user) + 1, 1) AS next_id FROM user";
+        $stmt = $conn->query($sql);
+
+        if ($stmt) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC); // Corrigido aqui
+            $nextId = $row['next_id'];
+            return $nextId;
+        }
+    }
     public static function CreditoAluno($conn, $idCliente)
     {
         try {

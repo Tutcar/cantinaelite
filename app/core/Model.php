@@ -172,7 +172,7 @@ abstract class Model
                 $sql = "SELECT * FROM " . $tabela . " WHERE cliente <> '' AND pago = 'N' AND encomendas = 'S' ORDER BY cliente";
             } else if ($tabela == "userAdm") {
                 $tabela = "user";
-                $sql = "SELECT * FROM " . $tabela . " WHERE id_user <> 1  ORDER BY login";
+                $sql = "SELECT * FROM " . $tabela . " WHERE id_user <> 1  ORDER BY login_cli";
             } else if ($tabela == "salario1") {
                 $tabela = "salario";
                 $sql = "SELECT *, ( select nm_nome from funcionario where funcionario.id_funcionario = salario.id_funcionario) as nm_nome FROM " . $tabela . " WHERE sl_vigente = 'S'";

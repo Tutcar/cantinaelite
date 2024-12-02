@@ -2,20 +2,24 @@
 
 namespace app\controllers;
 
+use app\core\Conexao;
 use app\core\Controller;
 use app\models\service\Service;
 use app\core\Flash;
 use app\models\service\UserService;
 use app\util\UtilService;
+use DateTime;
 
 class UserController extends Controller
 {
+    protected $db;
     private $tabela = "user";
     private $campo = "id_user";
     private $usuario = null;
     public function __construct()
     {
         $this->usuario = UtilService::getUsuario();
+        $this->db = Conexao::getConexao();
         if (!$this->usuario) {
             $this->redirect(URL_BASE . "login");
             exit();
@@ -57,10 +61,16 @@ class UserController extends Controller
         } else {
             $user->id_user = null;
         }
-        $user->login = $_POST["login"];
+        $user->login_cli = $_POST["login_cli"];
         if ($_POST["senha"] || "") {
             $user->senha = md5($_POST['senha']);
         }
+        $user->e_mail = $_POST["e_mail"];
+        $user->tipo = "funcionario";
+        $datetime = new DateTime('3024-11-14 20:45:07');
+        $datetime->format('Y-m-d H:i:s');
+        $user->expira = $datetime->format('Y-m-d H:i:s');
+        $user->id_cliente = Flash::UltimoIdUser($this->db);
         Flash::setForm($user);
         if (UserService::salvar($user, $this->campo, $this->tabela)) {
 
@@ -83,7 +93,7 @@ class UserController extends Controller
         $user = new \stdClass();
         // Alteração pelo usuario
         $user->id_user = $_SESSION[SESSION_LOGIN]->id_user;
-        $user->login = $_SESSION[SESSION_LOGIN]->login_login_cli;
+        $user->login_cli = $_SESSION[SESSION_LOGIN]->login_cli;
         $senha =  $_POST["senha"];
         $confirmPassword =  $_POST["confirmPassword"];
         $user->senha = md5($senha);

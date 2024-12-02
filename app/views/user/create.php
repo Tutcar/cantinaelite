@@ -1,22 +1,17 @@
 <section class="caixa">
-	<div class="thead"><i class="ico cad"></i><?php echo isset($user->login) ? "Formulario de alteração" : "Formulario de cadastro" ?></div>
+	<div class="thead"><i class="ico cad"></i>Formulario de cadastro</div>
 	<div class="base-form">
-
 		<div class="caixa-form">
-			<div class="thead"><?php echo isset($user->login) ? "Alterar cadastro" : "Inserir novo cadastro" ?></div>
+			<div class="thead">Inserir novo cadastro</div>
 			<form action="<?php echo URL_BASE . "user/salvar" ?>" method="POST" enctype="multipart/form-data">
 				<?php
 				$this->verMsg();
 				$this->verErro();
 				?>
 				<div class="rows">
-
+					<?php $null = ""; ?>
 					<div class="col-3 position-relative">
-						<?php if ($user->foto || "") : ?>
-							<?php $imagem = $user->foto ?>
-						<?php else : ?>
-							<?php $imagem = 'img-usuario.png' ?>
-						<?php endif; ?>
+						<?php $imagem = 'img-usuario.png' ?>
 						<img src="<?php echo URL_IMAGEM . $imagem ?>" class="img-fluido foto" id="imgUp">
 						<div class="foto-file">
 							<input type="file" name="arquivo" id="arquivo" onchange="pegaArquivo(this.files)"><label for="arquivo"><span>Editar foto</span></label>
@@ -26,24 +21,27 @@
 						<div class="rows">
 							<div class="col-12">
 								<label>Usuário</label>
-								<input <?php echo isset($user->login) ? "Readonly" : "" ?> name="login" value="<?php echo isset($user->login) ? $user->login : null ?>" type="text" placeholder="Insira um usuário" class="form-campo">
+								<input required="required" name="login_cli" value="" type="text" placeholder="Insira um usuário" class="form-campo">
+							</div>
+						</div>
+						<div class="rows">
+							<div class="col-12">
+								<label>Email</label>
+								<input required="required" name="e_mail" value="" type="email" placeholder="Insira um email" class="form-campo">
 							</div>
 						</div>
 						<div class="rows">
 							<div class="col-4">
 								<label>Senha ver&nbsp;&nbsp;<input type="checkbox" onclick="showOlh()"></label>
-								<input maxlength="20" minlength="6" id="senha" name="senha" value="" type="password" placeholder="Insira uma senha" class="form-campo">
+								<input maxlength="20" minlength="6" required="required" id="senha" name="senha" value="" type="text" placeholder="Insira uma senha" class="form-campo">
 							</div>
 						</div>
 					</div>
-
-
 					<input type="hidden" name="id_user" value="<?php echo isset($user->id_user) ? $user->id_user : null ?>" />
-					<input type="submit" value="<?php echo isset($user->login) ? "Alterar" : "Cadastrar" ?>" class="btn">
+					<input type="submit" value="Cadastrar" class="btn">
 				</div>
 			</form>
 		</div>
 	</div>
-
 </section>
 <script src="<?php echo URL_BASE ?>assets/js/mascara.js"></script>

@@ -13,11 +13,15 @@ class UserValidacao
 
         $validacao = new Validacao();
 
-        $validacao->setData("login", $User->login);
+        $validacao->setData("login_cli", $User->login_cli);
+        $validacao->setData("senha", $User->senha);
+        $validacao->setData("e_mail", $User->e_mail);
 
         //Fazendo a validação
 
         $validacao->getData("User")->isVazio()->isMinimo(4);
+        $validacao->getData("senha")->isVazio()->isMinimo(6);
+        $validacao->getData("e_mail")->isVazio();
 
         return $validacao;
     }
