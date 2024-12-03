@@ -34,8 +34,14 @@ class UserController extends Controller
 
     public function create()
     {
+
         $dados["user"] = Flash::getForm();
-        $dados["view"] = "user/cadUser";
+        if ($_SESSION[SESSION_LOGIN]->tipo = "admin") {
+            $dados["view"] = "user/create";
+        } else {
+            $dados["view"] = "user/cadUser";
+        }
+
         $this->load("template", $dados);
     }
 
@@ -54,7 +60,6 @@ class UserController extends Controller
 
     public function salvar()
     {
-
         $user = new \stdClass();
         if ($_POST["id_user"] || "") {
             $user->id_user = ($_POST["id_user"]);
@@ -74,7 +79,7 @@ class UserController extends Controller
         Flash::setForm($user);
         if (UserService::salvar($user, $this->campo, $this->tabela)) {
 
-            if ($_SESSION[SESSION_LOGIN]->id_user === '59') {
+            if ($_SESSION[SESSION_LOGIN]->tipo = "admin") {
                 $this->redirect(URL_BASE . "user");
             } else {
                 $this->redirect(URL_BASE . "home");

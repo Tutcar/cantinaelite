@@ -120,6 +120,7 @@ class PedidosController extends Controller
     public function salvarJson()
     {
         $pedidos = new \stdClass();
+        $pedidos->id_user = $_SESSION[SESSION_LOGIN]->id_user;
         $nrPedido = Flash::maximo3($this->db, "nr_pedido", "id_nr") + 1;
         $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
         $_SESSION["nr_ped"] = $_POST["nr_pedido"];

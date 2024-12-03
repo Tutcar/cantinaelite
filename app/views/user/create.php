@@ -2,7 +2,7 @@
 	<div class="thead"><i class="ico cad"></i>Formulario de cadastro</div>
 	<div class="base-form">
 		<div class="caixa-form">
-			<div class="thead">Inserir novo cadastro</div>
+			<div class="thead"><?php echo (isset($user->login_cli)) ? "Editar senha do " : "Inserir"; ?> funcionários</div>
 			<form action="<?php echo URL_BASE . "user/salvar" ?>" method="POST" enctype="multipart/form-data">
 				<?php
 				$this->verMsg();
@@ -21,13 +21,13 @@
 						<div class="rows">
 							<div class="col-12">
 								<label>Usuário</label>
-								<input required="required" name="login_cli" value="" type="text" placeholder="Insira um usuário" class="form-campo">
+								<input <?php echo (isset($user->login_cli)) ? "Readonly" : ""; ?> required="required" name="login_cli" value="<?php echo (isset($user->login_cli)) ? $user->login_cli : ""; ?>" type=" text" placeholder="Insira um usuário" class="form-campo">
 							</div>
 						</div>
 						<div class="rows">
 							<div class="col-12">
 								<label>Email</label>
-								<input required="required" name="e_mail" value="" type="email" placeholder="Insira um email" class="form-campo">
+								<input <?php echo (isset($user->e_mail)) ? "Readonly" : ""; ?> required="required" name="e_mail" value="<?php echo (isset($user->e_mail)) ? $user->e_mail : ""; ?>" type="email" placeholder="Insira um email" class="form-campo">
 							</div>
 						</div>
 						<div class="rows">

@@ -160,7 +160,7 @@ abstract class Model
         try {
             if ($tabela == "pedidoo") {
                 $tabela = "pedido";
-                $sql = "SELECT * FROM " . $tabela . " WHERE cliente <> '' AND pago = 'N' AND encomendas = 'N' ORDER BY cliente";
+                $sql = "SELECT * FROM " . $tabela . " WHERE cliente <> '' AND pago = 'N' AND encomendas = 'N' AND id_user = " . $_SESSION[SESSION_LOGIN]->id_user  . " ORDER BY cliente";
             } else if ($tabela == "producao") {
                 $tabela = "pedido";
                 $sql = "SELECT * FROM " . $tabela . " WHERE pago = 'N' AND cliente <> '' AND encomendas = 'S' ORDER BY data_encomendas";

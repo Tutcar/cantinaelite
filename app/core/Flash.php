@@ -7,6 +7,27 @@ use PDOException;
 
 class Flash
 {
+    public static function ContarCxFuncionarios($pdo)
+    {
+        // Consulta SQL com a condição
+        $sql = "SELECT DISTINCT u.id_user AS id_user, u.login_cli AS login_cli
+            FROM pedido p
+            JOIN user u ON p.id_user = u.id_user
+            WHERE p.cx_fechado = 'N'";
+
+        // Preparar e executar a consulta
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        // Buscar resultados como objetos
+        $funcionarios = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        // Retornar os funcionários com id_user e login_cli
+        return $funcionarios;
+    }
+
+
+
     public static function UltimoIdUser($conn)
     {
         $sql = "SELECT IFNULL(MAX(id_user) + 1, 1) AS next_id FROM user";

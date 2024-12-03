@@ -48,11 +48,13 @@ class HomeController extends Controller
          $valor = $_SESSION["nr_ped"];
          if ($valor > 0) {
             $clienteNome = Service::get("pedido", "nr_pedido", $_SESSION["nr_ped"], false);
-            $primeirosCinco = substr($clienteNome->cliente, 0, 5);
-            if ($primeirosCinco <> "Cli -") {
-               $clienteCpf = Service::get("cliente", "nm_nome", $clienteNome->cliente, false);
-               $saldoAlunos = Flash::CreditoAluno($this->db, $clienteNome->cliente);
-               $dados["saldoAluno"] =  floatval($saldoAlunos->soma + $clienteCpf->limite);
+            if ($clienteNome != "") {
+               $primeirosCinco = substr($clienteNome->cliente, 0, 5);
+               if ($primeirosCinco <> "Cli -") {
+                  $clienteCpf = Service::get("cliente", "nm_nome", $clienteNome->cliente, false);
+                  $saldoAlunos = Flash::CreditoAluno($this->db, $clienteNome->cliente);
+                  $dados["saldoAluno"] =  floatval($saldoAlunos->soma + $clienteCpf->limite);
+               }
             }
          }
          $dados["somaPedido"] = Service::getSoma("pedido", "quant * valor", "nr_pedido", null, true);

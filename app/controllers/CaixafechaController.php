@@ -44,6 +44,7 @@ class CaixafechaController extends Controller
         $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
         $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
         $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
         $dados["view"]  = "caixafecha/index";
         $dados["tipo"] = Service::lista("tipo");
         $this->load("template", $dados);
