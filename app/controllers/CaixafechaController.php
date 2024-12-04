@@ -65,6 +65,33 @@ class CaixafechaController extends Controller
         $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
         $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
         $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
+        $dados["cxInicial"] = count(Flash::ContarCxFuncionarios($this->db)) * 30;
+        $dados["view"]  = "caixafecha/index";
+        $dados["tipo"] = Service::lista("tipo");
+        $dados["view"] = "caixafecha/create";
+        $this->load("template", $dados);
+    }
+    public function caixaFuncionarios($id_user)
+    {
+        $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
+        $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
+        if ($dados["idAbre"] == 0) {
+            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
+        }
+        $ultimoCx = $dados["idAbre"];
+        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
+        $funcionarioEncontrado = array_filter($dados["cxfuncionarios"], function ($funcionario) use ($id_user) {
+            return $funcionario->id_user == $id_user;
+        });
+        $funcionario = $funcionarioEncontrado ? reset($funcionarioEncontrado) : null;
+        $dados["dinheiro"] = $funcionario->total_dinheiro;
+        $dados["cartao"] = $funcionario->total_cartao;
+        $dados["pix"] = $funcionario->total_pix;
+        $dados["outros"] = $funcionario->total_outros;
+        $dados["funcionario"] = $funcionario->login_cli;
+        $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
+        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
         $dados["view"]  = "caixafecha/index";
         $dados["tipo"] = Service::lista("tipo");
         $dados["view"] = "caixafecha/create";
