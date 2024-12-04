@@ -9,22 +9,36 @@ class Flash
 {
     public static function ContarCxFuncionarios($pdo)
     {
-        // Consulta SQL com a condição
-        $sql = "SELECT DISTINCT u.id_user AS id_user, u.login_cli AS login_cli
-            FROM pedido p
-            JOIN user u ON p.id_user = u.id_user
-            WHERE p.cx_fechado = 'N'";
+        // Consulta SQL com soma do campo valor, filtrando por pago e agrupando por tipo de pagamento e funcionário
+        $sql = "
+        SELECT 
+            u.id_user AS id_user, 
+            u.login_cli AS login_cli,
+            SUM(CASE WHEN p.tipo_pg = 'dinheiro' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_dinheiro,
+            SUM(CASE WHEN p.tipo_pg = 'cartao' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_cartao,
+            SUM(CASE WHEN p.tipo_pg = 'pix' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_pix,
+            SUM(CASE WHEN p.tipo_pg = 'outros' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_outros
+        FROM 
+            pedido p
+        JOIN 
+            user u ON p.id_user = u.id_user
+        WHERE 
+            p.cx_fechado = 'N'
+        GROUP BY 
+            u.id_user, u.login_cli
+    ";
 
         // Preparar e executar a consulta
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
 
         // Buscar resultados como objetos
-        $funcionarios = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        // Retornar os funcionários com id_user e login_cli
-        return $funcionarios;
+        // Retornar os resultados agrupados por funcionário
+        return $resultados;
     }
+
 
 
 

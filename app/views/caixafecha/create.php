@@ -1,6 +1,6 @@
 <section class="caixa">
 
-    <div class="thead"><i class="ico cad"></i>Movimento</div>
+    <div class="thead"><i class="ico cad"></i>Movimento <?php echo (isset($funcionario)) ?  $funcionario : ""; ?></div>
 
     <div class="base-form">
         <div class="caixa-form">
@@ -25,7 +25,7 @@
                                     <div class="col-6">
                                         <label>Entrada</label>
                                         <input readonly name="entrada"
-                                            value="<?php echo isset($dataCx->entrada) ? moedaBr($dataCx->entrada) : moedaBr(0) ?>"
+                                            value="<?php echo isset($cxInicial) ? moedaBr($cxInicial) : moedaBr(30) ?>"
                                             type="text" class="form-campo">
                                     </div>
                                     <div class="col-6">
@@ -107,14 +107,17 @@
                             value="<?php echo isset($dataCx->id_caixaabre) ? $dataCx->id_caixaabre : null ?>" />
                         <input type="hidden" name="data_fch_caixa"
                             value="<?php echo isset($dataCx->data_ab_caixa) ? $dataCx->data_ab_caixa : null ?>" />
-                        <input type="submit" value="<?php echo isset($caixafecha->nome) ? "Alterar" : "Fechar Caixa" ?>"
+                        <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>" value="<?php echo isset($caixafecha->nome) ? "Alterar" : "Fechar Caixa" ?>"
                             class="btn">
                     </div>
                 </div>
             </form>
+            <div class="text-end d-flex">
+                <a href="<?php echo URL_BASE . "Caixafecha/index" ?>"><img style="width: 30px; height: 30px"
+                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+            </div>
 
         </div>
     </div>
-    <a href="<?php echo URL_BASE . "Caixafecha/index" ?>"><img style="width: 30px; height: 30px"
-            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+
 </section>
