@@ -81,13 +81,13 @@
                                     <div class="col-4">
                                         <label>Saldo Caixa</label>
                                         <input readonly id="saldo_cx" name="saldo_cx"
-                                            value="<?php echo isset($idAbreValor) ? moedaBr($idAbreValor + $dinheiro) : moedaBr(0) ?>"
+                                            value="<?php echo (isset($funcionario)) ? moedaBr($idAbreValor + $dinheiro) : moedaBr($cxInicial + $dinheiro) ?>"
                                             type="text" class="form-campo">
                                     </div>
                                     <div class="col-4">
                                         <label>Valor conferência</label>
                                         <input id="conferencia" name="conferencia"
-                                            value="<?php echo moedaBr($idAbreValor + $dinheiro) ?>" type="text"
+                                            value="<?php echo (isset($funcionario)) ? moedaBr($idAbreValor + $dinheiro) : moedaBr($cxInicial + $dinheiro) ?>" type="text"
                                             onblur="calcDif()" placeholder="Insira diferenca de caixa caso tenha."
                                             class="form-campo">
                                     </div>

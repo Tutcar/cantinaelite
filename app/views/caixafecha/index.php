@@ -56,9 +56,6 @@
     </div>
     <div class="base-lista">
         <?php foreach ($cxfuncionarios as $funcionario) { ?>
-            <div class="text-end d-flex">
-                <a title="Ver resumo" href="<?php echo URL_BASE . "Caixafecha/caixaFuncionarios/$funcionario->id_user" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
-            </div>
             <div class="tabela-responsiva">
                 <label>Caixa de: <?php echo $funcionario->login_cli; ?></label>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="dataTable">
@@ -82,8 +79,10 @@
                             <td hidden><?php echo $caixafecha->id_caixafecha ?></td>
                         </tr>
                     </tbody>
-
                 </table>
+                <div class="text-end d-flex">
+                    <a title="Ver resumo" href="<?php echo URL_BASE . "Caixafecha/caixaFuncionarios/$funcionario->id_user" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
+                </div>
             </div>
         <?php } ?>
     </div>

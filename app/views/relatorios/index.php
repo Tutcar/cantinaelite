@@ -59,7 +59,7 @@
 
                     <?php foreach ($lista as $relatorios) { ?>
                         <tr>
-                            <td><?php echo dataBr($relatorios->data_ab_caixa) ?></td>
+                            <td><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $relatorios->data_ab_caixa)->format('d/m/Y H:i:s'); ?></td>
                             <td align="right"><?php echo moedaBr($relatorios->entrada) ?></td>
                             <td align="right"><?php echo moedaBr($relatorios->retirada) ?></td>
                             <td align="right"><?php echo $relatorios->fechado ?></td>

@@ -278,7 +278,7 @@ abstract class Model
                 $sql = "SELECT * FROM " . $tabela . " WHERE " . $campo . " =:campo ";
             } else if ($tabela == "pedidoD") {
                 $tabela = "pedido";
-                $sql = "SELECT * FROM " . $tabela . " WHERE " . $campo . " =:campo AND cx_fechado = 'S'";
+                $sql = "SELECT *, (select login_cli from user where user.id_user = pedido.id_user) as funcionario FROM " . $tabela . " WHERE " . $campo . " =:campo AND cx_fechado = 'S'";
             } else if ($tabela == "pedidoAreceberClilt") { // aqui
                 $tabela = "pedido";
                 $campo = "nr_pedido";
