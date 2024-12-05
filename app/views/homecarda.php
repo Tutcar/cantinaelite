@@ -313,7 +313,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <?php foreach ($pratos as $prato) { ?>
             <div class="itens-cardapio">
                 <div class="card">
-                    <img src="<?php echo URL_IMAGEM . $prato->foto ?>" alt="">
+                    <!-- <img src="<?php echo URL_IMAGEM . $prato->foto ?>" alt=""> -->
                     <div class="info">
                         <h2 hidden><?php echo $prato->id_produtos; ?></h2>
                         <h2 class="prato"><?php echo $prato->nome; ?></h2>

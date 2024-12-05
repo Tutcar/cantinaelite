@@ -458,6 +458,7 @@ function mostraAlerta2(r) {
 	}
 };
 $('#fecharPedido').submit(function (e) {
+	alert("2");
 	e.preventDefault();
 
 	var id_pedidos = $('#id_pedidos').val();
