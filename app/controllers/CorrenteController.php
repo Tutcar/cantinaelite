@@ -168,7 +168,6 @@ class CorrenteController extends Controller
     }
     public function salvarCrd()
     {
-
         $token_credito_al = rand(100000, 999999);
         $id_cli = Service::get("cliente", "nm_nome", $_POST["nome"]);
         $corrente = new \stdClass();
@@ -185,20 +184,24 @@ class CorrenteController extends Controller
         $source = array('.', ',');
         $replace = array('', '.');
         if ($_POST["valorCredito"] != null) {
-            $get_valor_credito = $_POST["valorCredito"];
-            $corrente->valor_credito = str_replace($source, $replace, $get_valor_credito);
+            if ($_POST["tipoOperacao"] == "credito") {
+                $creDeb = "Crédito para :";
+                $get_valor_credito = $_POST["valorCredito"];
+                $corrente->valor_credito = str_replace($source, $replace, $get_valor_credito);
+                $corrente->valor_debito = 0;
+            } else {
+                $creDeb = "Débito para :";
+                $get_valor_debito = $_POST["valorCredito"];
+                $corrente->valor_debito = str_replace($source, $replace, $get_valor_debito);
+                $corrente->valor_credito = 0;
+            }
         } else {
             $corrente->valor_credito = 0;
+            $corrente->valor_debito = 0;
         }
-        // if ($_POST["valor_debito"] != null) {
-        //     $get_valor_debito = $_POST["valor_debito"];
-        //     $corrente->valor_debito = str_replace($source, $replace, $get_valor_debito);
-        // } else {
-        //     $corrente->valor_debito = 0;
-        // }
         $corrente->confirma = "S";
         $corrente->data_confirma = dateTime(hoje());
-        $corrente->obs = "Crédito para : " . $_POST["nome"];
+        $corrente->obs = $creDeb . $_POST["nome"] . " feito manualmente por :" . $_SESSION[SESSION_LOGIN]->login_cli;
         $corrente->tipo = 0;
         Flash::setForm($corrente);
         if (CorrenteService::salvar($corrente, $this->campo, $this->tabela)) {

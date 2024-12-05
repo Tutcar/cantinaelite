@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="id_restricoes" value="" />
-                <button id="openMdCreditos" class="btn mt-3">Creditar</button>
+                <button id="openMdCreditos" class="btn mt-3">Crédito ou Débito</button>
                 <!-- <button id="openMdCreditos" class="btn mt-3" style="display: none;">Creditar</button> -->
             </div>
 
@@ -49,7 +49,7 @@
                             <td align="left"><?php echo ($corrente->obs) ? $corrente->obs : "" ?></td>
                             <td hidden><?php echo ($corrente->nr_doc_pg) ? $corrente->nr_doc_pg : "" ?></td>
                             <td align="center">
-                                <?php if ($corrente->valor_credito == 0) : ?>
+                                <?php if ($corrente->valor_credito == 0 && explode(' ', $corrente->obs)[0] != "Débito") : ?>
                                     <a href="<?php echo URL_BASE . "Relatorios/itensPedido/" . $corrente->nr_doc_pg . "/" . $corrente->descricao . "/" . date('Y-m-d', strtotime($corrente->data_cad)) . "/" . "ext" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>"></a>
                                 <?php endif ?>
                             </td>
@@ -115,6 +115,9 @@
     function atualizarTabela(correntes) {
         const tbody = document.querySelector("#dataTable tbody");
         correntes.forEach(corrente => {
+            // Verifica se a primeira palavra de `corrente.obs` é "Débito"
+            const isDebito = (corrente.obs || "").trim().startsWith("Débito");
+
             tbody.insertAdjacentHTML("beforeend", `
             <tr>
                 <td align="left">${corrente.data_cad ? formatarDataBr(corrente.data_cad) : ""}</td>
@@ -123,12 +126,17 @@
                 <td align="left">${corrente.obs || ""}</td>
                 <td hidden>${corrente.nr_doc_pg || ""}</td>
                 <td align="center">
-                    ${corrente.valor_credito == 0 ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png"></a>` : ""}
+                    ${(corrente.valor_credito == 0 && !isDebito) 
+                        ? `<a href="<?php echo URL_BASE; ?>Relatorios/itensPedido/${corrente.nr_doc_pg}/${corrente.descricao}/${corrente.data_cad}/ext">
+                               <img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM; ?>lupa.png">
+                           </a>` 
+                        : ""}
                 </td>
             </tr>
         `);
         });
     }
+
 
     const moedaBr = valor => {
         if (valor === null || valor === undefined || isNaN(valor)) {
@@ -160,13 +168,21 @@
             <div id="modalCrdAl" class="modalCrdAl" style="display: none;">
                 <div class="modal-content">
                     <span id="closeModalCrdAl" class="close">&times;</span>
-                    <div class="thead">Cadastro de Crédito</div>
+                    <div class="thead">Cadastro de Crédito/Débito</div>
                     <form id="formCreditos" method="POST" action="<?php echo URL_BASE . "Corrente/salvarCrd" ?>">
                         <div class="col-12">
                             <div class="rows">
                                 <div class="col-12">
                                     <label for="nome">Nome:</label>
                                     <input class="form-campo" type="text" id="nome" name="nome" readonly required><br><br>
+
+                                    <label for="tipoOperacao">Tipo de Operação:</label>
+                                    <select class="form-campo" id="tipoOperacao" name="tipoOperacao" required>
+                                        <option value="credito" selected>Crédito</option>
+                                        <option value="debito">Débito</option>
+                                    </select>
+                                    <br><br>
+
                                     <label for="valorCredito">Valor de Crédito:</label>
                                     <input
                                         class="form-campo"
@@ -186,6 +202,7 @@
         </div>
     </div>
 </section>
+
 <style>
     /* Estilos do Modal */
     .modalCrdAl {
@@ -266,15 +283,23 @@
         inputValorCredito.value = ''; // Limpa o valor do crédito
     }
 
-    // Abrir o modal
+    // Abrir o modal com validação
     openModalCreditos.onclick = function() {
+        // Verificar se um cliente foi selecionado
+        if (!selectCliente.value) {
+
+            return; // Interrompe a execução se nenhum cliente estiver selecionado
+        }
+
         console.log("Abrindo modal...");
         limparCamposModal(); // Limpa os campos antes de abrir
+        inputNome.value = selectCliente.options[selectCliente.selectedIndex].text; // Preenche o nome no modal
         modalCrdAl.style.display = 'block';
         setTimeout(() => {
             inputValorCredito.focus(); // Foca no campo de valor
         }, 100); // Garante o foco após exibir o modal
     };
+
 
     // Fechar o modal
     closeModalCrdAl.onclick = function() {
