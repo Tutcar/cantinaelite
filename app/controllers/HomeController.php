@@ -28,36 +28,7 @@ class HomeController extends Controller
 
    public function index()
    {
-      // $valorpag = new \stdClass();
-      // $valorpag->produto = "Credito";
-      // $valorpag->quantidade = 1;
-      // $valorpag->valor_credito = 12.00;
-      // $cliente = "Carlos Alberto Teixeira";
-      // $_SESSION['CLIENTE'] = Service::get("cliente", "nm_nome", $cliente);
-      // $alunopag = dadosAluno();
-      // $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, 1);
 
-      // // Verifique se a resposta contém o QR Code
-      // $qrcode_png_url = '';
-      // $qrcode = '';
-
-      // if (isset($response['qr_codes'][0]['links'])) {
-      //    // Seu array de exemplo
-
-      //    // Armazena o valor do ID na sessão
-      //    $_SESSION['id'] = $response['qr_codes'][0]['id'];
-
-
-
-      //    foreach ($response['qr_codes'][0]['links'] as $link) {
-      //       if ($link['rel'] === 'QRCODE.PNG') {
-      //          $qrcode_png_url = $link['href'];
-      //          break;
-      //       }
-      //    }
-      // }
-      // i("ok");
-      // exit();
       $dados["datacxab"] = service::get("caixaabre", "fechado", "N", false);
       $_SESSION["verifCx"] = 1000;
       $dados["clientes"] = Flash::clientes($this->db);

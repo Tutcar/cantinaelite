@@ -232,4 +232,151 @@
 		<a href="#" class="fechar">x</a>
 	</div>
 </div>
+<!--Modal pi -->
+<?php
+$qrcodeUrl = isset($_SESSION['qrcode_url']) ? $_SESSION['qrcode_url'] : '';
+$mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o modal
+; ?>
+<script>
+	window.onload = function() {
+		var mostrarModal = <?php echo json_encode($mostrarModal); ?>;
+
+		if (mostrarModal) {
+			var modal = document.getElementById('qrcodeModal');
+			var closeBtn = document.getElementsByClassName("close")[0];
+
+			// Exibe o modal automaticamente
+			if (modal) {
+				modal.style.display = 'block';
+			}
+
+			// Fechar o modal ao clicar no botão de fechar
+			closeBtn.onclick = function() {
+				modal.style.display = 'none';
+			}
+
+			// Fechar o modal ao clicar fora da área do conteúdo
+			window.onclick = function(event) {
+				if (event.target == modal) {
+					modal.style.display = 'none';
+				}
+			}
+		}
+		// Função verificarHorario
+		verificarHorario();
+	};
+	// Função verificarHorario para verificar o horário
+	function verificarHorario() {
+		const agora = new Date();
+		const horas = agora.getHours();
+		const minutos = agora.getMinutes();
+		const horaLimite = 10;
+		const minutoLimite = 30;
+		const botaoPedirMarmitex = document.getElementById('marmitex');
+
+		if (horas > horaLimite || (horas === horaLimite && minutos >= minutoLimite)) {
+			botaoPedirMarmitex.disabled = true;
+			botaoPedirMarmitex.textContent = 'Compra até 10:30';
+		}
+	}
+	// Função para copiar o valor do input para a área de transferência
+	function copyToClipboard() {
+		var copyText = document.getElementById("qrcodeLink");
+		copyText.select();
+		copyText.setSelectionRange(0, 99999); // Para dispositivos móveis
+
+		// Copia o texto para a área de transferência
+		document.execCommand("copy");
+
+		// Alerta visual de cópia bem-sucedida (opcional)
+		alert("Link copiado: " + copyText.value);
+	}
+</script>
+<!-- Modal -->
+<div id="qrcodeModal" class="modalpix">
+	<form action="<?php echo URL_BASE . "Homepage/simularPay" ?>" method="post">
+		<button type="submit">Pagar</button>
+	</form>
+	<div class="modalpix-content">
+		<span class="close">&times;</span>
+		<h2>QR Code</h2>
+		<p>Digitalize o código QR abaixo ou copie o link:</p>
+		<img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
+		<!-- Seção de copiar o texto -->
+		<div class="copy-container">
+			<input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+			<button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
+		</div>
+
+	</div>
+</div>
+<!-- fim modal pix -->
+<style>
+	/* Estilos básicos para o modal */
+	.modalpix {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+
+	.modalpix-content {
+		background-color: #fefefe;
+		margin: 0% auto;
+		padding: 20px;
+		border: 1px solid #888;
+		width: 80%;
+		max-width: 500px;
+	}
+
+	.close {
+		color: #aaa;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.modalpix img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	.copy-container {
+		margin-top: 15px;
+		text-align: center;
+	}
+
+	.copy-btn {
+		padding: 10px 20px;
+		font-size: 16px;
+		background-color: #4CAF50;
+		color: white;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+	}
+
+	.copy-btn:hover {
+		background-color: #45a049;
+	}
+
+	.copy-input {
+		width: 100%;
+		padding: 10px;
+		font-size: 16px;
+		margin-top: 10px;
+		text-align: center;
+	}
+</style>
 <div id="mascara"></div>
