@@ -225,6 +225,7 @@ class Flash
     }
     public static function quitarPix($db, $nr_pedido)
     {
+        // i($_SESSION['webhook']);
         $sleepInterval = 5; // Intervalo de 5 segundos
         $maxTime = 60; // Tempo máximo de 20 segundos
 

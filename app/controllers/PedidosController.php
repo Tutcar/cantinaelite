@@ -362,7 +362,7 @@ class PedidosController extends Controller
             }
         }
         if ($pedidos->tipo_pg == "Pix") {
-            $token_credito_al = rand(100000, 999999);
+            $token_credito_al = $_SESSION["nr_ped"];
             $confirma = "N";
             $pedidos->pago = "N";
             $valorpag = new \stdClass();
@@ -403,14 +403,19 @@ class PedidosController extends Controller
 
                 // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
                 $_SESSION['qrcode_url'] = $qrcode_png_url;
-                $_SESSION['formapix'] = "crd";
+                $_SESSION['formapix'] = "pix";
                 $nr_doc_pg = $token_credito_al;
                 $_SESSION['webhook'] = $nr_doc_pg;
             }
         }
+        if ($pedidos->tipo_pg == "Pix") {
+            $pedidos->pago = "N";
+        }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
-            $dados["pedidos"] = Flash::fechaCx($this->db);
+            if ($pedidos->tipo_pg <> "Pix") {
+                $dados["pedidos"] = Flash::fechaCx($this->db);
+            }
             unset($_SESSION["nr_ped"]);
             echo json_encode('Pedido fechado.');
         } else {

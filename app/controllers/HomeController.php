@@ -73,4 +73,9 @@ class HomeController extends Controller
 
       $this->load("template", $dados);
    }
+   public function simularPayCx()
+   {
+      Flash::quitarPix($this->db, $_SESSION['webhook']);
+      $this->redirect(URL_BASE . "home");
+   }
 }

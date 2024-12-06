@@ -232,18 +232,18 @@
 		<a href="#" class="fechar">x</a>
 	</div>
 </div>
-<!--Modal pi -->
+<!--Modal pix -->
 <?php
 $qrcodeUrl = isset($_SESSION['qrcode_url']) ? $_SESSION['qrcode_url'] : '';
-$mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o modal
+$mostrarModalHome = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o modal
 ; ?>
 <script>
 	window.onload = function() {
-		var mostrarModal = <?php echo json_encode($mostrarModal); ?>;
+		var mostrarModal = <?php echo json_encode($mostrarModalHome); ?>;
 
 		if (mostrarModal) {
-			var modal = document.getElementById('qrcodeModal');
-			var closeBtn = document.getElementsByClassName("close")[0];
+			var modal = document.getElementById('qrcodeHome');
+			var closeBtn = document.getElementsByClassName("closehome")[0];
 
 			// Exibe o modal automaticamente
 			if (modal) {
@@ -265,20 +265,6 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 		// Função verificarHorario
 		verificarHorario();
 	};
-	// Função verificarHorario para verificar o horário
-	function verificarHorario() {
-		const agora = new Date();
-		const horas = agora.getHours();
-		const minutos = agora.getMinutes();
-		const horaLimite = 10;
-		const minutoLimite = 30;
-		const botaoPedirMarmitex = document.getElementById('marmitex');
-
-		if (horas > horaLimite || (horas === horaLimite && minutos >= minutoLimite)) {
-			botaoPedirMarmitex.disabled = true;
-			botaoPedirMarmitex.textContent = 'Compra até 10:30';
-		}
-	}
 	// Função para copiar o valor do input para a área de transferência
 	function copyToClipboard() {
 		var copyText = document.getElementById("qrcodeLink");
@@ -292,28 +278,9 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 		alert("Link copiado: " + copyText.value);
 	}
 </script>
-<!-- Modal -->
-<div id="qrcodeModal" class="modalpix">
-	<form action="<?php echo URL_BASE . "Homepage/simularPay" ?>" method="post">
-		<button type="submit">Pagar</button>
-	</form>
-	<div class="modalpix-content">
-		<span class="close">&times;</span>
-		<h2>QR Code</h2>
-		<p>Digitalize o código QR abaixo ou copie o link:</p>
-		<img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
-		<!-- Seção de copiar o texto -->
-		<div class="copy-container">
-			<input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
-			<button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
-		</div>
-
-	</div>
-</div>
-<!-- fim modal pix -->
 <style>
 	/* Estilos básicos para o modal */
-	.modalpix {
+	.modalpixhome {
 		display: none;
 		position: fixed;
 		z-index: 1;
@@ -324,7 +291,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 		background-color: rgba(0, 0, 0, 0.4);
 	}
 
-	.modalpix-content {
+	.modalpixhome-content {
 		background-color: #fefefe;
 		margin: 0% auto;
 		padding: 20px;
@@ -333,21 +300,21 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 		max-width: 500px;
 	}
 
-	.close {
+	.closehome {
 		color: #aaa;
 		float: right;
 		font-size: 28px;
 		font-weight: bold;
 	}
 
-	.close:hover,
-	.close:focus {
+	.closehome:hover,
+	.closehome:focus {
 		color: black;
 		text-decoration: none;
 		cursor: pointer;
 	}
 
-	.modalpix img {
+	.modalpixhome img {
 		max-width: 100%;
 		height: auto;
 	}
@@ -379,4 +346,23 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 		text-align: center;
 	}
 </style>
+<!-- Modal -->
+<div id="qrcodeHome" class="modalpixhome">
+	<div class="modalpixhome-content">
+		<form action="<?php echo URL_BASE . "Home/simularPayCx" ?>" method="post">
+			<button type="submit" class="btn">Pagar</button>
+		</form>
+		<span class="closehome">&times;</span>
+		<h2>QR Code</h2>
+		<p>Digitalize o código QR abaixo ou copie o link:</p>
+		<img src="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code">
+		<!-- Seção de copiar o texto -->
+		<div class="copy-container">
+			<input type="text" id="qrcodeLink" class="copy-input" value="<?php echo htmlspecialchars($qrcodeUrl, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+			<button class="copy-btn" onclick="copyToClipboard()">Copiar Link</button>
+		</div>
+
+	</div>
+</div>
+<!-- fim modal pix -->
 <div id="mascara"></div>
