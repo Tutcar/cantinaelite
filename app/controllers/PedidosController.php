@@ -362,7 +362,9 @@ class PedidosController extends Controller
             }
         }
         if ($pedidos->tipo_pg == "Pix") {
+            $token_credito_al = rand(100000, 999999);
             $confirma = "N";
+            $pedidos->pago = "N";
             $valorpag = new \stdClass();
             $valorpag->produto = "Credito";
             $valorpag->quantidade = 1;
@@ -391,6 +393,19 @@ class PedidosController extends Controller
                         break;
                     }
                 }
+            }
+            // Verifica se a URL foi capturada corretamente
+            if (empty($qrcode_png_url)) {
+                echo "Erro: QR Code não disponível.";
+            } else {
+                // Exibe a página HTML com o modal e o QR Code
+
+
+                // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
+                $_SESSION['qrcode_url'] = $qrcode_png_url;
+                $_SESSION['formapix'] = "crd";
+                $nr_doc_pg = $token_credito_al;
+                $_SESSION['webhook'] = $nr_doc_pg;
             }
         }
         Flash::setForm($pedidos);
