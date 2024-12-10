@@ -70,10 +70,44 @@ class BalancoController extends Controller
         $dados["view"]  = "balanco/index";
         $this->load("template", $dados);
     }
-    public function vandasDia()
+    public function vandasProdutos()
     {
-        i($dados["vendasDia"] = Flash::vendasDia($this->db));
-        $dados["view"]  = "balanco/vandasDia";
+        $data = null;
+        $data = hoje();
+        $dados["vDia"] = " dia " . extraiDia($data) . " de " . extraiMes($data) . "/" . extraiAno($data);
+        $dados["vendasDia"] = Flash::vendasDia($this->db, $data);
+        $dados["view"]  = "balanco/balprodutos";
+        $this->load("template", $dados);
+    }
+    public function filtroProd()
+    {
+
+        $data = null;
+        $dataCompleta = null;
+        $dados["vDia"] = "";
+        if ($_POST["campo"] == "diavenda") {
+            $data = $_POST["valorCampo"];
+            $dados["vDia"] = " dia " . extraiDia($data) . " de " . extraiMes($data) . "/" . extraiAno($data);
+            $dados["vendasDia"] = Flash::vendasDia($this->db, $data);
+        } elseif ($_POST["campo"] == "mesvenda") {
+            $data = $_POST["valorCampo"];
+            $mesv = extraiMes($data);
+            $anov = extraiAno($data);
+            $dados["vDia"] = " mês " . $mesv . "/" . $anov;
+            $dados["vendasDia"] = Flash::vendaMes($this->db, $dataCompleta);
+        } elseif ($_POST["campo"] == "anovenda") {
+            $data = $_POST["valorCampo"];
+            $anov = extraiAno($data);
+            $dados["vDia"] = " ano de " . $anov;
+            $dados["vendasDia"] = Flash::vendaAno($this->db, $dataCompleta);
+        } else {
+            $data = $_POST["valorCampo"];
+            $dados["vDia"] = " dia " . extraiDia($data) . " de " . extraiMes($data) . "/" . extraiAno($data);
+            $dados["vendasDia"] = Flash::vendasDia($this->db, $data);
+        }
+
+
+        $dados["view"]  = "balanco/balprodutos";
         $this->load("template", $dados);
     }
 }

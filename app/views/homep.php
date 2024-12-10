@@ -40,8 +40,8 @@
                 <div class="link"><i class="fa fa-database"></i>Utilitários<i class="fa fa-chevron-down"></i></div>
                 <ul class="submenu">
                     <!-- <li><a href="<?php echo URL_BASE . "corretora/index" ?>">Bancos</a></li>
-                    <li><a href="<?php echo URL_BASE . "compromisso/index" ?>">Compromissos</a></li>
-                    <li><a href="<?php echo URL_BASE . "agenda/index" ?>">Agenda</a></li> -->
+                    <li><a href="<?php echo URL_BASE . "compromisso/index" ?>">Compromissos</a></li>-->
+                    <li><a href="<?php echo URL_BASE . "Balanco/vandasProdutos" ?>">Vendas dia</a></li>
                     <li><a href="<?php echo URL_BASE . "Balanco/index" ?>">Balanço</a></li>
                 </ul>
             </li>

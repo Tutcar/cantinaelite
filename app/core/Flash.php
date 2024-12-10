@@ -7,39 +7,124 @@ use PDOException;
 
 class Flash
 {
-    public static function vendasDia($pdo)
+    public static function vendaAno($pdo, $dataCompleta = null)
     {
         try {
-            // Escreve a consulta SQL
             $sql = "
-                SELECT 
-                    p.id_produto,
-                    p.nome,
-                    SUM(p.quant) AS total_quantidade,
-                    p.valor
-                FROM 
-                    pedido p
-                WHERE 
-                    p.quant > 0
-                    AND DATE(p.data_fch_pedido) = CURDATE()
-                GROUP BY 
-                    p.id_produto, p.nome, p.valor;
-            ";
+            SELECT 
+                p.id_produto,
+                p.data_ab_pedido,
+                p.nome,
+                SUM(p.quant) AS total_quantidade,
+                p.valor,
+                SUM(p.quant) * p.valor AS valor_total
+            FROM 
+                pedido p
+            WHERE 
+                p.quant > 0
+                AND YEAR(p.data_ab_pedido) = :ano
+            GROUP BY 
+                p.id_produto, p.data_ab_pedido, p.nome, p.valor
+            ORDER BY 
+                p.data_ab_pedido, p.nome ASC;
+        ";
 
-            // Prepara a consulta
             $stmt = $pdo->prepare($sql);
 
-            // Executa a consulta
+            // Obter o ano a partir da data completa
+            $dataCompleta = $dataCompleta ?? date('Y-m-d');
+            $ano = date('Y', strtotime($dataCompleta));
+
+            $stmt->bindValue(':ano', $ano, PDO::PARAM_INT);
+
             $stmt->execute();
 
-            // Retorna os resultados como um array associativo
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            // Trata erros de execução
             echo "Erro: " . $e->getMessage();
             return [];
         }
     }
+
+    public static function vendaMes($pdo, $dataCompleta = null)
+    {
+        try {
+            $sql = "
+                SELECT 
+                    p.id_produto,
+                    p.data_ab_pedido,
+                    p.nome,
+                    SUM(p.quant) AS total_quantidade,
+                    p.valor,
+                    SUM(p.quant) * p.valor AS valor_total
+                FROM 
+                    pedido p
+                WHERE 
+                    p.quant > 0
+                    AND MONTH(p.data_ab_pedido) = :mes
+                    AND YEAR(p.data_ab_pedido) = :ano
+                GROUP BY 
+                    p.id_produto, p.data_ab_pedido, p.nome, p.valor
+                ORDER BY 
+                    p.data_ab_pedido, p.nome ASC;
+            ";
+
+            $stmt = $pdo->prepare($sql);
+
+            // Obter mês e ano a partir da data completa
+            $dataCompleta = $dataCompleta ?? date('Y-m-d');
+            $mes = date('m', strtotime($dataCompleta));
+            $ano = date('Y', strtotime($dataCompleta));
+
+            $stmt->bindValue(':mes', $mes, PDO::PARAM_INT);
+            $stmt->bindValue(':ano', $ano, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Erro: " . $e->getMessage();
+            return [];
+        }
+    }
+
+
+    public static function vendasDia($pdo, $dataEspecifica = null)
+    {
+        try {
+            $sql = "
+                SELECT 
+                    p.id_produto,
+                    p.data_ab_pedido,
+                    p.nome,
+                    SUM(p.quant) AS total_quantidade,
+                    p.valor,
+                    SUM(p.quant) * p.valor AS valor_total
+                FROM 
+                    pedido p
+                WHERE 
+                    p.quant > 0
+                    AND DATE(p.data_ab_pedido) = :data_ab_pedido
+                GROUP BY 
+                    p.id_produto, p.data_ab_pedido, p.nome, p.valor
+                ORDER BY 
+                p.nome ASC;    
+            ";
+
+            $stmt = $pdo->prepare($sql);
+
+            $data = $dataEspecifica ?? date('Y-m-d');
+            $stmt->bindValue(':data_ab_pedido', $data);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Erro: " . $e->getMessage();
+            return [];
+        }
+    }
+
 
     public static function ContarCxFuncionarios($pdo)
     {
