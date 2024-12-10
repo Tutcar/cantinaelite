@@ -9,6 +9,7 @@ use app\core\Flash;
 use app\models\service\ClienteService;
 use app\models\service\UserService;
 use app\util\UtilService;
+use DateTime;
 
 class ClienteController extends Controller
 {
@@ -97,8 +98,11 @@ class ClienteController extends Controller
                 $user->id_user = null;
                 $user->id_cliente = $idcli->id_cliente;
                 $user->tipo = "cliente";
+                $datetime = new DateTime('3024-11-14 20:45:07');
+                $datetime->format('Y-m-d H:i:s');
+                $user->expira = $datetime->format('Y-m-d H:i:s');
                 $user->e_mail = $_POST["e_mail"];
-                $user->login = $_POST["nm_nome"];
+                $user->login_cli = $_POST["nm_nome"];
                 $tamanho = 12;
                 $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+<>?';
                 $user->senha = md5(substr(str_shuffle($caracteres), 0, $tamanho));

@@ -70,4 +70,10 @@ class BalancoController extends Controller
         $dados["view"]  = "balanco/index";
         $this->load("template", $dados);
     }
+    public function vandasDia()
+    {
+        i($dados["vendasDia"] = Flash::vendasDia($this->db));
+        $dados["view"]  = "balanco/vandasDia";
+        $this->load("template", $dados);
+    }
 }

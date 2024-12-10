@@ -372,7 +372,35 @@ class PedidosController extends Controller
             $pedido = Service::get("pedido", "nr_pedido", $_SESSION["nr_ped"], false);
             $cliente = $pedido->cliente;
             $_SESSION['CLIENTE'] = Service::get("cliente", "nm_nome", $cliente);
-            $alunopag = dadosAluno();
+            $alunoNaoInfo = substr($cliente, 0, 5);
+            if ($alunoNaoInfo == "Cli -") {
+                $alunopag = new \stdClass();
+                $alunopag->id_cliente = 952;
+                $alunopag->NomeCliente = "Danilo Mandetta Junior";
+                $alunopag->email = "contato@cantinaelite.com.br";
+                if (substr("67997861668", 0, 2) == "67") {
+                    $alunopag->ddd = substr("67997861668", 0, 2);
+                    $alunopag->nr_fone = substr("67997861668", 2);
+                } else {
+                    $alunopag->ddd = "67";
+                    $alunopag->nr_fone = "991285454";
+                }
+                $alunopag->tipoDoc = "CPF";
+                $alunopag->nrCpf = "33739544104";
+
+                $alunopag->nm_rua = "Rua Ari Coelho de Oliveira";
+                $alunopag->nr_numero = "105";
+                $alunopag->nm_bairro = "Vila Progresso";
+                $alunopag->nm_cidade = "Campo Grande";
+                $alunopag->sg_estado = "MS";
+                $alunopag->complemento = "Centro";
+                $alunopag->nr_cep = "13471-410";
+                $alunopag->pais = "BRA";
+                $alunopag->localizacao = "Mato Grosso do Sul";
+            } else {
+                $alunopag = dadosAluno();
+            }
+
             $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $_SESSION["nr_ped"]);
 
             // Verifique se a resposta contém o QR Code

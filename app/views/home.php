@@ -345,6 +345,14 @@ $mostrarModalHome = !empty($qrcodeUrl); // Verifica se há um valor para mostrar
 		margin-top: 10px;
 		text-align: center;
 	}
+
+	.modalpix img {
+		display: block;
+		margin: 0 auto;
+		/* Centraliza a imagem horizontalmente */
+		max-width: 70%;
+		height: auto;
+	}
 </style>
 <!-- Modal -->
 <div id="qrcodeHome" class="modalpixhome">

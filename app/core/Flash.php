@@ -7,6 +7,40 @@ use PDOException;
 
 class Flash
 {
+    public static function vendasDia($pdo)
+    {
+        try {
+            // Escreve a consulta SQL
+            $sql = "
+                SELECT 
+                    p.id_produto,
+                    p.nome,
+                    SUM(p.quant) AS total_quantidade,
+                    p.valor
+                FROM 
+                    pedido p
+                WHERE 
+                    p.quant > 0
+                    AND DATE(p.data_fch_pedido) = CURDATE()
+                GROUP BY 
+                    p.id_produto, p.nome, p.valor;
+            ";
+
+            // Prepara a consulta
+            $stmt = $pdo->prepare($sql);
+
+            // Executa a consulta
+            $stmt->execute();
+
+            // Retorna os resultados como um array associativo
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Trata erros de execução
+            echo "Erro: " . $e->getMessage();
+            return [];
+        }
+    }
+
     public static function ContarCxFuncionarios($pdo)
     {
         // Consulta SQL com soma do campo valor, filtrando por pago e agrupando por tipo de pagamento e funcionário

@@ -5,8 +5,13 @@ function dadosAluno()
     $alunopag->id_cliente = $_SESSION['CLIENTE']->id_cliente;
     $alunopag->NomeCliente = $_SESSION['CLIENTE']->nm_nome;
     $alunopag->email = $_SESSION['CLIENTE']->e_mail;
-    $alunopag->ddd = substr($_SESSION['CLIENTE']->nr_fone, 0, 2);
-    $alunopag->nr_fone = substr($_SESSION['CLIENTE']->nr_fone, 2);
+    if (substr($_SESSION['CLIENTE']->nr_fone_resp, 0, 2) == "67") {
+        $alunopag->ddd = substr($_SESSION['CLIENTE']->nr_fone_resp, 0, 2);
+        $alunopag->nr_fone = substr($_SESSION['CLIENTE']->nr_fone_resp, 2);
+    } else {
+        $alunopag->ddd = "67";
+        $alunopag->nr_fone = "991285454";
+    }
     $alunopag->tipoDoc = "CPF";
     $alunopag->nrCpf = $_SESSION['CLIENTE']->nr_cpf_cnpj;
 
@@ -14,7 +19,7 @@ function dadosAluno()
     $alunopag->nr_numero = $_SESSION['CLIENTE']->nr_numero;
     $alunopag->nm_bairro = $_SESSION['CLIENTE']->nm_bairro;
     $alunopag->nm_cidade = $_SESSION['CLIENTE']->nm_cidade;
-    $alunopag->sg_estado = $_SESSION['CLIENTE']->sg_estado;
+    $alunopag->sg_estado = "MS";
     $alunopag->complemento = "Centro";
     $alunopag->nr_cep = "13471-410";
     $alunopag->pais = "BRA";
