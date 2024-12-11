@@ -43,6 +43,7 @@ class AlunoController extends Controller
 
     public function salvarAl()
     {
+        I($_POST);
 
         $token_credito_al = rand(100000, 999999);
         $source = array('.', ',');

@@ -30,6 +30,7 @@ $(function () {
     $('input[name=valorEnc]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Valor aumento" });
     $('input[name=limite]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Limite aluno" });
     $('input[name=conferencia]').mask('000.000.000.000.000,00', { reverse: true, placeholder: "Diferença caixa" });
+
 });
 function checkRodada(rodada) {
 

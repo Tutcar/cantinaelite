@@ -285,12 +285,14 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <h2>Cadastro de Créditos</h2><br />
         <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Limite&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
         <?php if ($_SESSION[SESSION_LOGIN]->tipo == "cliente") : ?>
-            <form id="formulario" action="<?php echo URL_BASE . "Aluno/salvarAl" ?>" method="POST" enctype="multipart/form-data">
+            <!-- Formulário Pix -->
+            <form id="formularioPix" action="<?php echo URL_BASE . 'Aluno/salvarAl' ?>" method="POST" enctype="multipart/form-data" style="display: none;">
                 <div class="mb-3">
                     <label class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login_cli ?></span></label>
                     <label class="form-label">
                         <p> Saldo: R$&nbsp;
-                            <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?></p>
+                            <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?>
+                        </p>
                     </label>
                 </div>
                 <div class="mb-3">
@@ -299,12 +301,115 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                     <input type="hidden" name="valor_debito" value="">
                 </div>
                 <input type="hidden" name="id_user" value="<?php echo $_SESSION[SESSION_LOGIN]->id_user ?>" />
-                <button type="submit">Créditar</button>
-                <!-- INICIO DO BOTAO PAGBANK --><a href="https://pag.ae/7-XFzKMM4/button" target="_blank" title="Pagar com PagBank"><img src="//assets.pagseguro.com.br/ps-integration-assets/botoes/pagamentos/205x30-pagar.gif" alt="Pague com PagBank - é rápido, grátis e seguro!" /></a><!-- FIM DO BOTAO PAGBANK -->
+                <button type="submit">Confirmar Pix</button>
             </form>
         <?php endif; ?>
+        <button id="botaoPix" class="botao-pagamento">Pix</button>
+        <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoCartao" class="botao-pagamento">Cartão</button>
+        <!-- Formulário de pagamento com cartão -->
+        <form id="formularioCartao" action="<?php echo URL_BASE . 'Pagamento/salvarCartao' ?>" method="POST" style="display: none;">
+            <div id="cartaoFormCr" style="margin-top: 20px;">
+                <div class="mb-3">
+                    <label for="currency_cartao" class="form-label">Informe o valor para créditar:</label>
+                    <input type="text" name="currency_cartao" id="currency_cartao" required>
+                    <input type="hidden" name="valor_debito" value="">
+                </div>
+                <h2 style="color:blue">Informações do Cartão</h2>
+                <input required type="text" id="brand" name="brand" placeholder="Bandeira: VISA, MASTERCARD ..."><br>
+                <input
+                    type="text"
+                    id="number"
+                    name="number"
+                    placeholder="Número do cartão"
+                    oninput="mascaraCartaoCr(this)"
+                    maxlength="19"><br>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label>
+                        <h2 style="color:blue">Expiração:</h2>
+                    </label>
+                    <select id="exp_month" name="exp_month" style="font-size: 16px;">
+                        <option value="">Mês</option>
+                        <?php foreach ($meses as $key => $value) { ?>
+                            <option value="<?php echo $key; ?>"><?php echo $key; ?></option>
+                        <?php } ?>
+                    </select>
+                    <select id="exp_year" name="exp_year" style="font-size: 16px;">
+                        <option value="">Ano</option>
+                        <?php foreach ($anos as $ano) { ?>
+                            <option value="<?php echo $ano; ?>"><?php echo $ano; ?></option>
+                        <?php } ?>
+                    </select>
+                    <input
+                        type="text"
+                        id="security_code"
+                        name="security_code"
+                        style="width: 100%; max-width: 400px; font-size: 16px;"
+                        placeholder="Código de Segurança">
+                </div>
+                <input type="text" id="holder_name" name="holder_name" placeholder="Nome do titular"><br>
+                <input
+                    type="text"
+                    id="holder_tax_id"
+                    name="holder_tax_id"
+                    placeholder="CPF do titular"
+                    oninput="mascaraCPFcr(this)"
+                    maxlength="14"><br>
+                <input type="hidden" name="id_user" value="<?php echo $_SESSION[SESSION_LOGIN]->id_user ?>" />
+                <button type="submit">Pagar com Cartão</button>
+            </div>
+        </form>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<script>
+    document.getElementById("botaoPix").addEventListener("click", function() {
+        document.getElementById("formularioPix").style.display = "block";
+        document.getElementById("formularioCartao").style.display = "none";
+    });
+
+    document.getElementById("botaoCartao").addEventListener("click", function() {
+        document.getElementById("formularioPix").style.display = "none";
+        document.getElementById("formularioCartao").style.display = "block";
+    });
+
+    function mascaraCPFcr(campo) {
+        let valor = campo.value;
+        // Remove qualquer caractere que não seja dígito
+        valor = valor.replace(/\D/g, "");
+
+        // Aplica a máscara de CPF: 000.000.000-00
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+        // Atualiza o campo com o valor formatado
+        campo.value = valor;
+    }
+
+    function mascaraCartaoCr(campo) {
+        let valor = campo.value;
+        // Remove qualquer caractere que não seja dígito
+        valor = valor.replace(/\D/g, "");
+
+        // Aplica a máscara de cartão: 0000-0000-0000-0000
+        valor = valor.replace(/(\d{4})(?=\d)/g, "$1-");
+
+        // Limita ao formato de 16 dígitos com três traços
+        valor = valor.substring(0, 19);
+
+        // Atualiza o campo com o valor formatado
+        campo.value = valor;
+    }
+    // Aplica a máscara ao campo
+    $('input[name=currency_cartao]').mask('000.000.000.000.000,0', {
+        reverse: true,
+        placeholder: "Valor do Crédito"
+    });
+</script>
+
+
 <section class="cardapio" id="cardapio">
     <div class="cardapioh2">
         <h2>Cardápio <span><?php echo $dia; ?></span></h2>

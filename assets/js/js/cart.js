@@ -144,14 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
         }
     }
-    // const botaoPagamento3 = document.getElementById('botaoPagamento3');
-    // botaoPagamento3.onclick = function() {
-    //     if (total > 0) {
-    //         window.location.href =  base_url + "Homepage/cadastrar_carrinho/?saldo=3"; // Altere para a URL real da página de pagamento
-    //     } else {
-    //         alert('Seu carrinho está vazio. Adicione itens antes de continuar.');
-    //     }
-    // }
+    
     const botaoPagamento3 = document.getElementById('botaoPagamento3');
     botaoPagamento3.onclick = function() {
     if (total > 0) {
