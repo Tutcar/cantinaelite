@@ -56,6 +56,7 @@ class HomepageController extends Controller
 
    public function index()
    {
+
       if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
          $dados["saldoAluno"] = Flash::saldoCantina($this->db, $_SESSION['CLIENTE']->nr_cpf_cnpj) + $_SESSION['CLIENTE']->limite;
          $dados["limiteAluno"] = $_SESSION['CLIENTE']->limite;

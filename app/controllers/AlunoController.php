@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\core\Controller;
 use app\core\Conexao;
 use app\core\Flash;
+use app\models\pagseguro\ReqPagSeguroCartaoCredito;
 use app\models\pagseguro\ReqPagSeguroPix;
 use app\models\pagseguro\ReqPagSeguroPay;
 use app\models\service\CorrenteService;
@@ -40,11 +41,10 @@ class AlunoController extends Controller
         $this->redirect(URL_BASE);
         exit();
     }
+    public function salvarAlCr() {}
 
     public function salvarAl()
     {
-        I($_POST);
-
         $token_credito_al = rand(100000, 999999);
         $source = array('.', ',');
         $replace = array('', '.');
@@ -54,8 +54,14 @@ class AlunoController extends Controller
         $id = $valorpag->id_cliente;
         $valorpag->produto = "Credito";
         $valorpag->quantidade = 1;
-        $get_valor_credito = preg_replace('/[^\d,]/', '', $_POST["valor_credito"]);
-        $valorpag->valor_credito = str_replace($source, $replace, $get_valor_credito);
+
+        if (isset($_POST["valor_credito"]) != null) {
+            $get_valor_credito = preg_replace('/[^\d,]/', '', $_POST["valor_credito"]);
+            $valorpag->valor_credito = str_replace($source, $replace, $get_valor_credito);
+        } elseif (isset($_POST["currency_cartao"]) != null) {
+            $get_valor_credito = preg_replace('/[^\d,]/', '', $_POST["currency_cartao"]);
+            $valorpag->valor_credito = str_replace($source, $replace, $get_valor_credito);
+        }
         $valorpag->valorLimpo = preg_replace('/[,.]/', '', $valorpag->valor_credito);
         //Dados aluno credido
         $alunopag = new \stdClass();
@@ -91,12 +97,16 @@ class AlunoController extends Controller
         $corrente->descricao = $_SESSION['CLIENTE']->nm_nome;
         $corrente->nr_doc_pg = $token_credito_al;
 
-        if ($_POST["valor_credito"] != null) {
+        if (isset($_POST["valor_credito"]) != null) {
             $get_valor_credito = preg_replace('/[^\d,]/', '', $_POST["valor_credito"]);
+            $corrente->valor_credito = str_replace($source, $replace, $get_valor_credito);
+        } elseif (isset($_POST["currency_cartao"]) != null) {
+            $get_valor_credito = preg_replace('/[^\d,]/', '', $_POST["currency_cartao"]);
             $corrente->valor_credito = str_replace($source, $replace, $get_valor_credito);
         } else {
             $corrente->valor_credito = 0;
         }
+
         if ($_POST["valor_debito"] != null) {
             $get_valor_debito = $_POST["valor_debito"];
             $corrente->valor_debito = str_replace($source, $replace, $get_valor_debito);
@@ -113,43 +123,64 @@ class AlunoController extends Controller
         try {
             if (CorrenteService::salvar($corrente, $this->campo, $this->tabela)) {
                 Flash::setMsg("Crédito efetuado com sucesso!", 1);
-                // $response = ReqPagSeguroCheckout::checkoutPag($alunopag, $valorpag, $token_credito_al);
-                $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $token_credito_al . "CRD");
-
-                // Verifique se a resposta contém o QR Code
-                $qrcode_png_url = '';
-                $qrcode = '';
-
-                if (isset($response['qr_codes'][0]['links'])) {
-                    // Seu array de exemplo
-
-                    // Armazena o valor do ID na sessão
-                    $_SESSION['id'] = $response['qr_codes'][0]['id'];
-
-
-
-                    foreach ($response['qr_codes'][0]['links'] as $link) {
-                        if ($link['rel'] === 'QRCODE.PNG') {
-                            $qrcode_png_url = $link['href'];
-                            break;
-                        }
-                    }
-                }
-                // Verifica se a URL foi capturada corretamente
-                if (empty($qrcode_png_url)) {
-                    echo "Erro: QR Code não disponível.";
-                } else {
-                    // Exibe a página HTML com o modal e o QR Code
-
-
-                    // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
+                if (isset($_POST["brand"])) {
+                    $qrcode_png_url = '';
+                    $qrcode = '';
+                    $cardDetails = new \stdClass();
+                    $cardDetails->brand = $_POST["brand"]; //"visa";
+                    $cardDetails->number = tira_mascara($_POST["number"]); //"4066699917608988";
+                    $cardDetails->exp_month = intval($_POST["exp_month"]); //8;
+                    $cardDetails->exp_year = intval($_POST["exp_year"]); //2032;
+                    $cardDetails->security_code = $_POST["security_code"]; //"481";
+                    $cardDetails->holder_name = $_POST["holder_name"]; //"Carlos A Teixeira";
+                    $cardDetails->holder_tax_id = tira_mascara($_POST["holder_tax_id"]); //"06201683828";
+                    $response = ReqPagSeguroCartaoCredito::createCreditCardOrder($alunopag, $valorpag, $token_credito_al . "CRD", $cardDetails);
                     $_SESSION['qrcode_url'] = $qrcode_png_url;
                     $_SESSION['formapix'] = "crd";
                     $nr_doc_pg = $token_credito_al;
                     $_SESSION['webhook'] = $nr_doc_pg;
-                    $this->redirect(URL_BASE);
-                    header("Refresh: 0"); // Adiciona o refresh
+                    Flash::quitarCredito($this->db, $_SESSION['webhook']);
+                    $this->redirect(URL_BASE . "home");
                     exit;
+                } else {
+                    // $response = ReqPagSeguroCheckout::checkoutPag($alunopag, $valorpag, $token_credito_al);
+                    $response = ReqPagSeguroPix::createOrder($alunopag, $valorpag, $token_credito_al . "CRD");
+
+                    // Verifique se a resposta contém o QR Code
+                    $qrcode_png_url = '';
+                    $qrcode = '';
+
+                    if (isset($response['qr_codes'][0]['links'])) {
+                        // Seu array de exemplo
+
+                        // Armazena o valor do ID na sessão
+                        $_SESSION['id'] = $response['qr_codes'][0]['id'];
+
+
+
+                        foreach ($response['qr_codes'][0]['links'] as $link) {
+                            if ($link['rel'] === 'QRCODE.PNG') {
+                                $qrcode_png_url = $link['href'];
+                                break;
+                            }
+                        }
+                    }
+                    // Verifica se a URL foi capturada corretamente
+                    if (empty($qrcode_png_url)) {
+                        echo "Erro: QR Code não disponível.";
+                    } else {
+                        // Exibe a página HTML com o modal e o QR Code
+
+
+                        // Redireciona para a página de confirmação de pagamento, passando o link do QR Code
+                        $_SESSION['qrcode_url'] = $qrcode_png_url;
+                        $_SESSION['formapix'] = "crd";
+                        $nr_doc_pg = $token_credito_al;
+                        $_SESSION['webhook'] = $nr_doc_pg;
+                        $this->redirect(URL_BASE);
+                        header("Refresh: 0"); // Adiciona o refresh
+                        exit;
+                    }
                 }
             }
         } catch (PDOException $e) {

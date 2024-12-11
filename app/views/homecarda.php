@@ -9,7 +9,11 @@
         <h2 class="h2carda">Cardápio da Semana</h2>
         <section class="cardapio" id="cardapio">
             <form>
-                <?php foreach ($pratoss as $prato) { ?>
+                <?php
+
+                use app\core\Flash;
+
+                foreach ($pratoss as $prato) { ?>
                     <div class="itens-cardapio">
 
                         <div class="card">
@@ -281,20 +285,28 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
 <!-- Modal -->
 <div id="creditos" class="modalcr">
     <div class="modalcr-content">
-        <span class="closecr">&times;</span>
-        <h2>Cadastro de Créditos</h2><br />
-        <?php ($_SESSION['CLIENTE']->limite > 0) ? $limite = "&nbsp;Limite&nbspR$:" . moedaBr($_SESSION['CLIENTE']->limite) : $limite = "" ?>
+        <div>
+            <span class="closecr">&times;</span>
+            <h2>Cadastro de Créditos </h2><br />
+            <div class="mb-3">
+                <label class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login_cli ?></span></label>
+                <label class="form-label">
+                    <p> Saldo: R$&nbsp;
+                        <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?>
+                    </p>
+                </label>
+            </div>
+
+            <?php
+            $limite = ($_SESSION['CLIENTE']->limite > 0 || isset($_SESSION['CLIENTE']->cartao))
+                ? "&nbsp;Limite&nbsp;R$: " . moedaBr($_SESSION['CLIENTE']->limite)
+                : "";
+            ?>
+        </div>
+
         <?php if ($_SESSION[SESSION_LOGIN]->tipo == "cliente") : ?>
             <!-- Formulário Pix -->
             <form id="formularioPix" action="<?php echo URL_BASE . 'Aluno/salvarAl' ?>" method="POST" enctype="multipart/form-data" style="display: none;">
-                <div class="mb-3">
-                    <label class="form-label"><span><?php echo $_SESSION[SESSION_LOGIN]->login_cli ?></span></label>
-                    <label class="form-label">
-                        <p> Saldo: R$&nbsp;
-                            <?php echo moedaBR($saldoAluno - $_SESSION['CLIENTE']->limite) . $limite ?>
-                        </p>
-                    </label>
-                </div>
                 <div class="mb-3">
                     <label for="valor_credito" class="form-label">Informe o valor para créditar:</label>
                     <input type="text" name="valor_credito" id="currency" required>
@@ -307,10 +319,10 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         <button id="botaoPix" class="botao-pagamento">Pix</button>
         <button <?php echo $_SESSION[SESSION_LOGIN]->tipo <> "cliente" ? 'disabled' : ''; ?> id="botaoCartao" class="botao-pagamento">Cartão</button>
         <!-- Formulário de pagamento com cartão -->
-        <form id="formularioCartao" action="<?php echo URL_BASE . 'Pagamento/salvarCartao' ?>" method="POST" style="display: none;">
+        <form id="formularioCartao" action="<?php echo URL_BASE . 'Aluno/salvarAl' ?>" method="POST" style="display: none;">
             <div id="cartaoFormCr" style="margin-top: 20px;">
                 <div class="mb-3">
-                    <label for="currency_cartao" class="form-label">Informe o valor para créditar:</label>
+                    <label style="color:blue" for="currency_cartao" class="form-label">Informe o valor para créditar:</label>
                     <input type="text" name="currency_cartao" id="currency_cartao" required>
                     <input type="hidden" name="valor_debito" value="">
                 </div>
@@ -355,7 +367,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                     oninput="mascaraCPFcr(this)"
                     maxlength="14"><br>
                 <input type="hidden" name="id_user" value="<?php echo $_SESSION[SESSION_LOGIN]->id_user ?>" />
-                <button type="submit">Pagar com Cartão</button>
+                <button type="submit">Confirna o Cartão</button>
             </div>
         </form>
     </div>
@@ -403,7 +415,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         campo.value = valor;
     }
     // Aplica a máscara ao campo
-    $('input[name=currency_cartao]').mask('000.000.000.000.000,0', {
+    $('input[name=currency_cartao]').mask('000.000.000.000.000,00', {
         reverse: true,
         placeholder: "Valor do Crédito"
     });
