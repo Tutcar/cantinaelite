@@ -46,7 +46,10 @@
 					<article class="cx-home">
 						<div class="thead">
 							<div class="col-12">
-								<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janela1')">Novo Pedidos</label>
+								<div style="display: flex; gap: 10px;">
+									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janela1')">Novo Pedidos</label>
+									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janelacr')">Creditar</label>
+								</div>
 								<select onchange="mostraAlerta(this.value)" id="novoPed" name="nr_pedidos" class="form-campo">
 									<option value="novo"></option>
 									<?php
@@ -125,7 +128,7 @@
 		<form method="POST" id="nomePedido">
 			<div class="rows">
 				<div class="col-12">
-					<span class="label text-label">Nome Cliente</span>
+					<span class="label text-label">Nome Aluno</span>
 
 					<select id="nomeCliente" name="cliente" class="form-campo">
 						<option value=""></option>
@@ -147,8 +150,89 @@
 		</form>
 		<a href="#" class="fechar">x</a>
 	</div>
-
 </div>
+<div class="window formulario" id="janelacr">
+	<div class="p-4 width-100 d-inline-block">
+		<form method="POST" id="nomePedidocr">
+			<div class="rows">
+				<div class="col-12">
+					<!-- Saldo do Aluno -->
+					<span class="label text-label">Saldo Aluno: <span id="saldoAluno">0,00</span></span>
+
+					<!-- Seleção de Cliente -->
+					<select id="nomeClientecr" name="clientecr" class="form-campo" onchange="buscarSaldo()">
+						<option value=""></option>
+						<?php
+						foreach ($clientes as $cliente) :
+						?>
+							<option value="<?php echo $cliente->nm_nome; ?>"><?php echo $cliente->nm_nome; ?></option>
+						<?php
+						endforeach;
+						?>
+					</select>
+
+					<!-- Valor Crédito -->
+					<span class="label text-label">Valor crédito</span>
+					<input class="form-campo"
+						type="text"
+						id="valorCredito"
+						placeholder="Valor do crédito"
+						oninput="formatarValor(this)" required="required" />
+				</div>
+
+				<!-- Botão de Submissão -->
+				<div class="col-12 mt-3">
+					<input id="nomePedidocr" type="submit" class="btn" value="Creditar">
+				</div>
+			</div>
+		</form>
+		<a href="#" class="fechar">x</a>
+	</div>
+</div>
+
+<script>
+	// Função para buscar o saldo do cliente
+	function buscarSaldo() {
+		const clienteNome = document.getElementById("nomeClientecr").value;
+
+		if (!clienteNome) {
+			document.getElementById("saldoAluno").textContent = "0,00";
+			return;
+		}
+
+		const url = `<?php echo URL_BASE; ?>Corrente/saldoCx/${encodeURIComponent(clienteNome)}`;
+		console.log("URL gerada:", url);
+
+		fetch(url)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Erro na resposta do servidor");
+				}
+				return response.json();
+			})
+			.then(data => {
+				const saldo = parseFloat(data.saldo || 0).toLocaleString("pt-BR", {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2
+				});
+				document.getElementById("saldoAluno").textContent = saldo;
+			})
+			.catch(error => {
+				console.error("Erro ao buscar saldo:", error);
+				alert("Não foi possível buscar o saldo do cliente.");
+			});
+	}
+	// Função para formatar o valor de crédito
+	function formatarValor(input) {
+		let valor = input.value.replace(/\D/g, "");
+		valor = new Intl.NumberFormat("pt-BR", {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		}).format(valor / 100);
+		input.value = valor;
+	}
+</script>
+
 <div class="window formulario " id="janela2">
 	<div class="p-4 width-100 d-inline-block">
 		<form method="POST" id="fecharPedido">

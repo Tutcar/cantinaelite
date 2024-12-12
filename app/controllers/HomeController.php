@@ -28,7 +28,6 @@ class HomeController extends Controller
 
    public function index()
    {
-
       $dados["datacxab"] = service::get("caixaabre", "fechado", "N", false);
       $_SESSION["verifCx"] = 1000;
       $dados["clientes"] = Flash::clientes($this->db);

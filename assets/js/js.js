@@ -407,6 +407,23 @@ $('#nomePedido').submit(function (e) {
 		}
 	});
 });
+$('#nomePedidocr').submit(function (e) {
+	e.preventDefault();
+	var cliente = $('#nomeClientecr').val();
+	var valor_credito = $('#valorCredito').val();
+	var nr_pedido = novoPedido;
+	$.ajax({
+		url: base_url + "Pedidos/salvarJsoncr/",
+		type: 'POST',
+		data: { cliente: cliente, valor_credito: valor_credito, nr_pedido: nr_pedido },
+		dataType: 'json',
+		success: function (r) {
+			
+			window.location.reload();
+
+		}
+	});
+});
 
 $('#nomePedido2').submit(function (e) {
 	e.preventDefault();

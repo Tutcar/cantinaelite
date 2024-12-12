@@ -98,6 +98,19 @@ class CorrenteController extends Controller
             echo json_encode(['error' => $e->getMessage()]);
         }
     }
+    public function saldoCx($clienteId = null)
+    {
+        try {
+            $credito =  Flash::CreditoAluno($this->db, $clienteId);
+            // Retorna o saldo em formato JSON
+            echo json_encode(['saldo' => $credito->soma]);
+            exit;
+        } catch (Exception $e) {
+            // Retorna erro se o ID do cliente não for informado
+            echo json_encode(['error' => 'Cliente não encontrado.']);
+            exit;
+        }
+    }
 
     public function obterCorrentesSjson($idCliente = null)
     {
