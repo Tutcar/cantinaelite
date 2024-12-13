@@ -506,6 +506,10 @@ abstract class Model
                     $tabela = "pedido";
                     $campoAgregacao = "valor";
                     $sql = "SELECT sum($campoAgregacao) as soma FROM pedido  WHERE tipo_pg = 'Outros' AND quant = '0' AND cx_fechado = 'N'";
+                } else if ($tabela == "caixafechaCrCx") {
+                    $tabela = "pedido";
+                    $campoAgregacao = "valor";
+                    $sql = "SELECT sum($campoAgregacao) as soma FROM pedido  WHERE tipo_pg = 'credito' AND quant = '0' AND cx_fechado = 'N'";
                 } else if ($tabela == "caixafechaA") {
                     $tabela = "pedido";
                     $campoAgregacao = "quant * valor";

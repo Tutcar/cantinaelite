@@ -36,6 +36,7 @@
                         <th align="left">Pix</th>
                         <th align="left">Alunos</th>
                         <th align="left">Pedidos</th>
+                        <th align="left">Créditos</th>
                         <th align="left">Saldo</th>
                         <th hidden align="left">ID</th>
                     </tr>
@@ -47,6 +48,7 @@
                         <td align="center"><?php echo moedaBr($pix) ?></td>
                         <td align="center"><?php echo moedaBr($outros) ?></td>
                         <td align="center"><?php echo moedaBr($pedidos_ab) ?></td>
+                        <td align="center"><?php echo moedaBr($creditos) ?></td>
                         <td align="center"><?php echo moedaBr($saldo) ?></td>
                         <td hidden><?php echo $caixafecha->id_caixafecha ?></td>
                     </tr>
@@ -65,6 +67,7 @@
                             <th align="center">Cartao</th>
                             <th align="center">Pix</th>
                             <th align="center">Alunos</th>
+                            <th align="center">Créditos</th>
                             <th align="center">Saldo</th>
                             <th hidden align="left">ID</th>
                         </tr>
@@ -75,7 +78,8 @@
                             <td align="center"><?php echo moedaBr($funcionario->total_cartao) ?></td>
                             <td align="center"><?php echo moedaBr($funcionario->total_pix) ?></td>
                             <td align="center"><?php echo moedaBr($funcionario->total_outros) ?></td>
-                            <td align="center"><?php echo moedaBr($funcionario->total_dinheiro + $funcionario->total_cartao + $funcionario->total_pix + $funcionario->total_outros) ?></td>
+                            <td align="center"><?php echo moedaBr($creditos) ?></td>
+                            <td align="center"><?php echo moedaBr($funcionario->total_dinheiro + $funcionario->total_cartao + $funcionario->total_pix + $funcionario->total_outros + $funcionario->total_creditos) ?></td>
                             <td hidden><?php echo $caixafecha->id_caixafecha ?></td>
                         </tr>
                     </tbody>

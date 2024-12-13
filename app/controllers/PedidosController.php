@@ -120,6 +120,7 @@ class PedidosController extends Controller
     }
     public function salvarJson()
     {
+        $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);
         $pedidos = new \stdClass();
         $pedidos->id_user = $_SESSION[SESSION_LOGIN]->id_user;
         $nrPedido = Flash::maximo3($this->db, "nr_pedido", "id_nr") + 1;
@@ -139,6 +140,7 @@ class PedidosController extends Controller
         $today = date("Y-m-d H:i:s");
         $pedidos->data_ab_pedido = $today;
         $pedidos->id_caixaabre = $dados["idAbre"];
+        $pedidos->id_cliente = $cliente->id_cliente;
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             $tabela = "pedido";
@@ -150,6 +152,7 @@ class PedidosController extends Controller
     }
     public function salvarJsoncr()
     {
+        $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);
         $pedidos = new \stdClass();
         $pedidos->id_user = $_SESSION[SESSION_LOGIN]->id_user;
         $nrPedido = Flash::maximo3($this->db, "nr_pedido", "id_nr") + 1;
@@ -166,14 +169,14 @@ class PedidosController extends Controller
         }
         $pedidos->nr_pedido = $_POST["nr_pedido"];
         $pedidos->pago = "N";
+        $pedidos->id_cliente = $cliente->id_cliente;
         $today = date("Y-m-d H:i:s");
         $pedidos->data_ab_pedido = $today;
         $pedidos->id_caixaabre = $dados["idAbre"];
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             //itens
-            $Cli_p = $_POST["cliente"];
-            $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);
+
             if ($cliente <> "") {
                 $id_cli = $cliente->id_cliente;
             } else {
@@ -184,16 +187,16 @@ class PedidosController extends Controller
             $pedidos = new \stdClass();
             $pedidos->id_pedidos = null;
             $pedidos->nr_pedido = $_POST["nr_pedido"];
-            $pedidos->id_produto = 0;
+            $pedidos->id_produto = 10000;
             $pedidos->cli_p = $_POST["cliente"];
-            $pedidos->data_ab_pedido = $Cli_p->data_ab_pedido;
+            $pedidos->data_ab_pedido = $today;
             $pedidos->nome = "Crédito direto no caixa feito por : " . $_SESSION[SESSION_LOGIN]->login_cli;
             $pedidos->quant = 1;
             $pedidos->pago = "S";
-            $get_custo = moedaBr(0);
-            $pedidos->custo = str_replace($source, $replace, $get_custo);
-            $get_valor = moedaBr($_POST["valor_credito"]);
-            $pedidos->valor = str_replace($source, $replace, $get_valor);
+            $pedidos->custo = 0;
+            $get_valor = $_POST["valor_credito"];
+            $valor_credito = str_replace($source, $replace, $get_valor);
+            $pedidos->valor = $valor_credito;
             Flash::setForm($pedidos);
             if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             }
@@ -207,11 +210,13 @@ class PedidosController extends Controller
             $replace = array('', '.');
             $pedidos->id_pedidos = Service::getMinimo2("pedido", "id_pedidos", "nr_pedido", $_SESSION["nr_ped"]);
             if ($_POST["valor_credito"] > 0) {
-                $pedidos->valor = $_POST['valor_credito'];
+                $get_valor = $_POST["valor_credito"];
+                $valor_credito = str_replace($source, $replace, $get_valor);
             } else {
-                $get_valor = $_POST['valor_credito'];
-                $pedidos->valor = str_replace($source, $replace, $get_valor);
+                $get_valor = $_POST["valor_credito"];
+                $valor_credito = str_replace($source, $replace, $get_valor);
             }
+            $pedidos->valor = $valor_credito;
             $pedidos->custo = 0;
             $pedidos->tipo_pg = "credito";
             $pedidos->pago = "S";
@@ -228,10 +233,10 @@ class PedidosController extends Controller
             $id_corretora = 1;
             $nr_doc_banco = "Cli-" . $aluno->id_cliente;
             $cod_despesa = $aluno->nr_cpf_cnpj;
-            $data_cad = dateTime(hoje());
+            $data_cad = date("Y-m-d H:i:s");
             $descricao = $aluno->nm_nome;
             $nr_doc_pg =  $_SESSION["nr_ped"];
-            $get_valor = moedaBr($_POST["valor_credito"]);
+            $get_valor = $_POST["valor_credito"];
             $valor_credito = str_replace($source, $replace, $get_valor);
             $valor_debito = 0;
             $data_confirma = dateTime(hoje());
@@ -240,8 +245,8 @@ class PedidosController extends Controller
             $tipo = null;
             Flash::debitoAl($this->db, $id_user, $id_corretora, $nr_doc_banco, $cod_despesa, $data_cad, $descricao, $nr_doc_pg, $valor_credito, $valor_debito, $data_confirma, $confirma, $obs, $tipo);
             //fim
-            $tabela = "pedido";
-            $dados["lista"] = Service::lista($tabela);
+            $_SESSION["nr_ped"] = 0;
+            $dados["somaPedido"] = 0;
             echo json_encode('Pedido cadastrado.');
         } else {
             echo json_encode('Pedido não cadastrado.');

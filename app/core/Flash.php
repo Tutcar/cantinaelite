@@ -136,7 +136,8 @@ class Flash
             SUM(CASE WHEN p.tipo_pg = 'dinheiro' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_dinheiro,
             SUM(CASE WHEN p.tipo_pg = 'cartao' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_cartao,
             SUM(CASE WHEN p.tipo_pg = 'pix' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_pix,
-            SUM(CASE WHEN p.tipo_pg = 'outros' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_outros
+            SUM(CASE WHEN p.tipo_pg = 'outros' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_outros,
+            SUM(CASE WHEN p.tipo_pg = 'credito' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_creditos
         FROM 
             pedido p
         JOIN 
