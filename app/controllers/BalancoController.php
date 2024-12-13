@@ -26,6 +26,7 @@ class BalancoController extends Controller
     }
     public function index()
     {
+
         $dataBala = Flash::balancoData($this->db);
         $balancoMes = array();
         foreach ($dataBala as $balanco) {
@@ -58,6 +59,7 @@ class BalancoController extends Controller
     }
     public function filtro()
     {
+        $dados['balaMes'] = [];
         $_SESSION["dataIn"] = $_POST["dataIn"];
         $_SESSION["dataFim"] = $_POST["dataFim"];
         $dados["salarioTotal"] = Service::getSoma("salarioTotalData", "", "", null, false);

@@ -5,6 +5,10 @@
     <div class="thead">Saldo : <?php echo (isset($credito)) ? moedaBr($credito) : moedaBr(0); ?> Limite: <?php echo (isset($limite)) ? moedaBr($limite) : moedaBr(0); ?> Total: <?php echo moedaBr($credito + $limite); ?></div>
     <?php $this->verMsg() ?>
     <div class="base-lista">
+        <div class="text-end d-flex">
+            <a href="<?php echo URL_BASE . "/painel" ?>"><img style="width: 30px; height: 30px"
+                    src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+        </div>
         <div class="tabela-responsiva">
             <div class="col-12">
                 <div class="rows">

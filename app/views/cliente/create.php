@@ -3,6 +3,13 @@
     <div class="base-form">
         <div class="caixa-form">
             <div class="thead">Cadastro do aluno</div>
+            <div class="text-end d-flex">
+                <a href="<?php echo URL_BASE . "Cliente/index" ?>"><img style="width: 30px; height: 30px"
+                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+            </div>
             <form action="<?php echo URL_BASE . "cliente/salvar" ?>" method="POST" enctype="multipart/form-data">
                 <?php
                 $this->verMsg();
@@ -102,7 +109,5 @@
         </div>
 
     </div>
-    <a href="<?php echo URL_BASE . "Cliente/index" ?>"><img style="width: 30px; height: 30px"
-            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
     <script src="<?php echo URL_BASE ?>assets/js/mascara.js"></script>
 </section>

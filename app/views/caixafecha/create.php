@@ -6,7 +6,10 @@
         <div class="caixa-form">
 
             <div class="thead">Fechar Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
-
+            <div class="text-end d-flex">
+                <a href="<?php echo URL_BASE . "Caixafecha/index" ?>"><img style="width: 30px; height: 30px"
+                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+            </div>
             <form action="<?php echo URL_BASE . "caixafecha/salvar" ?>" method="POST" enctype="multipart/form-data">
 
                 <div class="rows">
@@ -78,20 +81,25 @@
                                     </div>
                                 </div>
                                 <div class="rows">
-                                    <div class="col-4">
+                                    <div class="col-3">
+                                        <label <?php echo (isset($creditos) && !empty($creditos)) ? 'style="color: blue;"' : ''; ?>>Créditos</label> <input readonly name="credito"
+                                            value="<?php echo isset($creditos) ? moedaBr($creditos) : moedaBr(0) ?>"
+                                            type="text" class="form-campo">
+                                    </div>
+                                    <div class="col-3">
                                         <label>Saldo Caixa</label>
                                         <input readonly id="saldo_cx" name="saldo_cx"
                                             value="<?php echo (isset($funcionario)) ? moedaBr($idAbreValor + $dinheiro) : moedaBr($cxInicial + $dinheiro) ?>"
                                             type="text" class="form-campo">
                                     </div>
-                                    <div class="col-4">
-                                        <label>Valor conferência</label>
+                                    <div class="col-3">
+                                        <label>Conferência</label>
                                         <input id="conferencia" name="conferencia"
                                             value="<?php echo (isset($funcionario)) ? moedaBr($idAbreValor + $dinheiro) : moedaBr($cxInicial + $dinheiro) ?>" type="text"
                                             onblur="calcDif()" placeholder="Insira diferenca de caixa caso tenha."
                                             class="form-campo">
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <label>Diferença</label>
                                         <input readonly id="diferenca" name="diferenca"
                                             value="<?php echo moedaBr(0); ?>" type="text" class="form-campo">
@@ -112,11 +120,6 @@
                     </div>
                 </div>
             </form>
-            <div class="text-end d-flex">
-                <a href="<?php echo URL_BASE . "Caixafecha/index" ?>"><img style="width: 30px; height: 30px"
-                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
-            </div>
-
         </div>
     </div>
 

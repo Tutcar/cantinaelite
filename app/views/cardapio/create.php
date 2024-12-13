@@ -6,7 +6,13 @@
         <div class="caixa-form">
 
             <div class="thead">Inserir novo cadastro</div>
-
+            <div class="text-end d-flex">
+                <a href="<?php echo URL_BASE . "Cardapio/index" ?>"><img style="width: 30px; height: 30px"
+                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+            </div>
             <form action="<?php echo URL_BASE . "cardapio/salvar" ?>" method="POST" enctype="multipart/form-data">
 
                 <?php
@@ -107,8 +113,6 @@
                 <input type="submit" value="<?php echo isset($cardapio->nome) ? "Alterar" : "Cadastrar" ?>" class="btn">
             </form>
         </div>
-        <a href="<?php echo URL_BASE . "Cardapio/index" ?>"><img style="width: 30px; height: 30px"
-                src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
     </div>
 </section>

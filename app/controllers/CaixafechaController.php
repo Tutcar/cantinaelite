@@ -64,7 +64,7 @@ class CaixafechaController extends Controller
         $dados["cartao"] = Service::getSoma("caixafechaC", "cartao", "tipo_pg", null, true);
         $dados["pix"] = Service::getSoma("caixafechaP", "pix", "tipo_pg", null, true);
         $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
-        $dados["creditos"] = Service::getSoma("caixafechaO", "creditos", "tipo_pg", null, true);
+        $dados["creditos"] = Service::getSoma("caixafechaCrCx", "credito", "tipo_pg", null, true);
         $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
         $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
         $dados["cxInicial"] = count(Flash::ContarCxFuncionarios($this->db)) * 30;
@@ -91,6 +91,7 @@ class CaixafechaController extends Controller
         $dados["cartao"] = $funcionario->total_cartao;
         $dados["pix"] = $funcionario->total_pix;
         $dados["outros"] = $funcionario->total_outros;
+        $dados["creditos"] = $funcionario->total_creditos;
         $dados["funcionario"] = $funcionario->login_cli;
         $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
         $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];

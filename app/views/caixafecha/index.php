@@ -78,7 +78,7 @@
                             <td align="center"><?php echo moedaBr($funcionario->total_cartao) ?></td>
                             <td align="center"><?php echo moedaBr($funcionario->total_pix) ?></td>
                             <td align="center"><?php echo moedaBr($funcionario->total_outros) ?></td>
-                            <td align="center"><?php echo moedaBr($creditos) ?></td>
+                            <td align="center"><?php echo moedaBr($funcionario->total_creditos) ?></td>
                             <td align="center"><?php echo moedaBr($funcionario->total_dinheiro + $funcionario->total_cartao + $funcionario->total_pix + $funcionario->total_outros + $funcionario->total_creditos) ?></td>
                             <td hidden><?php echo $caixafecha->id_caixafecha ?></td>
                         </tr>

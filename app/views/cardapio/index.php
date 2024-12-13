@@ -7,6 +7,8 @@
         <div>
             <div class="rows">
                 <div class="text-end d-flex col-12">
+                    <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
+                            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
                     <a href="<?php echo URL_BASE . "cardapio/index" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>
                     <a href="<?php echo URL_BASE . "cardapio/create" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
                     <a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
@@ -79,7 +81,6 @@
 
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
     </div>
 
 </section>

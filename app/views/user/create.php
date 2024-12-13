@@ -1,5 +1,16 @@
 <section class="caixa">
 	<div class="thead"><i class="ico cad"></i>Formulario de cadastro</div>
+	&nbsp;
+	&nbsp;
+	&nbsp;
+	&nbsp;
+	<div class="text-end d-flex">
+		<a href="<?php echo URL_BASE . "user/index" ?>"><img style="width: 30px; height: 30px"
+				src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
+		&nbsp;
+		&nbsp;
+		&nbsp;
+	</div>
 	<div class="base-form">
 		<div class="caixa-form">
 			<div class="thead"><?php echo (isset($user->login_cli)) ? "Editar senha do " : "Inserir"; ?> funcionários</div>

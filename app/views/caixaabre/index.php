@@ -5,7 +5,14 @@
     <div class="thead"><i class="ico lista"></i> Abertura Caixa</div>
     <div class="base-lista">
         <div>
+
             <div class="text-end d-flex">
+                <div class="text-end d-flex">
+                    <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
+                            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+                </div>&nbsp;
+                &nbsp;
+                &nbsp;
                 <?php if ($idAbre > 1) : ?>
                     <p><?php $this->verMsg(); ?> </p>
                 <?php elseif ($idAbre == 0) : ?>
@@ -52,6 +59,5 @@
             </table>
         </div>
     </div>
-    <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
-            src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+
 </section>

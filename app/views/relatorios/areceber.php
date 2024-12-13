@@ -6,7 +6,18 @@
         Vendas:<?php echo isset($vendaTotal) ? moedaBR($vendaTotal) : null; ?> -
         Custo:<?php echo isset($custoTotal) ? moedaBR($custoTotal) : null; ?> -
         Margem:<?php echo ($vendaTotal > 0 && $custoTotal > 0) ? number_format(($vendaTotal / $custoTotal), 2, '.', ',') * 100 . "%" : " - s/custo"; ?>
+    </div>&nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <div class="text-end d-flex">
+        <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
+                src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
     </div>
+
     <div class="base-lista">
 
 
@@ -42,8 +53,5 @@
 
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
-                src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
-
     </div>
 </section>
