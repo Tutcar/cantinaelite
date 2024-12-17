@@ -554,6 +554,63 @@ $('#fecharPedido').submit(function (e) {
 	});
 });
 
+// $('#fecharPedido').submit(function (e) {
+//     e.preventDefault();
+
+//     var id_pedidos = $('#id_pedidos').val();
+//     var valor = $('#valor').val();
+//     var vLiquido = $('#vLiquido').val();
+//     var tipo_pg = $('#tipo_pg').val();
+
+//     console.log("Dados capturados do formulário:", {
+//         id_pedidos: id_pedidos,
+//         valor: valor,
+//         vLiquido: vLiquido,
+//         tipo_pg: tipo_pg
+//     });
+
+//     $.ajax({
+//         url: base_url + "Pedidos/salvarFechaPedido/",
+//         type: 'POST',
+//         data: { id_pedidos: id_pedidos, valor: valor, vLiquido: vLiquido, tipo_pg: tipo_pg },
+//         dataType: 'json',
+//         success: function (r) {
+//             console.log("Resposta do salvamento do pedido:", r);
+
+//             if (r.success) {
+//                 console.log("Salvamento do pedido bem-sucedido. Agora chamando a impressão.");
+//                 // Chamar a função de impressão após salvar
+//                 $.ajax({
+//                     url: `${base_url}Pedidos/imprimirPedido/`,
+//                     type: 'POST',
+//                     data: { id_pedido: id_pedidos }, // Envia o ID do pedido para impressão
+//                     success: function (response) {
+//                         console.log("Resposta da impressão:", response);
+//                         alert('Impressão enviada com sucesso!');
+//                         window.location.reload(); // Recarrega a página
+//                     },
+//                     error: function (xhr, status, error) {
+//                         console.error("Erro ao enviar para impressão:", {
+//                             status: status,
+//                             error: error,
+//                             responseText: xhr.responseText
+//                         });
+//                         alert('Erro ao enviar para impressão.');
+//                     }
+//                 });
+//             } else {
+//                 alert('Erro ao salvar pedido.');
+//             }
+//         },
+//         error: function () {
+//             alert('Erro na requisição de salvamento.');
+//         }
+//     });
+// });
+
+
+
+
 function excluir3(obj) {
 	var entidade = $(obj).attr('data-entidade');
 	var id = $(obj).attr('data-id');

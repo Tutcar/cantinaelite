@@ -8,6 +8,7 @@ use app\core\Conexao;
 use app\core\Flash;
 use app\models\service\CompromissoService;
 use app\util\UtilService;
+use Exception;
 
 class CompromissoController extends Controller
 {
@@ -29,6 +30,7 @@ class CompromissoController extends Controller
     }
     public function index()
     {
+
         $dados["lista"] = Flash::compromissos($this->db);
         $dados["view"]  = "compromisso/index";
         $this->load("template", $dados);

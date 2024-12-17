@@ -1,3 +1,5 @@
+<script src="path/to/Chart.min.js"></script>
+<script src="path/to/9480317a2f.js"></script>
 <section class="caixa">
     <div class="thead"><i class="ico home"></i> Painel Administrativo: </div>
     <div class="base-home">

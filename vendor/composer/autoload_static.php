@@ -24,6 +24,10 @@ class ComposerStaticInit48d2371bdc53c7798a2a3b42c1171083
             'PagSeguro\\' => 10,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
+        'M' => 
+        array (
+            'Mike42\\' => 7,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -53,6 +57,10 @@ class ComposerStaticInit48d2371bdc53c7798a2a3b42c1171083
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Mike42\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

@@ -10,6 +10,7 @@ use app\models\pagseguro\ReqPagSeguroPix;
 use app\models\service\PedidosService;
 use app\models\service\CompromissoService;
 use app\util\UtilService;
+use Exception;
 
 class PedidosController extends Controller
 {
@@ -548,6 +549,8 @@ class PedidosController extends Controller
             if ($pedidos->tipo_pg <> "Pix") {
                 $dados["pedidos"] = Flash::fechaCx($this->db);
             }
+            $_SESSION["impPedido"] = $_SESSION["nr_ped"];
+            $this->imprimirPedido();
             unset($_SESSION["nr_ped"]);
             echo json_encode('Pedido fechado.');
         } else {
@@ -572,17 +575,62 @@ class PedidosController extends Controller
             echo json_encode('Item não alterado.');
         }
     }
-
-    public function alteraPedido2Json()
+    public function imprimirPedido()
     {
-        $pedidos = new \stdClass();
-        $pedidos->id_pedidos = $_POST["id_pedidos"];
-        $pedidos->quant = $_POST["quant"];
-        Flash::setForm($pedidos);
-        if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
-            echo json_encode('Item alterado.');
-        } else {
-            echo json_encode('Item não alterado.');
+        // Nome da impressora compartilhada na rede ou local
+        $printerName = "smb://TutaTeixeira/POS-80"; // Nome do compartilhamento no Windows
+
+        // Recupera os dados do pedido
+        $array = Flash::getItensPorPedido($this->db, $_SESSION["impPedido"]);
+
+        unset($_SESSION["impPedido"]);
+        // Verifica se o array contém dados
+        if (!$array || !isset($array[0])) {
+            return;
+        }
+
+        // Prepara o texto para impressão
+        $texto = "";
+
+        // Adiciona a logo (ASCII Art ou qualquer outro placeholder)
+        $texto .= "  ***********************\n";
+        $texto .= "       MINHA LOGO        \n";
+        $texto .= "  ***********************\n";
+        $texto .= "\n";
+
+        // Cabeçalho do pedido
+        $texto .= "Pedido: {$array[0]['nr_pedido']}\n";
+        $texto .= "Cliente: {$array[0]['cliente']}\n";
+        $texto .= "Data: {$array[0]['data_cad']}\n";
+        $texto .= str_repeat("-", 40) . "\n";
+
+        // Corpo: Detalhes dos itens do pedido
+        foreach ($array as $index => $item) {
+            if ($index === 0) continue; // Ignora o cabeçalho
+            $texto .= "Quantidade: {$item['quant']}\n";
+            $texto .= "Produto: {$item['nome']}\n";
+            $texto .= "Valor: R$ " . moedaBr($item['valor']) . "\n";
+            $texto .= str_repeat("-", 40) . "\n";
+        }
+
+        // Finaliza com comandos ESC/POS para corte de papel
+        $texto .= "\x1B\x64\x02"; // Avança 2 linhas
+        $texto .= "\x1B\x69";     // Corta o papel
+
+        // Envia o texto para a impressora
+        try {
+            // Abre a conexão com a impressora
+            $fp = fopen($printerName, "w");
+            if (!$fp) {
+                throw new Exception("Erro ao abrir a impressora: {$printerName}");
+            }
+
+            // Envia os dados para impressão
+            fwrite($fp, $texto);
+            fclose($fp);
+        } catch (Exception $e) {
+            // Tratamento de erros
+
         }
     }
 }

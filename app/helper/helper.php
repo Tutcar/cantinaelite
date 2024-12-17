@@ -1,4 +1,23 @@
 <?php
+function resize_image($src, $width, $height, $destination)
+{
+    list($original_width, $original_height) = getimagesize($src);
+    $image_p = imagecreatetruecolor($width, $height);
+    $image = imagecreatefrompng($src); // Use imagecreatefromjpeg para JPEG
+
+    // Redimensiona a imagem
+    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $original_width, $original_height);
+
+    // Salva a imagem redimensionada
+    imagepng($image_p, $destination); // Use imagejpeg se for JPEG
+    imagedestroy($image_p);
+    imagedestroy($image);
+}
+
+$src = 'C:/xampp/htdocs/cantinaelite/images/images.png'; // Caminho da imagem original
+$destination = 'C:/xampp/htdocs/cantinaelite/images/images3.png'; // Caminho da imagem redimensionada
+resize_image($src, 200, 200, $destination);
+
 function dadosAluno()
 {
     $alunopag = new \stdClass();

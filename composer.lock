@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "037ef10c8e8c4c2125177b8a5ab8f09e",
+    "content-hash": "9590a1d17ad20ee4fd84a1c649f0b532",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -134,16 +134,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8"
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
                 "shasum": ""
             },
             "require": {
@@ -197,7 +197,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.3"
+                "source": "https://github.com/guzzle/promises/tree/2.0.4"
             },
             "funding": [
                 {
@@ -213,7 +213,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-18T10:29:17+00:00"
+            "time": "2024-10-17T10:06:22+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -332,6 +332,65 @@
             "time": "2024-07-18T11:15:46+00:00"
         },
         {
+            "name": "mike42/escpos-php",
+            "version": "v2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mike42/escpos-php.git",
+                "reference": "e5496cf819b048b11877117bd14a9cea4fb17c03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mike42/escpos-php/zipball/e5496cf819b048b11877117bd14a9cea4fb17c03",
+                "reference": "e5496cf819b048b11877117bd14a9cea4fb17c03",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^5.3",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "suggest": {
+                "ext-gd": "Used for image printing if present.",
+                "ext-imagick": "Will be used for image printing if present. Required for PDF printing or use of custom fonts.",
+                "guzzlehttp/guzzle": "Allows the use of the ApiConnector to send print jobs over HTTP."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mike42\\": "src/Mike42"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Billington",
+                    "email": "michael.billington@gmail.com"
+                }
+            ],
+            "description": "PHP receipt printer library for use with ESC/POS-compatible thermal and impact printers",
+            "homepage": "https://github.com/mike42/escpos-php",
+            "keywords": [
+                "ESC-POS",
+                "driver",
+                "escpos",
+                "print",
+                "receipt"
+            ],
+            "support": {
+                "issues": "https://github.com/mike42/escpos-php/issues",
+                "source": "https://github.com/mike42/escpos-php/tree/v2.2"
+            },
+            "time": "2019-10-05T05:59:00+00:00"
+        },
+        {
             "name": "pagseguro/pagseguro-php-sdk",
             "version": "4.2.1",
             "source": {
@@ -378,16 +437,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.9.2",
+            "version": "v6.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "a7b17b42fa4887c92146243f3d2f4ccb962af17c"
+                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a7b17b42fa4887c92146243f3d2f4ccb962af17c",
-                "reference": "a7b17b42fa4887c92146243f3d2f4ccb962af17c",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/2f5c94fe7493efc213f643c23b1b1c249d40f47e",
+                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e",
                 "shasum": ""
             },
             "require": {
@@ -447,7 +506,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.2"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.3"
             },
             "funding": [
                 {
@@ -455,7 +514,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-09T10:07:50+00:00"
+            "time": "2024-11-24T18:04:13+00:00"
         },
         {
             "name": "psr/http-client",
@@ -663,16 +722,16 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.5.0",
+            "version": "v3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1"
+                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
+                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +769,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.1"
             },
             "funding": [
                 {
@@ -726,7 +785,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-18T09:32:20+00:00"
+            "time": "2024-09-25T14:20:29+00:00"
         }
     ],
     "packages-dev": [],
