@@ -641,14 +641,17 @@ class PedidosController extends Controller
     public function alteraPedidoJson()
     {
         $pedidos = new \stdClass();
-        $source = array('.', ',');
-        $replace = array('', '.');
+        $source = ['.', ','];
+        $replace = ['', '.'];
+
         $pedidos->id_pedidos = $_POST["id_pedidos"];
         $pedidos->nome = $_POST["nome"];
         $pedidos->quant = $_POST["quant"];
         $get_valor = moedaBr($_POST["valor"]);
         $pedidos->valor = str_replace($source, $replace, $get_valor);
+
         Flash::setForm($pedidos);
+
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             echo json_encode('Item alterado.');
         } else {
@@ -658,60 +661,92 @@ class PedidosController extends Controller
 
     public function imprimirPedido()
     {
-
-        //Fim imprimir
-        $printerName = "\\\TutaTeixeira/POS-80"; // Nome do compartilhamento no Windows
+        $printerName = "\\\\TutaTeixeira/POS-80";
         $_SESSION["impPedido"] = $_SESSION["nr_ped"];
+
         // Recupera os dados do pedido
-        $array = new Pedidos();
-        $array = Pedidos::ItensPorPedido($this->db, $nr_pedido = $_SESSION["impPedido"]);
+        $array = Pedidos::ItensPorPedido($this->db, $_SESSION["impPedido"]);
         unset($_SESSION["impPedido"]);
-        // Verifica se o array contém dados
+
         if (!$array || !isset($array[0])) {
             return;
         }
 
+        // Função para gerar texto estilizado
+        function gerarTextoEstilizado()
+        {
+            $texto = "\n\n";
+            $texto .= "\x1B\x61\x01"; // Centraliza o texto
+            $texto .= "\x1D\x21\x9"; // Aumenta o tamanho da fonte
+            $texto .= "##############################\n";
+            $texto .= "#        CANTINA ELITE       #\n";
+            $texto .= "##############################\n";
+            $texto .= "\x1D\x21\x00"; // Retorna ao tamanho normal
+            $texto .= "\x1B\x61\x00"; // Retorna ao alinhamento padrão
+            $texto .= "\n\n";
+            return $texto;
+        }
+
         // Prepara o texto para impressão
-        $texto = "";
+        $texto = "\x1B\x74\x10"; // Define tabela de caracteres Latin-1 (ISO-8859-1)
+        // Prepara o texto para impressão
+        $texto = gerarTextoEstilizado();
 
-        // Adiciona a logo (ASCII Art ou qualquer outro placeholder)
-        $texto .= "  ***********************\n";
-        $texto .= "       MINHA LOGO        \n";
-        $texto .= "  ***********************\n";
-        $texto .= "\n";
-
-        // Cabeçalho do pedido
-        $texto .= "Pedido: {$array[0]['nr_pedido']}\n";
+        // Adiciona os detalhes do pedido
+        $texto .= "\x1B\x61\x01"; // Centraliza o texto
+        $texto .= "\x1D\x21\x11"; // Aumenta o tamanho da fonte
+        $texto .= "Pedido: {$array[0]['nr_pedido']}\n\n";
+        $texto .= "\x1D\x21\x00"; // Retorna ao tamanho normal
+        $texto .= "\x1B\x61\x00"; // Retorna ao alinhamento padrão
         $texto .= "Cliente: {$array[0]['cliente']}\n";
         $texto .= "Data: {$array[0]['data_cad']}\n";
         $texto .= str_repeat("-", 40) . "\n";
 
-        // Corpo: Detalhes dos itens do pedido
         foreach ($array as $index => $item) {
-            if ($index === 0) continue; // Ignora o cabeçalho
+            if ($index === 0) continue;
             $texto .= "Quantidade: {$item['quant']}\n";
             $texto .= "Produto: {$item['nome']}\n";
             $texto .= "Valor: R$ " . moedaBr($item['valor']) . "\n";
             $texto .= str_repeat("-", 40) . "\n";
         }
 
-        // Finaliza com comandos ESC/POS para corte de papel
-        $texto .= "\x1B\x64\x02"; // Avança 2 linhas
+        // Finaliza com comandos ESC/POS
+        $texto .= "\x1B\x64\x04"; // Avança 2 linhas
         $texto .= "\x1B\x69";     // Corta o papel
+
+        // Substituir caracteres não suportados explicitamente
+        $mapaCaracteres = [
+            'á' => "\xA0",
+            'é' => "\x82",
+            'í' => "\xA1",
+            'ó' => "\xA2",
+            'ú' => "\xA3",
+            'Á' => "\xB5",
+            'É' => "\x90",
+            'Í' => "\xD6",
+            'Ó' => "\xE0",
+            'Ú' => "\xE9",
+            'ã' => "\xC6",
+            'õ' => "\xD5",
+            'ç' => "\x87",
+            'Ã' => "\xC7",
+            'Õ' => "\xD6",
+            'Ç' => "\x80"
+        ];
+
+        $texto = strtr($texto, $mapaCaracteres);
 
         // Envia o texto para a impressora
         try {
-            // Abre a conexão com a impressora
             $fp = fopen($printerName, "w");
             if (!$fp) {
                 throw new Exception("Erro ao abrir a impressora: {$printerName}");
             }
 
-            // Envia os dados para impressão
             fwrite($fp, $texto);
             fclose($fp);
         } catch (Exception $e) {
-            // Tratamento de erros
+            error_log("Erro na impressão: " . $e->getMessage());
         }
     }
 }
