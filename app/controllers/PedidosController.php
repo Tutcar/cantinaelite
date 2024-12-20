@@ -39,6 +39,19 @@ class PedidosController extends Controller
         $dados["tipo"] = Service::lista("tipo");
         $this->load("template", $dados);
     }
+    public function impPedido()
+    {
+        $pedidosImp = new Pedidos();
+        $dados["pedidosImp"] = $pedidosImp->pedidosImp();
+        $dados["view"] = "pedidos/impPedido";
+        $this->load("template", $dados);
+    }
+    public function impPedidoVia2($nr_pedido = null)
+    {
+        $impVia2 = new Pedidos();
+        $impVia = $impVia2->imprimirPedido($nr_pedido);
+        $this->redirect(URL_BASE . "pedidos/impPedido");
+    }
     public function create()
     {
         $dados["pedidos"] = Flash::getForm();
@@ -551,86 +564,12 @@ class PedidosController extends Controller
             }
 
             //Imprimir
-            $_SESSION["impPedido"] = $_SESSION["nr_ped"];
 
-            // Nome da impressora compartilhada no Windows
-            $printerName = "\\\\TutaTeixeira\\POS-80";
-
-            // Caminho da imagem .bmp
-            $imagePath = "C:/xampp/htdocs/cantinaelite/images/logoimp.bmp";
-
-            // Recupera os dados do pedido
-            $array = new Pedidos();
-            $array = Pedidos::ItensPorPedido($this->db, $nr_pedido = $_SESSION["impPedido"]);
-            unset($_SESSION["impPedido"]);
-
-            // Verifica se o array contém dados
-            if (!$array || !isset($array[0])) {
-                return;
-            }
-
-            // Inicializa o texto para impressão
-            $texto = "";
-
-            // Adiciona a imagem convertida
-            if (file_exists($imagePath)) {
-                try {
-                    // Comandos ESC/POS para iniciar a impressão de gráficos
-                    $texto .= "\x1B\x40";       // Reinicia as configurações da impressora
-                    $texto .= "\x1D\x76\x30\x00"; // Inicia modo gráfico ESC/POS
-
-                    // Lê os dados da imagem
-                    $imageData = file_get_contents($imagePath);
-
-                    // Inclui os dados da imagem no comando
-                    $texto .= $imageData;
-                } catch (Exception $e) {
-                    $texto .= "Erro ao carregar a imagem.\n";
-                }
-            } else {
-                $texto .= "Logo não encontrada.\n";
-            }
-
-            // Adiciona um espaço após a logo
-            $texto .= "\n\n";
-
-            // Cabeçalho do pedido
-            $texto .= "Pedido: {$array[0]['nr_pedido']}\n";
-            $texto .= "Cliente: {$array[0]['cliente']}\n";
-            $texto .= "Data: {$array[0]['data_cad']}\n";
-            $texto .= str_repeat("-", 40) . "\n";
-
-            // Corpo: Detalhes dos itens do pedido
-            foreach ($array as $index => $item) {
-                if ($index === 0) continue; // Ignora o cabeçalho
-                $texto .= "Quantidade: {$item['quant']}\n";
-                $texto .= "Produto: {$item['nome']}\n";
-                $texto .= "Valor: R$ " . moedaBr($item['valor']) . "\n";
-                $texto .= str_repeat("-", 40) . "\n";
-            }
-
-            // Finaliza com comandos ESC/POS para corte de papel
-            $texto .= "\x1B\x64\x02"; // Avança 2 linhas
-            $texto .= "\x1B\x69";     // Corta o papel
-
-            // Envia o texto para a impressora
-            try {
-                // Abre a conexão com a impressora
-                $fp = fopen($printerName, "w");
-                if (!$fp) {
-                    throw new Exception("Erro ao abrir a impressora: {$printerName}");
-                }
-
-                // Envia os dados para impressão
-                fwrite($fp, $texto);
-                fclose($fp);
-                echo "Impressão enviada com sucesso!";
-            } catch (Exception $e) {
-                echo "Erro: " . $e->getMessage();
-            }
 
             // //Fim imprimir
-            // $this->imprimirPedido();
+            $_SESSION["impPedido"] = $_SESSION["nr_ped"];
+            $impPedido = new Pedidos();
+            $onfImp = $impPedido->imprimirPedido($nr_pedido = $_SESSION["impPedido"]);
             unset($_SESSION["nr_ped"]);
             echo json_encode('Pedido fechado.');
         } else {
@@ -658,6 +597,18 @@ class PedidosController extends Controller
             echo json_encode('Item não alterado.');
         }
     }
+    public function alteraPedido2Json()
+    {
+        $pedidos = new \stdClass();
+        $pedidos->id_pedidos = $_POST["id_pedidos"];
+        $pedidos->quant = $_POST["quant"];
+        Flash::setForm($pedidos);
+        if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
+            echo json_encode('Item alterado.');
+        } else {
+            echo json_encode('Item não alterado.');
+        }
+    }
 
     public function imprimirPedido()
     {
@@ -665,7 +616,8 @@ class PedidosController extends Controller
         $_SESSION["impPedido"] = $_SESSION["nr_ped"];
 
         // Recupera os dados do pedido
-        $array = Pedidos::ItensPorPedido($this->db, $_SESSION["impPedido"]);
+        $array = new Pedidos();
+        $array = $array->ItensPorPedido($nr_pedido = $_SESSION["impPedido"]);
         unset($_SESSION["impPedido"]);
 
         if (!$array || !isset($array[0])) {
@@ -742,9 +694,9 @@ class PedidosController extends Controller
             if (!$fp) {
                 throw new Exception("Erro ao abrir a impressora: {$printerName}");
             }
-
             fwrite($fp, $texto);
             fclose($fp);
+            return;
         } catch (Exception $e) {
             error_log("Erro na impressão: " . $e->getMessage());
         }

@@ -9,7 +9,8 @@
     <div class="base-lista">
         <div>
             <div class="text-end d-flex">
-                <a href="<?php echo URL_BASE . "Compromisso/pedidosPendentes" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Pedidos Pendentes</a>
+                <a href="<?php echo URL_BASE . "Pedidos/impPedido" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Pedidos do Caixa</a>
+                <a href="<?php echo URL_BASE . "Compromisso/pedidosPendentes" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Pedidos Pendentes Site</a>
             </div>
         </div>
         <div id="minhaDiv" class="lst">

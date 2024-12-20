@@ -665,7 +665,6 @@ $('#alteraPedido2').submit(function (e) {
 		data: { id_pedidos: id_pedidos, nome: nome, quant: quant, valor: valor },
 		dataType: 'json',
 		success: function (r) {
-		
 			window.location.reload();
 		}
 	});

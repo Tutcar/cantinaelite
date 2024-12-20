@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\models\service\Service;
 use app\core\Conexao;
 use app\core\Flash;
+use app\models\pedidos\Pedidos;
 use app\models\service\CompromissoService;
 use app\util\UtilService;
 use Exception;
@@ -94,10 +95,14 @@ class CompromissoController extends Controller
             }
         }
     }
-    public function confEntrega($id)
+    public function confEntrega($id = null)
     {
 
         Flash::confEnt($this->db, $id);
+        $nr_pedido = Service::get("compromisso", "id_compromisso", $id);
+        $nr_pedido = $nr_pedido->nr_pedido;
+        $impPedido = new Pedidos();
+        $onfImp = $impPedido->imprimirPedido($nr_pedido);
         $this->redirect(URL_BASE . "compromisso/pedidosDia");
     }
 

@@ -291,7 +291,7 @@
 	<div class="p-4 width-100 d-inline-block">
 		<form method="POST" id="alteraPedido2">
 			<div class="rows">
-				<div class="ocDiv"> <!--class="ocDiv"-->
+				<div class="ocDiv">
 					<span class="label text-label">Id</span>
 					<input id="id_pedidosPd" name="id_pedidos" type="text" value="">
 				</div>
