@@ -126,10 +126,15 @@ class PedidosController extends Controller
     public function filtro()
     {
 
+        $pesqPed = new Pedidos();
         $campo = $_POST["campo"];
-        $valor = $_POST["valor"];
-        $dados["lista"] = Service::getLike($this->tabela, $campo, $valor, true);
-        $dados["view"]  = "pedidos/index";
+        $valor = $_POST["valorfiltro"];
+        if ($campo == "nr_pedido") {
+            $dados["pedidosImp"] = $pesqPed->pedidosImpNr($valor);
+        } else {
+            $dados["pedidosImp"] = $pesqPed->pedidosImpDia($valor);
+        }
+        $dados["view"]  = "pedidos/impPedido";
         $this->load("template", $dados);
     }
     public function salvarJson()

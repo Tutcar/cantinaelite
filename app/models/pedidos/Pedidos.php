@@ -36,6 +36,66 @@ class Pedidos
         // Retornar os registros ou array vazio
         return $pedidos ?: [];
     }
+    public function pedidosImpDia($dataDia = null)
+    {
+
+        // Construir a cláusula de data com base no valor de $dataDia
+        if ($dataDia === null) {
+            $clausulaData = "AND DATE(data_cad) = CURDATE()";
+        } else {
+            $clausulaData = "AND DATE(data_cad) = :dataDia";
+        }
+
+        // Query para buscar os registros
+        $sql = "SELECT * 
+            FROM pedido 
+            WHERE cliente <> ''
+              AND encomendas = 'N'
+              AND pago = 'S'
+              $clausulaData";
+
+        // Preparar a query
+        $stmt = $this->db->prepare($sql);
+
+        // Vincular o parâmetro se necessário
+        if ($dataDia !== null) {
+            $stmt->bindValue(':dataDia', $dataDia);
+        }
+
+        // Executar a query
+        $stmt->execute();
+
+        // Verificar se há resultados
+        $pedidos = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        // Retornar os registros ou array vazio
+        return $pedidos ?: [];
+    }
+    public function pedidosImpNr($nr_pedido = null)
+    {
+        // Query para buscar os registros
+        $sql = "SELECT * 
+            FROM pedido 
+            WHERE cliente <> ''
+              AND encomendas = 'N'
+              AND pago = 'S'
+              AND nr_pedido = :nr_pedido";
+
+        // Preparar a query
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':nr_pedido', $nr_pedido, PDO::PARAM_INT); // Use PDO::PARAM_INT ou PDO::PARAM_STR, dependendo do tipo do valor
+
+        // Executar a query
+        $stmt->execute();
+
+        // Verificar se há resultados
+        $pedidos = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        // Retornar os registros ou array vazio
+        return $pedidos ?: [];
+    }
+
+
 
     public function imprimirPedido($nr_pedido = null)
     {
