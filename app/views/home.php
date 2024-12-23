@@ -47,8 +47,8 @@
 						<div class="thead">
 							<div class="col-12">
 								<div style="display: flex; gap: 10px;">
-									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janela1')">Novo Pedidos</label>
-									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janelacr')">Creditar</label>
+									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#09/12/24 rodada 4etp 2024 cash')">Novo Pedidos</label>
+									<label class="btn" href="javascript:;" id="nomePedidos" onclick="abrirModal('#janelacr')">Saldo</label>
 								</div>
 								<select onchange="mostraAlerta(this.value)" id="novoPed" name="nr_pedidos" class="form-campo">
 									<option value="novo"></option>
