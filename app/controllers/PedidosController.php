@@ -39,6 +39,14 @@ class PedidosController extends Controller
         $dados["tipo"] = Service::lista("tipo");
         $this->load("template", $dados);
     }
+    public function PedidosAlt()
+    {
+        $pago = "N";
+        $pedidosImp = new Pedidos();
+        $dados["pedidosImp"] = $pedidosImp->pedidosImp($pago);
+        $dados["view"] = "pedidos/pedidosAlt";
+        $this->load("template", $dados);
+    }
     public function impPedido()
     {
         $pedidosImp = new Pedidos();
@@ -106,6 +114,11 @@ class PedidosController extends Controller
     {
         Service::excluir($this->tabela, $this->campo, $id);
         $this->redirect(URL_BASE . "home");
+    }
+    public function excluirPedido($id)
+    {
+        Service::excluir("pedido", "nr_pedido", $id);
+        $this->redirect(URL_BASE . "pedidos/pedidosAlt");
     }
     public function verPedido($id_pedido)
     {

@@ -28,7 +28,7 @@
                     <li><a href="<?php echo URL_BASE . "Caixaabre/index" ?>">Abrir</a></li>
                     <li><a href="<?php echo URL_BASE . "Caixafecha/index" ?>">Fechar</a></li>
                     <li><a href="<?php echo URL_BASE . "Relatorios/areceber" ?>">A receber</a></li>
-                    <!-- <li><a href="<?php echo URL_BASE . "Encomendas/index" ?>">Encomendas</a></li> -->
+                    <li><a href="<?php echo URL_BASE . "Pedidos/pedidosAlt" ?>">Pedidos</a></li>
                     <li><a href="<?php echo URL_BASE . "Relatorios/index" ?>">Relatório</a></li>
                 </ul>
             </li>

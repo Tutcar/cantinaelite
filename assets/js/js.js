@@ -34,6 +34,13 @@ function excluir(obj) {
 		window.location.href = base_url + entidade + "/excluir/" + id;
 	}
 }
+function excluirPedido(obj) {
+	var entidade = $(obj).attr('data-entidade');
+	var id = $(obj).attr('data-id');
+	if (confirm('Deseja realmente excluir ?')) {
+		window.location.href = base_url + entidade + "/excluirPedido/" + id;
+	}
+}
 function excluirCom(obj) {
 	var entidade = $(obj).attr('data-entidade');
 	var id = $(obj).attr('data-id');

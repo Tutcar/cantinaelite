@@ -17,14 +17,19 @@ class Pedidos
     {
         $this->db = Conexao::getConexao();
     }
-    public function pedidosImp()
+    public function pedidosImp($pago = null)
     {
+        if ($pago !== null) {
+            $pgsn = "AND pago = 'N'";
+        } else {
+            $pgsn = "AND pago = 'S'";
+        }
         // Query para buscar os registros
         $sql = "SELECT * 
             FROM pedido 
             WHERE cliente <> ''
               AND encomendas = 'N'
-              AND pago = 'S'
+              $pgsn
               AND DATE(data_cad) = CURDATE()";
 
         // Executar a query
