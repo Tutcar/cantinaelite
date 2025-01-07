@@ -17,6 +17,19 @@ class Pedidos
     {
         $this->db = Conexao::getConexao();
     }
+    public function novoPedido($db, $nrPedido)
+    {
+        try {
+            $sql = "INSERT INTO nr_pedido (nr_cli) VALUES (:nr_cli)";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':nr_cli', $nrPedido);
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+        return false;
+    }
     public function pedidosImp($pago = null)
     {
         if ($pago !== null) {

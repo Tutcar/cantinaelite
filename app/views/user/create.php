@@ -5,7 +5,7 @@
 	&nbsp;
 	&nbsp;
 	<div class="text-end d-flex">
-		<a href="<?php echo URL_BASE . "user/index" ?>"><img style="width: 30px; height: 30px"
+		<a href="<?php echo URL_BASE . "user/funcionarios" ?>"><img style="width: 30px; height: 30px"
 				src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
 		&nbsp;
 		&nbsp;

@@ -20,6 +20,7 @@
                     <li><a href="<?php echo URL_BASE . "Cliente/index" ?>">Alunos</a></li>
                     <li><a href="<?php echo URL_BASE . "Restricao/index" ?>">Restrições</a></li>
                     <li><a href="<?php echo URL_BASE . "User/index" ?>">Usuário</a></li>
+                    <li><a href="<?php echo URL_BASE . "User/funcionarios" ?>">Funcionários</a></li>
                 </ul>
             </li>
             <li>

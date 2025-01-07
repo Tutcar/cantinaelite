@@ -152,36 +152,49 @@ class PedidosController extends Controller
     }
     public function salvarJson()
     {
-        $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);
-        $pedidos = new \stdClass();
-        $pedidos->id_user = $_SESSION[SESSION_LOGIN]->id_user;
-        $nrPedido = Flash::maximo3($this->db, "nr_pedido", "id_nr") + 1;
-        $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
-        $_SESSION["nr_ped"] = $_POST["nr_pedido"];
-        $pedidos->id_pedidos = null;
-        if ($_POST["cliente"] == "") {
-            $pedidos->cliente = "Cli - " . $nrPedido;
+        header('Content-Type: application/json');
+        try {
+            $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);
+            if (!$cliente && !empty($_POST["cliente"])) {
+                echo json_encode(['error' => 'Cliente não encontrado.']);
+                return;
+            }
+
+            $pedidos = new \stdClass();
+            $pedidos->id_user = $_SESSION[SESSION_LOGIN]->id_user;
+            $nrPedido = Flash::maximo3($this->db, "nr_pedido", "id_nr") + 1;
+            $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
+            $_SESSION["nr_ped"] = $_POST["nr_pedido"];
+            $pedidos->id_pedidos = null;
+
+            if (empty($_POST["cliente"])) {
+                $pedidos->cliente = "Cli - " . $nrPedido;
+                $pedidos->nr_pedido = $_POST["nr_pedido"];
+                $novoPedido = new Pedidos();
+                $novoPedido->novoPedido($this->db, $nrPedido);
+            } else {
+                $pedidos->cliente = $_POST["cliente"];
+                $pedidos->nr_pedido = $_POST["nr_pedido"];
+            }
+
             $pedidos->nr_pedido = $_POST["nr_pedido"];
-            Flash::novoPedido($this->db, $nrPedido);
-        } else {
-            $pedidos->cliente = $_POST["cliente"];
-            $pedidos->nr_pedido = $_POST["nr_pedido"];
-        }
-        $pedidos->nr_pedido = $_POST["nr_pedido"];
-        $pedidos->pago = "N";
-        $today = date("Y-m-d H:i:s");
-        $pedidos->data_ab_pedido = $today;
-        $pedidos->id_caixaabre = $dados["idAbre"];
-        $pedidos->id_cliente = $cliente->id_cliente;
-        Flash::setForm($pedidos);
-        if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
-            $tabela = "pedido";
-            $dados["lista"] = Service::lista($tabela);
-            echo json_encode('Pedido cadastrado.');
-        } else {
-            echo json_encode('Pedido não cadastrado.');
+            $pedidos->pago = "N";
+            $pedidos->data_ab_pedido = date("Y-m-d H:i:s");
+            $pedidos->id_caixaabre = $dados["idAbre"];
+            $pedidos->id_cliente = $cliente ? $cliente->id_cliente : null;
+
+            Flash::setForm($pedidos);
+            if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
+                $dados["lista"] = Service::lista("pedido");
+                echo json_encode(['message' => 'Pedido cadastrado.']);
+            } else {
+                echo json_encode(['error' => 'Erro ao salvar pedido.']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'Erro interno: ' . $e->getMessage()]);
         }
     }
+
     public function salvarJsoncr()
     {
         $cliente = Service::get("cliente", "nm_nome", $_POST["cliente"], false);

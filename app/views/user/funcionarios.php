@@ -2,12 +2,13 @@
 	var coluOr = 2;
 </script>
 <section class="caixa">
-	<div class="thead"><i class="ico lista"></i> Lista Usuários</div>
+	<div class="thead"><i class="ico lista"></i> Lista Funcionários</div>
 	<div class="base-lista">
 		<div>
 			<div class="text-end d-flex">
 				<a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
 						src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
+				<a href="<?php echo URL_BASE . "user/create" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Cadastrar funcionário</a>
 				<a href="" class="btn btn-roxo d-inline-block mb-2 filtro"><i class="fas fa fa-filter" aria-hidden="true"></i> Filtrar</a>
 			</div>
 		</div>

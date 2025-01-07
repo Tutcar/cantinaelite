@@ -398,22 +398,24 @@ function fecharModal() {
 }
 
 $('#nomePedido').submit(function (e) {
-	
-	e.preventDefault();
-	var cliente = $('#nomeCliente').val();
-	var nr_pedido = novoPedido;
-	$.ajax({
-		url: base_url + "Pedidos/salvarJson/",
-		type: 'POST',
-		data: { cliente: cliente, nr_pedido: nr_pedido },
-		dataType: 'json',
-		success: function (r) {
-			
-			window.location.reload();
-
-		}
-	});
+    e.preventDefault();
+    var cliente = $('#nomeCliente').val();
+    var nr_pedido = novoPedido;
+    $.ajax({
+        url: base_url + "Pedidos/salvarJson/",
+        type: 'POST',
+        data: { cliente: cliente, nr_pedido: nr_pedido },
+        dataType: 'json',
+        success: function (r) {
+            console.log(r); // Depuração
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            console.error("Erro na requisição: ", error, xhr.responseText);
+        }
+    });
 });
+
 $('#nomePedidocr').submit(function (e) {
 	e.preventDefault();
 	var cliente = $('#nomeClientecr').val();
