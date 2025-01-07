@@ -31,6 +31,12 @@ class UserController extends Controller
         $dados["view"]  = "user/index";
         $this->load("template", $dados);
     }
+    public function funcionarios()
+    {
+        $dados["lista"] = Service::get("user", "tipo", "funcionario", true);
+        $dados["view"]  = "user/funcionarios";
+        $this->load("template", $dados);
+    }
 
     public function create()
     {
@@ -129,7 +135,7 @@ class UserController extends Controller
     public function excluir($id)
     {
         Service::excluir($this->tabela, $this->campo, $id);
-        $this->redirect(URL_BASE . "user");
+        $this->redirect(URL_BASE . "user/funcionarios");
     }
     public function filtro()
     {
