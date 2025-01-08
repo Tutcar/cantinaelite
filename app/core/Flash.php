@@ -1074,11 +1074,13 @@ class Flash
         }
         return false;
     }
-    public static function caixaFecha($db, $id)
+    public static function caixaFecha($db, $conferido, $id)
     {
         try {
-            $sql = "UPDATE caixaabre SET fechado = 'S' WHERE id_caixaabre =" . $id;
+            $sql = "UPDATE caixaabre SET fechado = 'S', conferido = :conferido WHERE id_caixaabre = :id_caixaabre";
             $stmt = $db->prepare($sql);
+            $stmt->bindValue(':conferido', $conferido);
+            $stmt->bindValue(':id_caixaabre', $id);
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\PDOException $e) {

@@ -115,8 +115,18 @@
                             value="<?php echo isset($dataCx->id_caixaabre) ? $dataCx->id_caixaabre : null ?>" />
                         <input type="hidden" name="data_fch_caixa"
                             value="<?php echo isset($dataCx->data_ab_caixa) ? $dataCx->data_ab_caixa : null ?>" />
-                        <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>" value="<?php echo isset($caixafecha->nome) ? "Alterar" : "Fechar Caixa" ?>"
-                            class="btn">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>"
+                                name="acao"
+                                value="Fechar Caixa"
+                                class="btn"
+                                <?php echo isset($caixafecha->nome) ? 'value="Alterar"' : 'value="Fechar Caixa"'; ?>>
+                            <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>"
+                                name="acao"
+                                value="Fechar Caixa a conferir"
+                                class="btn"
+                                <?php echo isset($caixafecha->nome) ? 'value="Alterar"' : 'value="Fechar Caixa a conferir"'; ?>>
+                        </div>
                     </div>
                 </div>
             </form>

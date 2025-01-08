@@ -32,6 +32,28 @@ class CaixafechaController extends Controller
     {
 
         $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
+        i($dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]));
+        if ($dados["idAbre"] == 0) {
+            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
+        }
+        $ultimoCx = $dados["idAbre"];
+        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
+        $dados["dinheiro"] = Service::getSoma("caixafechaD", "dinheiro", "tipo_pg", null, true);
+        $dados["cartao"] = Service::getSoma("caixafechaC", "cartao", "tipo_pg", null, true);
+        $dados["pix"] = Service::getSoma("caixafechaP", "pix", "tipo_pg", null, true);
+        $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
+        $dados["creditos"] = Service::getSoma("caixafechaCrCx", "credito", "tipo_pg", null, true);
+        $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
+        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["creditos"] + $dados["pedidos_ab"];
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
+        $dados["view"]  = "caixafecha/index";
+        $dados["tipo"] = Service::lista("tipo");
+        $this->load("template", $dados);
+    }
+    public function naoConferido()
+    {
+
+        $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
         $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
         if ($dados["idAbre"] == 0) {
             Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
@@ -117,7 +139,6 @@ class CaixafechaController extends Controller
 
     public function salvar()
     {
-
         $caixafecha = new \stdClass();
         $source = array('.', ',');
         $replace = array('', '.');
@@ -146,12 +167,19 @@ class CaixafechaController extends Controller
         $get_total_dia = $_POST["total_dia"];
         $caixafecha->total_dia = str_replace($source, $replace, $get_total_dia);
         $caixafecha->fechado = "S";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['acao']) && $_POST['acao'] === 'Fechar Caixa') {
+                $caixafecha->conferido = "S";
+            } elseif (isset($_POST['acao']) && $_POST['acao'] === 'Fechar Caixa a conferir') {
+                $caixafecha->conferido = "N";
+            }
+        }
         $id = $_POST['id_caixaabre'];
         $dt = $_POST['data_fch_caixa'];
         Flash::setForm($caixafecha);
         if (CaixafechaService::salvar($caixafecha, $this->campo, $this->tabela)) {
             if (!$caixafecha->id_caixafecha) {
-                Flash::caixaFecha($this->db, $id);
+                Flash::caixaFecha($this->db, $caixafecha->conferido, $id);
                 Flash::fechaItens($this->db, $dt);
                 unset($_SESSION["verifCx"]);
 
