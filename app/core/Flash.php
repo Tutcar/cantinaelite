@@ -158,6 +158,38 @@ class Flash
         // Retornar os resultados agrupados por funcionário
         return $resultados;
     }
+    public static function ContarCxFuncionariosNaoConferido($pdo, $id = null)
+    {
+        // Consulta SQL com soma do campo valor, filtrando por pago e agrupando por tipo de pagamento e funcionário
+        $sql = "
+        SELECT 
+            u.id_user AS id_user, 
+            u.login_cli AS login_cli,
+            SUM(CASE WHEN p.tipo_pg = 'dinheiro' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_dinheiro,
+            SUM(CASE WHEN p.tipo_pg = 'cartao' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_cartao,
+            SUM(CASE WHEN p.tipo_pg = 'pix' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_pix,
+            SUM(CASE WHEN p.tipo_pg = 'outros' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_outros,
+            SUM(CASE WHEN p.tipo_pg = 'credito' AND p.pago = 'S' THEN p.valor ELSE 0 END) AS total_creditos
+        FROM 
+            pedido p
+        JOIN 
+            user u ON p.id_user = u.id_user
+        WHERE 
+            p.cx_fechado = 'S' AND p.cx_fechado_nao_conferido = 'N' AND id_caixaabre = $id
+        GROUP BY 
+            u.id_user, u.login_cli
+    ";
+
+        // Preparar e executar a consulta
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        // Buscar resultados como objetos
+        $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        // Retornar os resultados agrupados por funcionário
+        return $resultados;
+    }
 
 
 
@@ -1088,10 +1120,10 @@ class Flash
         }
         return false;
     }
-    public static function fechaItens($db, $dt)
+    public static function fechaItens($db, $dt, $id)
     {
         try {
-            $sql = "UPDATE pedido SET cx_fechado = 'S' WHERE pago = 'S'";
+            $sql = "UPDATE pedido SET cx_fechado = 'S', cx_fechado_nao_conferido = 'S' WHERE pago = 'S' AND id_caixaabre = " . $id;
             $stmt = $db->prepare($sql);
             $stmt->execute();
             return $stmt->rowCount();

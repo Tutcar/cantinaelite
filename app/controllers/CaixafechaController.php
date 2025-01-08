@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\models\service\Service;
 use app\core\Flash;
 use app\core\Conexao;
+use app\models\caixas\Caixas;
 use app\models\service\CaixaabreService;
 use app\models\service\CaixafechaService;
 use app\util\UtilService;
@@ -30,29 +31,6 @@ class CaixafechaController extends Controller
     }
     public function index()
     {
-
-        $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
-        i($dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]));
-        if ($dados["idAbre"] == 0) {
-            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
-        }
-        $ultimoCx = $dados["idAbre"];
-        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
-        $dados["dinheiro"] = Service::getSoma("caixafechaD", "dinheiro", "tipo_pg", null, true);
-        $dados["cartao"] = Service::getSoma("caixafechaC", "cartao", "tipo_pg", null, true);
-        $dados["pix"] = Service::getSoma("caixafechaP", "pix", "tipo_pg", null, true);
-        $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
-        $dados["creditos"] = Service::getSoma("caixafechaCrCx", "credito", "tipo_pg", null, true);
-        $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
-        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["creditos"] + $dados["pedidos_ab"];
-        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
-        $dados["view"]  = "caixafecha/index";
-        $dados["tipo"] = Service::lista("tipo");
-        $this->load("template", $dados);
-    }
-    public function naoConferido()
-    {
-
         $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
         $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
         if ($dados["idAbre"] == 0) {
@@ -72,7 +50,59 @@ class CaixafechaController extends Controller
         $dados["tipo"] = Service::lista("tipo");
         $this->load("template", $dados);
     }
+    public function indexNaoConferido($id = null)
+    {
 
+        $dados["idAbre"] = $id;
+        $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
+        if ($dados["idAbre"] == 0) {
+            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
+        }
+        $ultimoCx = $id;
+        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
+        $dados["dinheiro"] = Service::getSoma("caixafechaD", "dinheiro", "tipo_pg", null, true);
+        $dados["cartao"] = Service::getSoma("caixafechaC", "cartao", "tipo_pg", null, true);
+        $dados["pix"] = Service::getSoma("caixafechaP", "pix", "tipo_pg", null, true);
+        $dados["outros"] = Service::getSoma("caixafechaO", "outros", "tipo_pg", null, true);
+        $dados["creditos"] = Service::getSoma("caixafechaCrCx", "credito", "tipo_pg", null, true);
+        $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
+        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["creditos"] + $dados["pedidos_ab"];
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionariosNaoConferido($this->db, $ultimoCx);
+        $dados["view"]  = "caixafecha/indexnaoconferido";
+        $dados["tipo"] = Service::lista("tipo");
+        $this->load("template", $dados);
+    }
+    public function naoConferido()
+    {
+        $caixasNaoConferidos = new Caixas();
+        $dados["caixasNaoConferidos"] = $caixasNaoConferidos->caixasNaoConferidos();
+        $dados["view"]  = "caixafecha/caixanaoconferido";
+        $this->load("template", $dados);
+    }
+    public function createNaoConferido($id = null)
+    {
+        $dados["idAbre"] = $id;
+        $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
+        if ($dados["idAbre"] == 0) {
+            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
+        }
+        $caixasnaoconferidossoma = new Caixas();
+        $caixasnaoconferidossomaResult = $caixasnaoconferidossoma->caixasNaoConferidosSoma($id);
+        $dados["dinheiro"] = $caixasnaoconferidossomaResult["Dinheiro"];
+        $dados["cartao"] = $caixasnaoconferidossomaResult["Cartao"];
+        $dados["pix"] = $caixasnaoconferidossomaResult["Pix"];
+        $dados["outros"] = $caixasnaoconferidossomaResult["Outros"];
+        $dados["credito"] = $caixasnaoconferidossomaResult["credito"];
+        $ultimoCx =  $id;
+        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
+        $dados["pedidos_ab"] = 0; //Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
+        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
+        $dados["cxInicial"] = count(Flash::ContarCxFuncionarios($this->db)) * 30;
+        $dados["view"]  = "caixafecha/indexnaoconferido";
+        $dados["tipo"] = Service::lista("tipo");
+        $dados["view"] = "caixafecha/createnaoconferido";
+        $this->load("template", $dados);
+    }
     public function create()
     {
         $dados["idAbre"] = Flash::maximo($this->db, "caixaabre", "fechado", "N");
@@ -120,6 +150,34 @@ class CaixafechaController extends Controller
         $dados["view"]  = "caixafecha/index";
         $dados["tipo"] = Service::lista("tipo");
         $dados["view"] = "caixafecha/create";
+        $this->load("template", $dados);
+    }
+    public function caixaFuncionariosNaoConferido($id_user, $id = null)
+    {
+
+        $dados["idAbre"] = $id;
+        $dados["dataCx"] = Service::get("caixaabre", "id_caixaabre ", $dados["idAbre"]);
+        if ($dados["idAbre"] == 0) {
+            Flash::setMsg("Não exite caixa aberto, abra antes de fechar.", -1);
+        }
+        $ultimoCx  = $id;
+        $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
+        $funcionarioEncontrado = array_filter($dados["cxfuncionarios"], function ($funcionario) use ($id_user) {
+            return $funcionario->id_user == $id_user;
+        });
+        $funcionario = $funcionarioEncontrado ? reset($funcionarioEncontrado) : null;
+        $dados["dinheiro"] = $funcionario->total_dinheiro;
+        $dados["cartao"] = $funcionario->total_cartao;
+        $dados["pix"] = $funcionario->total_pix;
+        $dados["outros"] = $funcionario->total_outros;
+        $dados["creditos"] = $funcionario->total_creditos;
+        $dados["funcionario"] = $funcionario->login_cli;
+        $dados["pedidos_ab"] = Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
+        $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
+        $dados["view"]  = "caixafecha/indexnaoconferido";
+        $dados["tipo"] = Service::lista("tipo");
+        $dados["view"] = "caixafecha/createnaoconferido";
         $this->load("template", $dados);
     }
 
@@ -180,7 +238,7 @@ class CaixafechaController extends Controller
         if (CaixafechaService::salvar($caixafecha, $this->campo, $this->tabela)) {
             if (!$caixafecha->id_caixafecha) {
                 Flash::caixaFecha($this->db, $caixafecha->conferido, $id);
-                Flash::fechaItens($this->db, $dt);
+                Flash::fechaItens($this->db, $dt, $id);
                 unset($_SESSION["verifCx"]);
 
                 $caixaabre = new \stdClass();
