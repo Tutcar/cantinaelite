@@ -97,7 +97,7 @@ class CaixafechaController extends Controller
         $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
         $dados["pedidos_ab"] = 0; //Service::getSoma("caixafechaA", "outros", "tipo_pg", null, true);
         $dados["saldo"] = $dados["dinheiro"] + $dados["cartao"] + $dados["pix"] + $dados["outros"] + $dados["pedidos_ab"];
-        $dados["cxInicial"] = count(Flash::ContarCxFuncionarios($this->db)) * 30;
+        $dados["cxInicial"] = count(Flash::ContarCxFuncionariosNaoConferido($this->db, $id)) * 30;
         $dados["view"]  = "caixafecha/indexnaoconferido";
         $dados["tipo"] = Service::lista("tipo");
         $dados["view"] = "caixafecha/createnaoconferido";
@@ -162,7 +162,7 @@ class CaixafechaController extends Controller
         }
         $ultimoCx  = $id;
         $dados["idAbreValor"] = Flash::soma($this->db, "caixaabre", "entrada - retirada", "id_caixaabre ", $ultimoCx);
-        $dados["cxfuncionarios"] = Flash::ContarCxFuncionarios($this->db);
+        $dados["cxfuncionarios"] = Flash::ContarCxFuncionariosNaoConferido($this->db, $ultimoCx);
         $funcionarioEncontrado = array_filter($dados["cxfuncionarios"], function ($funcionario) use ($id_user) {
             return $funcionario->id_user == $id_user;
         });
@@ -232,7 +232,9 @@ class CaixafechaController extends Controller
                 $caixafecha->conferido = "N";
             }
         }
+
         $id = $_POST['id_caixaabre'];
+        $caixafecha->id_caixaabre = $id;
         $dt = $_POST['data_fch_caixa'];
         Flash::setForm($caixafecha);
         if (CaixafechaService::salvar($caixafecha, $this->campo, $this->tabela)) {
@@ -263,7 +265,12 @@ class CaixafechaController extends Controller
             }
         }
     }
-
+    public function salvarNaoConferido($dataCxAbre = null, $id = null)
+    {
+        $salvarNaoConferido = new Caixas();
+        $salvarNaoConferido->salvarCxNaoConferido($dataCxAbre, $id);
+        $this->naoConferido();
+    }
     public function excluir($id)
     {
         Service::excluir($this->tabela, $this->campo, $id);

@@ -97,4 +97,38 @@ class Caixas
             echo "Erro: " . $e->getMessage();
         }
     }
+    public function salvarCxNaoConferido($dataCxAbre = null, $id = null)
+    {
+        try {
+            // Inicia uma transação
+            $this->db->beginTransaction();
+
+            // Query para atualizar a tabela caixaabre
+            $sqlCaixaAbre = "UPDATE caixaabre SET conferido = 'S' WHERE id_caixaabre = :id_caixaabre";
+            $queryCaixaAbre = $this->db->prepare($sqlCaixaAbre);
+            $queryCaixaAbre->bindParam(':id_caixaabre', $id);
+            $queryCaixaAbre->execute();
+
+            // Query para atualizar a tabela caixafecha
+            $sqlCaixaFecha = "UPDATE caixafecha SET conferido = 'S' WHERE id_caixaabre = :id_caixaabre";
+            $queryCaixaFecha = $this->db->prepare($sqlCaixaFecha);
+            $queryCaixaFecha->bindParam(':id_caixaabre', $id);
+            $queryCaixaFecha->execute();
+
+            // Query para atualizar a tabela pedido
+            $sqlPedido = "UPDATE pedido SET cx_fechado_nao_conferido = 'S' WHERE id_caixaabre = :id";
+            $queryPedido = $this->db->prepare($sqlPedido);
+            $queryPedido->bindParam(':id', $id);
+            $queryPedido->execute();
+
+            // Finaliza a transação
+            $this->db->commit();
+
+            return true;
+        } catch (Exception $e) {
+            // Em caso de erro, desfaz a transação
+            $this->db->rollBack();
+            return "Erro ao salvar caixa não conferido: " . $e->getMessage();
+        }
+    }
 }

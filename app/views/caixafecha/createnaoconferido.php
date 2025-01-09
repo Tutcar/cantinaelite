@@ -5,12 +5,12 @@
     <div class="base-form">
         <div class="caixa-form">
 
-            <div class="thead">Fechar Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
+            <div class="thead">Conferir Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
             <div class="text-end d-flex">
                 <a href="<?php echo URL_BASE . "Caixafecha/naoConferido" ?>"><img style="width: 30px; height: 30px"
-                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+                        src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-            <form action="<?php echo URL_BASE . "caixafecha/salvar" ?>" method="POST" enctype="multipart/form-data">
+            <form action="<?php echo URL_BASE . "caixafecha/salvarNaoConferido/" . $dataCx->data_ab_caixa . "/" . $dataCx->id_caixaabre ?>" method="POST" enctype="multipart/form-data">
 
                 <div class="rows">
                     <div class="ocDiv">
@@ -116,16 +116,7 @@
                         <input type="hidden" name="data_fch_caixa"
                             value="<?php echo isset($dataCx->data_ab_caixa) ? $dataCx->data_ab_caixa : null ?>" />
                         <div style="display: flex; gap: 10px;">
-                            <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>"
-                                name="acao"
-                                value="Fechar Caixa"
-                                class="btn"
-                                <?php echo isset($caixafecha->nome) ? 'value="Alterar"' : 'value="Fechar Caixa"'; ?>>
-                            <input type="<?php echo (isset($funcionario)) ? "hidden" : "submit"; ?>"
-                                name="acao"
-                                value="Fechar Caixa a conferir"
-                                class="btn"
-                                <?php echo isset($caixafecha->nome) ? 'value="Alterar"' : 'value="Fechar Caixa a conferir"'; ?>>
+                            <input type="submit" value="Caixa Conferido" class="btn">
                         </div>
                     </div>
                 </div>

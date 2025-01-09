@@ -3,7 +3,7 @@
 </script>
 <section class="caixa">
     <?php if ($_SESSION["verifCx"] > 0) : ?>
-        <div class="thead">Fechar Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
+        <div class="thead">Conferir Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
     <?php endif; ?>
     <?php if ($idAbre == 0) : ?>
         <p><?php $this->verMsg(); ?> </p>

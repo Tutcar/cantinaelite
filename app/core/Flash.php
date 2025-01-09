@@ -158,6 +158,7 @@ class Flash
         // Retornar os resultados agrupados por funcionário
         return $resultados;
     }
+
     public static function ContarCxFuncionariosNaoConferido($pdo, $id = null)
     {
         // Consulta SQL com soma do campo valor, filtrando por pago e agrupando por tipo de pagamento e funcionário
@@ -1123,7 +1124,7 @@ class Flash
     public static function fechaItens($db, $dt, $id)
     {
         try {
-            $sql = "UPDATE pedido SET cx_fechado = 'S', cx_fechado_nao_conferido = 'S' WHERE pago = 'S' AND id_caixaabre = " . $id;
+            $sql = "UPDATE pedido SET cx_fechado = 'S', cx_fechado_nao_conferido = 'N' WHERE pago = 'S' AND id_caixaabre = " . $id;
             $stmt = $db->prepare($sql);
             $stmt->execute();
             return $stmt->rowCount();
