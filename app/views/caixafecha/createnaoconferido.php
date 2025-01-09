@@ -7,7 +7,7 @@
 
             <div class="thead">Conferir Caixa do Dia - <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $dataCx->data_ab_caixa)->format('d/m/Y H:i:s'); ?></div>
             <div class="text-end d-flex">
-                <a href="<?php echo URL_BASE . "Caixafecha/naoConferido" ?>"><img style="width: 30px; height: 30px"
+                <a title="Voltar" href="<?php echo URL_BASE . "Caixafecha/naoConferido" ?>"><img style="width: 30px; height: 30px"
                         src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
             <form action="<?php echo URL_BASE . "caixafecha/salvarNaoConferido/" . $dataCx->data_ab_caixa . "/" . $dataCx->id_caixaabre ?>" method="POST" enctype="multipart/form-data">

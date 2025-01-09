@@ -34,7 +34,7 @@
                             </td>
                             <td hidden><?php echo $relatorios->id_pedidos ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "Relatorios/index" ?>" ><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+                                <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -42,6 +42,6 @@
             </table>
         </div>
     </div>
-    <a href="<?php echo URL_BASE . "Relatorios/index"?>" ><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+    <a title="Voltar" href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
 </section>

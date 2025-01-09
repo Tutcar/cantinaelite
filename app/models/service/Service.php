@@ -17,6 +17,11 @@ class Service
         $dao = new Dao();
         return  $dao->get($tabela, $campo, $valor, $eh_lista);
     }
+    public static  function get2($tabela, $campo1, $valor1, $campo2, $valor2, $eh_lista = false)
+    {
+        $dao = new Dao();
+        return  $dao->get2($tabela, $campo1, $valor1, $campo2, $valor2, $eh_lista);
+    }
     public static  function getEntre($tabela, $campo, $valor1, $valor2)
     {
         $dao = new Dao();

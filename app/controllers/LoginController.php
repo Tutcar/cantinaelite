@@ -32,6 +32,14 @@ class LoginController extends Controller
         if (Service::logar("e_mail", $e_mail, $senha, "user")) {
             if ($_SESSION[SESSION_LOGIN]->id_user === 1) {
                 $this->redirect(URL_BASE . "painel");
+            } elseif ($_SESSION[SESSION_LOGIN]->user_excluido === "S") {
+                if ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
+                    Flash::setMsg("Usuário excluido.", -1);
+                    $this->redirect(URL_BASE . "login");
+                } else {
+                    Flash::setMsg("Funcionário excluido.", -1);
+                    $this->redirect(URL_BASE . "login");
+                }
             } elseif ($_SESSION[SESSION_LOGIN]->tipo === "cliente") {
                 $this->redirect(URL_BASE . "homepage");
             } elseif ($_SESSION[SESSION_LOGIN]->tipo === "funcionario") {

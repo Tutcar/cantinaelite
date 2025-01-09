@@ -11,7 +11,7 @@
     &nbsp;
     &nbsp;
     <div class="text-end d-flex">
-        <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
+        <a title="Voltar" href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
                 src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
         &nbsp;
         &nbsp;
@@ -44,7 +44,7 @@
                             <td align="left"><?php echo ($relatorios->encomendas == "S") ? "Encomenda" : "Caixa" ?></td>
                             <td hidden><?php echo $relatorios->nr_pedido ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "Relatorios/areceberCli/" . $relatorios->nr_pedido ?>">&nbsp;&nbsp;<img
+                                <a title="Verificar" href="<?php echo URL_BASE . "Relatorios/areceberCli/" . $relatorios->nr_pedido ?>">&nbsp;&nbsp;<img
                                         style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>"></a>
                             </td>
                         </tr>

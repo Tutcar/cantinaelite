@@ -39,6 +39,10 @@ class Dao extends Model
     {
         return  $this->find($this->db, $campo, $valor, $tabela, $eh_lista);
     }
+    public function get2($tabela, $campo1, $valor1, $campo2, $valor2, $eh_lista)
+    {
+        return  $this->find2($this->db, $tabela, $campo1, $valor1, $campo2, $valor2, $eh_lista);
+    }
     public function getGeral($tabela, $campo, $operador, $valor, $eh_lista)
     {
         return  $this->findGeral($this->db, $campo, $operador, $valor, $tabela, $eh_lista);

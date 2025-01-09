@@ -40,7 +40,7 @@
 
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+        <a title="Voltar" href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
     </div>
 </section>

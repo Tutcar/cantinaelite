@@ -27,13 +27,24 @@ class UserController extends Controller
     }
     public function index()
     {
-        $dados["lista"] = Service::lista("userAdm");
+        $tabela = "user";
+        $campo1 = "tipo";
+        $valor1 = "cliente";
+        $campo2 = "user_excluido";
+        $valor2 = "N";
+        $dados["lista"] = Service::get2($tabela, $campo1, $valor1, $campo2, $valor2, true);
         $dados["view"]  = "user/index";
         $this->load("template", $dados);
     }
     public function funcionarios()
     {
-        $dados["lista"] = Service::get("user", "tipo", "funcionario", true);
+
+        $tabela = "user";
+        $campo1 = "tipo";
+        $valor1 = "funcionario";
+        $campo2 = "user_excluido";
+        $valor2 = "N";
+        $dados["lista"] = Service::get2($tabela, $campo1, $valor1, $campo2, $valor2, true);
         $dados["view"]  = "user/funcionarios";
         $this->load("template", $dados);
     }
@@ -132,17 +143,34 @@ class UserController extends Controller
         }
     }
 
-    public function excluir($id)
+    public function excluir($id = null)
     {
-        Service::excluir($this->tabela, $this->campo, $id);
-        $this->redirect(URL_BASE . "user/funcionarios");
+
+        $user = new \stdClass();
+        $user->id_user = $id;
+        $user->user_excluido = "S";
+        if (Flash::excluirFuncionarios($this->db, $id)) {
+            Flash::setMsg("Funcionário excluido com sucesso!", 1);
+            $this->redirect(URL_BASE . "user/funcionarios");
+        } else {
+            Flash::setMsg("Funcionário não foi excluido!!", -1);
+            $this->redirect(URL_BASE . "user/funcionarios");
+        }
     }
     public function filtro()
     {
         $campo = $_POST["campo"];
-        $valor = $_POST["valor"];
+        $valor = $_POST["nome"];
         $dados["lista"] = Service::getLike($this->tabela, $campo, $valor, true);
         $dados["view"]  = "user/index";
+        $this->load("template", $dados);
+    }
+    public function filtroFuncionarios()
+    {
+
+        $login_cli = $_POST["nome"];
+        $dados["lista"] = Flash::userFuncionarios($this->db,  $login_cli);
+        $dados["view"]  = "user/funcionarios";
         $this->load("template", $dados);
     }
 }

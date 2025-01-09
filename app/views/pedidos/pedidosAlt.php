@@ -7,8 +7,8 @@
     <div class="base-lista">
         <div>
             <div class="text-end d-flex">
-                &nbsp;&nbsp;&nbsp;<a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
-                &nbsp;&nbsp;&nbsp;<a href="<?php echo URL_BASE . "Compromisso/pedidosDia" ?>"><img style="width: 40px; height: 30px"
+                &nbsp;&nbsp;&nbsp;<a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img title="Pesquisar" style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
+                &nbsp;&nbsp;&nbsp;<a href="<?php echo URL_BASE . "Compromisso/pedidosDia" ?>"><img title="Voltar" style="width: 30px; height: 30px"
                         src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
             </div>
         </div>
@@ -50,7 +50,7 @@
                             <td align="center"><?php echo $pedidos->nr_pedido ?></td>
                             <td align="center">
                                 <a title="Imprimir pedido" href="<?php echo URL_BASE . "Pedidos/impPedidoVia2/" . $pedidos->nr_pedido ?>"><img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . 'imprimirped.png'; ?>"></a>
-                                <a href="javascript:;" onclick="excluirPedido(this)" data-entidade="Pedidos" data-id="<?php echo $pedidos->nr_pedido ?>"><img style="width: 25px; height: 25px"
+                                <a title="Excluir" href="javascript:;" onclick="excluirPedido(this)" data-entidade="Pedidos" data-id="<?php echo $pedidos->nr_pedido ?>"><img style="width: 25px; height: 25px"
                                         src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a>
                             </td>
                         </tr>

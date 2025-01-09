@@ -7,7 +7,7 @@
     &nbsp;
     &nbsp;
     <div class="text-end d-flex">
-        <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
+        <a title="Voltar" href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
                 src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
         &nbsp;
         &nbsp;

@@ -30,7 +30,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "Corrente/obterCorrentesSjson/" . $relatorios->cliente ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+        <a title="Voltar" href="<?php echo URL_BASE . "Corrente/obterCorrentesSjson/" . $relatorios->cliente ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
     </div>
 </section>

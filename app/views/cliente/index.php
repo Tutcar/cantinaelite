@@ -6,11 +6,11 @@
     <div class="base-lista">
         <div>
             <div class="text-end d-flex">
-                <a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
+                <a title="Voltar" href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
                         src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
-                <a href="<?php echo URL_BASE . "cliente/index" ?>"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>
-                <a href="<?php echo URL_BASE . "cliente/create" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
-                <a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
+                <a title="Atualizar" href="<?php echo URL_BASE . "cliente/index" ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>
+                <a title="Cadastrar" href="<?php echo URL_BASE . "cliente/create" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
+                <a title="Pesquisar" data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
             </div>
         </div>
         <div id="minhaDiv" class="lst">
@@ -59,10 +59,10 @@
                             <td align="right"><?php echo $cliente->nr_cpf_cnpj ?></td>
                             <td align="right"><?php echo $cliente->nm_cidade ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "cliente/edit/" . $cliente->id_cliente ?>"><img
-                                        style="width: 30px; height: 30px"
+                                <a title="Editar" href="<?php echo URL_BASE . "cliente/edit/" . $cliente->id_cliente ?>"><img
+                                        style="width: 25px; height: 25px"
                                         src="<?php echo URL_IMAGEM . "editar.jpeg"; ?>"></a></a>
-                                <a href="javascript:;" onclick="excluir(this)" data-entidade="cliente" data-id="<?php echo $cliente->id_cliente ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a></a>
+                                <!-- <a href="javascript:;" onclick="excluir(this)" data-entidade="cliente" data-id="<?php echo $cliente->id_cliente ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a></a> -->
                             </td>
                             <td hidden align="right"><?php echo $cliente->id_cliente ?></td>
                         </tr>

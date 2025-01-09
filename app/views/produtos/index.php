@@ -7,12 +7,12 @@
         <div>
             <div class="rows">
                 <div class="text-end d-flex col-12">
-                    <a href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
+                    <a title="Voltar" href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
                             src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
 
-                    <a href="<?php echo URL_BASE . "Produtos/index" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>
-                    <a href="<?php echo URL_BASE . "Produtos/create" ?>" class="d-inline-block mb-2"><img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
-                    <a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
+                    <a title="Atualizar" href="<?php echo URL_BASE . "Produtos/index" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>
+                    <a title="Cadastra" href="<?php echo URL_BASE . "Produtos/create" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "cadastro.jpeg"; ?>"></a>
+                    <a title="Pesquisar" data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
                 </div>
 
             </div>
@@ -73,10 +73,10 @@
                             <td><?php echo moedaBR($produtos->custo) ?></td>
                             <td><?php echo moedaBR($produtos->venda) ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "produtos/edit/" . $produtos->id_produtos ?>"><img
-                                        style="width: 30px; height: 30px"
+                                <a title="Editar" href="<?php echo URL_BASE . "produtos/edit/" . $produtos->id_produtos ?>"><img
+                                        style="width: 25px; height: 25px"
                                         src="<?php echo URL_IMAGEM . "editar.jpeg"; ?>"></a>
-                                <a href="javascript:;" onclick="excluir(this)" data-entidade="produtos" data-id="<?php echo $produtos->id_produtos ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a>
+                                <a title="Excluir" href="javascript:;" onclick="excluir(this)" data-entidade="produtos" data-id="<?php echo $produtos->id_produtos ?>"><img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a>
 
                             </td>
                         </tr>

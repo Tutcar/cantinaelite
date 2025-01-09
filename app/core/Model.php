@@ -248,6 +248,33 @@ abstract class Model
             throw new \Exception($e->getMessage());
         }
     }
+    //Retorna uma consulta por dois campo
+    function find2($conn, $tabela = null, $campo1 = null, $valor1 = null, $campo2 = null, $valor2 = null, $isLista = false)
+    {
+
+        $tabela = ($tabela) ? $tabela : $this->tabela;
+        try {
+            // Montar SQL dinamicamente
+            $sql = "SELECT * FROM `" . $tabela . "` WHERE `" . $campo1 . "` = :campo1 AND `" . $campo2 . "` = :campo2";
+            $stmt = $conn->prepare($sql);
+
+            // Bind dos valores
+            $stmt->bindValue(":campo1", $valor1);
+            $stmt->bindValue(":campo2", $valor2);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Retornar resultado
+            if ($isLista) {
+                return $stmt->fetchAll(\PDO::FETCH_OBJ);
+            } else {
+                return $stmt->fetch(\PDO::FETCH_OBJ);
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception("Erro ao executar a consulta: " . $e->getMessage());
+        }
+    }
 
     //Retorna uma consulta por um campo
     function find($conn, $campo, $valor, $tabela = null, $isLista = false)

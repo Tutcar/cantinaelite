@@ -249,6 +249,32 @@ class Flash
             throw new \Exception($e->getMessage());
         }
     }
+    public static function userFuncionarios($db, $login_cli)
+    {
+        try {
+            // Consulta com placeholder nomeado
+            $sql = "SELECT * FROM user WHERE user_excluido =:user_excluido AND tipo = :tipo AND login_cli LIKE :login_cli";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro nomeado
+            $stmt->bindValue(':user_excluido', "N");
+            $stmt->bindValue(':tipo', "funcionario");
+            $stmt->bindValue(":login_cli", $login_cli . "%");
+
+            // Executar a consulta
+            $stmt->execute();
+
+            $funcionarios = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+            return $funcionarios;
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public static function restricoesAlunoCad($db, $id_cliente, $id_produto)
     {
         try {
@@ -330,6 +356,35 @@ class Flash
             throw new \Exception($e->getMessage());
         }
     }
+    public static function excluirFuncionarios($db, $id)
+    {
+        try {
+            // Consulta para marcar o usuário como excluído
+            $sql = "UPDATE user SET user_excluido = :user_excluido WHERE id_user = :id_user";
+            $stmt = $db->prepare($sql);
+
+            // Bind dos valores
+            $stmt->bindValue(':user_excluido', 'S');
+            $stmt->bindValue(':id_user', $id, \PDO::PARAM_INT); // Especificar o tipo do ID como inteiro
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Verificar linhas afetadas
+            $rowCount = $stmt->rowCount();
+            if ($rowCount === 0) {
+                // Nenhuma linha afetada, talvez o ID não exista
+                throw new \Exception("Nenhum registro encontrado para id_user: {$id}");
+            }
+
+            return $rowCount; // Retornar o número de linhas alteradas
+        } catch (\PDOException $e) {
+            // Obter informações adicionais do erro
+            $errorInfo = $db->errorInfo();
+            throw new \Exception("Erro ao excluir funcionário: {$e->getMessage()} | SQLSTATE: {$errorInfo[0]} | Código DB: {$errorInfo[1]} | Mensagem DB: {$errorInfo[2]}");
+        }
+    }
+
 
 
     public static function quitarPgComSaldo($db, $valor, $nr_pedido)

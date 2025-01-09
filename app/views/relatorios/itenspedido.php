@@ -34,14 +34,14 @@
                             </td>
                             <td hidden><?php echo $relatorios->id_pedidos ?></td>
                             <td align="center">
-                                <a href="<?php echo URL_BASE . "Relatorios/todosItens/" . $relatorios->cliente ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>"></a>
+                                <a title="Verificar" href="<?php echo URL_BASE . "Relatorios/todosItens/" . $relatorios->cliente ?>"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "lupa.png"; ?>"></a>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
-        <a href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
+        <a title="Voltar" href="<?php echo URL_BASE . "Relatorios/index" ?>"><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
 
     </div>
 </section>

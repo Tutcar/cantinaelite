@@ -5,26 +5,30 @@
 	<div class="thead"><i class="ico lista"></i> Lista Funcionários</div>
 	<div class="base-lista">
 		<div>
-			<div class="text-end d-flex">
-				<a href="<?php echo URL_BASE . "Painel" ?>"><img style="width: 30px; height: 30px"
-						src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
-				<a href="<?php echo URL_BASE . "user/create" ?>" class="btn btn-roxo d-inline-block mb-2 mx-1"><i class="fas fa fa-plus-circle" aria-hidden="true"></i> Cadastrar funcionário</a>
-				<a href="" class="btn btn-roxo d-inline-block mb-2 filtro"><i class="fas fa fa-filter" aria-hidden="true"></i> Filtrar</a>
+			<div class="rows">
+				<div class="text-end d-flex col-12">
+					<a title="Atualizar" href="<?php echo URL_BASE . "User/funcionarios" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "atualizar.png"; ?>"></a>&nbsp;&nbsp;
+					<a title="Voltar" href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
+							src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;&nbsp;&nbsp;
+					<a title="Pesquisa por nome" data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>&nbsp;&nbsp;
+				</div>
+
 			</div>
+
 		</div>
-		<div class="lst mostraFiltro">
-			<form action="<?php echo URL_BASE . "user/filtro"; ?>" method="post">
+		<div id="minhaDiv" class="lst">
+			<form action="<?php echo URL_BASE . "User/filtroFuncionarios"; ?>" method="post">
 				<div class="rows">
 					<div class="col-4">
 						<select name="campo">
-							<option selected>nome</option>
+							<option value="login_cli" selected>nome</option>
 						</select>
 					</div>
 					<div class="col-6">
-						<input type="text" name="valor" placeholder="Valor da pesquisar...">
+						<input type="text" required="required" name="nome" placeholder="Valor da pesquisar...">
 					</div>
 					<div class="col-2">
-						<input type="submit" class="btn-roxo" value="Pesquisar">
+						<input type="submit" class="btn" value="Pesquisar">
 					</div>
 				</div>
 			</form>
@@ -48,8 +52,10 @@
 							<td hidden><?php echo $user->id_user ?></td>
 
 							<td align="center">
-								<a href="<?php echo URL_BASE . "user/edit/" . $user->id_user ?>" class="btn btn-verde">Editar</a>
-								<a href="javascript:;" onclick="excluir(this)" data-entidade="user" data-id="<?php echo $user->id_user ?>" class="btn btn-vermelho">Excluir</a>
+								<a title="Editar" href="<?php echo URL_BASE . "user/edit/" . $user->id_user ?>"><img
+										style="width: 25px; height: 25px"
+										src="<?php echo URL_IMAGEM . "editar.jpeg"; ?>"></a>&nbsp;
+								<a title="Excluir" href="javascript:;" onclick="excluir(this)" data-entidade="user" data-id="<?php echo $user->id_user ?>"><img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a>
 							</td>
 						</tr>
 					<?php } ?>
