@@ -206,6 +206,28 @@ class Flash
             return $nextId;
         }
     }
+    public static function limeteAluno($db, $clienteId)
+    {
+        try {
+            // Consulta com placeholder nomeado
+            $sql = "SELECT limite FROM cliente WHERE nm_nome =:nm_nome";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro nomeado
+            $stmt->bindValue(':nm_nome', $clienteId);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Obter os resultados
+            return $stmt->fetch(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception($e->getMessage());
+        }
+    }
     public static function CreditoAluno($conn, $idCliente)
     {
         try {
@@ -774,7 +796,7 @@ class Flash
     public static function clientes($db)
     {
         $isLista = true;
-        $sql = "SELECT nm_nome FROM cliente";
+        $sql = "SELECT nm_nome FROM cliente ORDER by nm_nome";
         $sql = $db->prepare($sql);
         $sql->execute();
         return $sql->fetchAll(\PDO::FETCH_OBJ);

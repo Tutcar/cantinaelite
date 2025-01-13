@@ -60,7 +60,8 @@ class CorrenteController extends Controller
         $dados['saldoLq'] = $credito->soma - $compensar->soma - $debito->soma;
         $dados['corretoras'] = Service::get($tabela, $campo, $id_corretora);
         $dados["lista"] = Service::listaCorr($this->tabela, $id_corretora);
-        $dados["clientes"] = Service::lista("cliente");
+        $dados["clientes"] = Flash::clientes($this->db);
+        // $dados["clientes"] = Service::lista("cliente");
         $dados["correntes"] = Service::get("corrente", "descricao", 0, true);
         $dados["limite"] = 0;
         $dados["credito"] = 0;
@@ -100,6 +101,7 @@ class CorrenteController extends Controller
     }
     public function saldoCx($clienteId = null)
     {
+
         try {
             $credito =  Flash::CreditoAluno($this->db, $clienteId);
             // Retorna o saldo em formato JSON

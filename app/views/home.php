@@ -23,7 +23,7 @@
 										</thead>
 										<tbody id="tbodyId">
 											<?php foreach ($lista as $produtos) { ?>
-												<tr>
+												<tr onclick="cadPedido(<?php echo $produtos->id_produtos ?>)" style="cursor: pointer;">
 													<td id="idNome"><?php echo substr($produtos->nome, 0, 20) ?></td>
 													<td id="idVenda" align="right"><?php echo moedaBR($produtos->venda) ?></td>
 													<?php if ($produtos->foto || "") : ?>
@@ -31,9 +31,12 @@
 													<?php else : ?>
 														<?php $imagem = 'camera.png' ?>
 													<?php endif; ?>
-													<td><a href="javascript:;" onclick="cadPedido(<?php echo $produtos->id_produtos ?>)"><img style="width: 50px; height: 50px" src="<?php echo URL_IMAGEM . $imagem ?>"></a></td>
+													<td>
+														<img style="width: 50px; height: 50px" src="<?php echo URL_IMAGEM . $imagem ?>">
+													</td>
 													<td id="idId" hidden><?php echo $produtos->id_produtos ?></td>
 												</tr>
+
 											<?php } ?>
 										</tbody>
 									</table>
