@@ -1,6 +1,7 @@
 <script>
     var coluOr = 1;
 </script>
+
 <section class="caixa">
     <div class="thead"><i class="ico lista"></i> Lista de Cliente</div>
     <div class="base-lista">
@@ -17,14 +18,16 @@
             <form action="<?php echo URL_BASE . "cliente/filtro"; ?>" method="post">
                 <div class="rows">
                     <div class="col-4">
-                        <select name="campo">
-                            <option value="nm_nome" selected>nome</option>
-                            <option value="nr_cpf_cnpj" selected>Cpf/Cnpj</option>
+                        <!-- Elemento select -->
+                        <select name="campo" id="campoSelect" onchange="atualizarInput()">
+                            <option value="nm_nome" selected>Nome</option>
+                            <option value="nr_cpf_cnpj">Cpf/Cnpj</option>
+                            <option value="limites">Limites</option>
                         </select>
-
                     </div>
                     <div class="col-6">
-                        <input type="text" required="required" name="pesqFiltrar" placeholder="Valor da pesquisar...">
+                        <!-- Campo de entrada -->
+                        <input type="text" value="" required="required" name="pesqFiltrar" id="pesqFiltrar" placeholder="Valor da pesquisa...">
                     </div>
                     <div class="col-2">
                         <input type="submit" class="btn-roxo" value="Pesquisar">
@@ -32,6 +35,21 @@
                 </div>
             </form>
         </div>
+
+        <!-- Script para atualizar o campo de entrada -->
+        <script>
+            function atualizarInput() {
+                const selectElement = document.getElementById('campoSelect');
+                const inputElement = document.getElementById('pesqFiltrar');
+
+                // Verifica se a opção "Limites" está selecionada
+                if (selectElement.value === 'limites') {
+                    inputElement.value = 'limite';
+                } else {
+                    inputElement.value = ''; // Limpa o input para outras opções
+                }
+            }
+        </script>
 
 
         <?php $this->verMsg() ?>

@@ -122,7 +122,11 @@ class ClienteController extends Controller
     {
         $campo = $_POST["campo"];
         $valor = $_POST["pesqFiltrar"];
-        $dados["lista"] = Service::getLike($this->tabela, $campo, $valor, true);
+        if ($campo == "limites") {
+            $dados["lista"] = Flash::limeteAlunos($this->db);
+        } else {
+            $dados["lista"] = Service::getLike($this->tabela, $campo, $valor, true);
+        }
         $dados["view"]  = "cliente/index";
         $this->load("template", $dados);
     }

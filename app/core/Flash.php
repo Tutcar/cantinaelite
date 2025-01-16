@@ -228,6 +228,104 @@ class Flash
             throw new \Exception($e->getMessage());
         }
     }
+    public static function limeteSaldos($db)
+    {
+        try {
+            // Consulta SQL para calcular o saldo, apenas para clientes com limite maior que zero
+            $sql = "
+            SELECT 
+                c.descricao,
+                cl.nm_nome AS nome,
+                cl.limite,
+                SUM(c.valor_credito) AS valor_credito,
+                SUM(c.valor_debito) AS valor_debito,
+                (cl.limite + SUM(c.valor_credito) - SUM(c.valor_debito)) AS saldo
+            FROM 
+                corrente c
+            JOIN 
+                cliente cl ON c.descricao = cl.nm_nome
+            WHERE 
+                cl.limite > 0
+            GROUP BY 
+                c.descricao, cl.nm_nome, cl.limite
+            ORDER BY 
+                c.descricao;
+        ";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Retornar os resultados
+            return $stmt->fetchAll(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception('Erro ao buscar saldos: ' . $e->getMessage());
+        }
+    }
+    public static function saldoTotal($db)
+    {
+        try {
+            // Consulta SQL para calcular o saldo total, usando subconsulta para calcular os saldos de cada cliente
+            $sql = "
+                SELECT 
+                    SUM(saldo_cliente) AS saldo_total
+                FROM (
+                    SELECT 
+                        cl.limite + IFNULL(SUM(c.valor_credito), 0) - IFNULL(SUM(c.valor_debito), 0) AS saldo_cliente
+                    FROM 
+                        cliente cl
+                    LEFT JOIN 
+                        corrente c ON c.descricao = cl.nm_nome
+                    WHERE 
+                        cl.limite > 0
+                    GROUP BY 
+                        cl.nm_nome, cl.limite
+                ) AS subconsulta;
+            ";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Retornar o resultado (saldo total)
+            return $stmt->fetch(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception('Erro ao buscar o saldo total: ' . $e->getMessage());
+        }
+    }
+
+
+
+    public static function limeteAlunos($db)
+    {
+        try {
+            // Consulta para selecionar todos os dados com limite maior que 0
+            $sql = "SELECT * FROM cliente WHERE limite > :limite";
+
+            // Preparar a consulta
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro nomeado
+            $stmt->bindValue(':limite', 0, \PDO::PARAM_INT);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Obter os resultados
+            return $stmt->fetchAll(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            // Lançar exceção com mensagem de erro
+            throw new \Exception('Erro no banco de dados: ' . $e->getMessage());
+        }
+    }
+
+
     public static function CreditoAluno($conn, $idCliente)
     {
         try {
