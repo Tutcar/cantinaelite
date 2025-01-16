@@ -231,26 +231,25 @@ class Flash
     public static function limeteSaldos($db)
     {
         try {
-            // Consulta SQL para calcular o saldo, apenas para clientes com limite maior que zero
+            // Consulta SQL para calcular o saldo, incluindo clientes sem transações
             $sql = "
-            SELECT 
-                c.descricao,
-                cl.nm_nome AS nome,
-                cl.limite,
-                SUM(c.valor_credito) AS valor_credito,
-                SUM(c.valor_debito) AS valor_debito,
-                (cl.limite + SUM(c.valor_credito) - SUM(c.valor_debito)) AS saldo
-            FROM 
-                corrente c
-            JOIN 
-                cliente cl ON c.descricao = cl.nm_nome
-            WHERE 
-                cl.limite > 0
-            GROUP BY 
-                c.descricao, cl.nm_nome, cl.limite
-            ORDER BY 
-                c.descricao;
-        ";
+        SELECT 
+            cl.nm_nome AS nome,
+            cl.limite,
+            COALESCE(SUM(c.valor_credito), 0) AS valor_credito,
+            COALESCE(SUM(c.valor_debito), 0) AS valor_debito,
+            (cl.limite + COALESCE(SUM(c.valor_credito), 0) - COALESCE(SUM(c.valor_debito), 0)) AS saldo
+        FROM 
+            cliente cl
+        LEFT JOIN 
+            corrente c ON cl.nm_nome = c.descricao
+        WHERE 
+            cl.limite > 0
+        GROUP BY 
+            cl.nm_nome, cl.limite
+        ORDER BY 
+            cl.nm_nome;
+    ";
 
             // Preparar a consulta
             $stmt = $db->prepare($sql);
@@ -265,26 +264,45 @@ class Flash
             throw new \Exception('Erro ao buscar saldos: ' . $e->getMessage());
         }
     }
+
     public static function saldoTotal($db)
     {
         try {
-            // Consulta SQL para calcular o saldo total, usando subconsulta para calcular os saldos de cada cliente
+            // Consulta SQL revisada para calcular o saldo total, evitando duplicidade nos valores
             $sql = "
+            SELECT 
+                SUM(saldo_cliente) AS saldo_total
+            FROM (
                 SELECT 
-                    SUM(saldo_cliente) AS saldo_total
-                FROM (
+                    cl.limite + 
+                    IFNULL(creditos.total_credito, 0) - 
+                    IFNULL(debitos.total_debito, 0) AS saldo_cliente
+                FROM 
+                    cliente cl
+                LEFT JOIN (
                     SELECT 
-                        cl.limite + IFNULL(SUM(c.valor_credito), 0) - IFNULL(SUM(c.valor_debito), 0) AS saldo_cliente
+                        descricao, 
+                        SUM(valor_credito) AS total_credito 
                     FROM 
-                        cliente cl
-                    LEFT JOIN 
-                        corrente c ON c.descricao = cl.nm_nome
-                    WHERE 
-                        cl.limite > 0
+                        corrente 
                     GROUP BY 
-                        cl.nm_nome, cl.limite
-                ) AS subconsulta;
-            ";
+                        descricao
+                ) AS creditos ON creditos.descricao = cl.nm_nome
+                LEFT JOIN (
+                    SELECT 
+                        descricao, 
+                        SUM(valor_debito) AS total_debito 
+                    FROM 
+                        corrente 
+                    GROUP BY 
+                        descricao
+                ) AS debitos ON debitos.descricao = cl.nm_nome
+                WHERE 
+                    cl.limite > 0
+                GROUP BY 
+                    cl.nm_nome, cl.limite
+            ) AS subconsulta;
+        ";
 
             // Preparar a consulta
             $stmt = $db->prepare($sql);
@@ -299,6 +317,7 @@ class Flash
             throw new \Exception('Erro ao buscar o saldo total: ' . $e->getMessage());
         }
     }
+
 
 
 

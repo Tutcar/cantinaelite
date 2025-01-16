@@ -75,7 +75,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
         const agora = new Date();
         const horas = agora.getHours();
         const minutos = agora.getMinutes();
-        const horaLimite = 10;
+        const horaLimite = 21;
         const minutoLimite = 30;
         const botaoPedirMarmitex = document.getElementById('marmitex');
 
@@ -448,6 +448,10 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                                     <input type="radio" name="preco_<?php echo $prato->id_produtos; ?>" value="<?php echo $prato->venda; ?>">
                                     <span class="ptpq">Marmitex P: &nbsp;<span class="ptpq2">R$ <?php echo moedaBr($prato->venda); ?></span></span>
                                 </label>
+                            </div>
+                            <div class="col-3"><br />
+                                <span class="ptrg">Observações:</span>
+                                <textarea name="obs_cardapio" style="width: 100%; height: 100px;" maxlength="200"></textarea>
                             </div>
                             <div class="col-3 div-sp">
                                 <button id="marmitex" onclick="adicionarAoCarrinho(<?php echo $prato->id_produtos; ?>, 'cardapio', 'Prato -&nbsp;<?php echo $prato->descricao ?>', getSelectedPrice(<?php echo $prato->id_produtos; ?>), event); return false;" class="botao-personalizado">Pedir Marmitex</button>
