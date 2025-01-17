@@ -245,6 +245,7 @@ class HomepageController extends Controller
          $texto .= "Nr. Pedido: {$nrPedido}\n";
          foreach ($carrinho as $item) {
             $id = $item['id'];
+            $observacao = $item['observacao'];
             $Cli_p = Service::get("pedidoCli_p", "nr_pedido", $nrPedido);
             $produtos = new \stdClass();
             $source = array('.', ',');
@@ -258,6 +259,7 @@ class HomepageController extends Controller
             $pedidos->cli_p = $Cli_p->cliente;
             $pedidos->data_ab_pedido = $Cli_p->data_ab_pedido;
             $pedidos->nome = $produtos->nome;
+            $pedidos->obs_cardapio = $observacao;
             $pedidos->quant = 1;
             //se for por saldo
             if ($_GET['saldo'] == 1) {

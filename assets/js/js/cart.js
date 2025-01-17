@@ -43,15 +43,23 @@ function getSelectedPrice(idProduto) {
 }
 
 // Função para adicionar um item ao carrinho
-function adicionarAoCarrinho(idProduto, categoriaProduto, nomeProduto, precoProduto, event) {
+function adicionarAoCarrinho(idProduto, categoriaProduto, nomeProduto, precoProduto, event, observacao) {
+    
     event.preventDefault();
     precoProduto = parseFloat(precoProduto.toString().replace(',', '.'));
+
+    // Verifica se há uma observação e a concatena ao nome do produto
+    if (observacao && observacao.trim() !== '') {
+        nomeProduto += ` (Observação: ${observacao.trim()})`;
+    }
+
     if (precoProduto > 0) {
         carrinho.push({
             id: idProduto,
             categoria: categoriaProduto,
-            nome: nomeProduto,
-            preco: precoProduto
+            nome: nomeProduto, // Nome do produto com observação (se existir)
+            preco: precoProduto,
+            observacao: observacao // Armazena a observação separadamente, caso necessário
         });
 
         total += precoProduto;
@@ -62,6 +70,8 @@ function adicionarAoCarrinho(idProduto, categoriaProduto, nomeProduto, precoProd
         alert('Por favor, selecione um preço válido.');
     }
 }
+
+
 
 
 // Função para remover um item do carrinho

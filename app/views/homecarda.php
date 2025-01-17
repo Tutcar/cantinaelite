@@ -451,10 +451,43 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                             </div>
                             <div class="col-3"><br />
                                 <span class="ptrg">Observações:</span>
-                                <textarea name="obs_cardapio" style="width: 100%; height: 100px;" maxlength="200"></textarea>
+                                <textarea
+                                    id="obs_cardapio_<?php echo $prato->id_produtos; ?>"
+                                    name="obs_cardapio"
+                                    style="width: 100%; height: 100px;"
+                                    maxlength="200"
+                                    oninput="updateCounter(this)">
+</textarea>
+                                <small>
+                                    <span id="charCount_<?php echo $prato->id_produtos; ?>">200</span> caracteres restantes
+                                </small>
+
+                                <script>
+                                    function updateCounter(textarea) {
+                                        const maxLength = 200; // Defina o limite máximo de caracteres
+                                        const charCountId = `charCount_${textarea.id.split('_')[2]}`; // Pegue o ID do contador de forma dinâmica
+                                        const charCount = document.getElementById(charCountId);
+
+                                        if (charCount) {
+                                            charCount.textContent = maxLength - textarea.value.length;
+                                        }
+                                    }
+                                </script>
                             </div>
                             <div class="col-3 div-sp">
-                                <button id="marmitex" onclick="adicionarAoCarrinho(<?php echo $prato->id_produtos; ?>, 'cardapio', 'Prato -&nbsp;<?php echo $prato->descricao ?>', getSelectedPrice(<?php echo $prato->id_produtos; ?>), event); return false;" class="botao-personalizado">Pedir Marmitex</button>
+                                <button
+                                    id="marmitex"
+                                    onclick="adicionarAoCarrinho(
+        <?php echo $prato->id_produtos; ?>, 
+        'cardapio', 
+        'Prato - <?php echo $prato->descricao ?>', 
+        getSelectedPrice(<?php echo $prato->id_produtos; ?>), 
+        event, 
+        document.getElementById('obs_cardapio_<?php echo $prato->id_produtos; ?>').value
+    ); return false;"
+                                    class="botao-personalizado">
+                                    Pedir Marmitex
+                                </button>
                             </div>
                         </div>
                     </div>

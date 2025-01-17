@@ -44,6 +44,7 @@ function getSelectedPrice(idProduto) {
 
 // Função para adicionar um item ao carrinho
 function adicionarAoCarrinho(idProduto, categoriaProduto, nomeProduto, precoProduto, event) {
+    
     event.preventDefault();
     precoProduto = parseFloat(precoProduto.toString().replace(',', '.'));
     if (precoProduto > 0) {
