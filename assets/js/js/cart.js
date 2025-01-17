@@ -44,15 +44,15 @@ function getSelectedPrice(idProduto) {
 
 // Função para adicionar um item ao carrinho
 function adicionarAoCarrinho(idProduto, categoriaProduto, nomeProduto, precoProduto, event, observacao) {
-    
     event.preventDefault();
     precoProduto = parseFloat(precoProduto.toString().replace(',', '.'));
 
     // Verifica se há uma observação e a concatena ao nome do produto
     if (observacao && observacao.trim() !== '') {
         nomeProduto += ` (Observação: ${observacao.trim()})`;
+    }else{
+        observacao = ` (Completo)`;
     }
-
     if (precoProduto > 0) {
         carrinho.push({
             id: idProduto,

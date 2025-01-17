@@ -11,6 +11,7 @@ use app\models\pedidos\Pedidos;
 use app\models\service\PedidosService;
 use app\util\UtilService;
 use Exception;
+use FPDF;
 
 class PedidosController extends Controller
 {
@@ -135,6 +136,53 @@ class PedidosController extends Controller
         } else {
             echo json_encode(['erro' => 'Itens não encontrados']);
         }
+    }
+    public function marmitex()
+    {
+
+        $marmitexDia = new Pedidos();
+        $dados["marmitexs"] = $marmitexDia->marmitexDia($this->db);
+        $dados["marmitexsContar"] = $marmitexDia->marmitexDiaContar($this->db);
+        $dados["view"]  = "pedidos/marmitex";
+        $this->load("template", $dados);
+    }
+    public function marmitexImp()
+    {
+        $marmitexDia = new Pedidos();
+        $marmitexs = $marmitexDia->marmitexDiaImp($this->db);
+        $marmitexsContar = $marmitexDia->marmitexDiaContar($this->db);
+
+
+        // Criação do PDF
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 12);
+
+        // Título
+        $pdf->Cell(190, 10, 'Relatorio de Marmitex - ' . date('d/m/Y'), 1, 1, 'C');
+
+        // Quantidade total
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(190, 10, 'Quantidade Marmitex: ' . $marmitexsContar['total_registros'], 1, 1, 'L');
+
+        // Cabeçalho da tabela
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(15, 10, 'Pedido', 1, 0, 'L');
+        $pdf->Cell(50, 10, 'Cliente', 1, 0, 'L');
+        $pdf->Cell(20, 10, 'Prato', 1, 0, 'L');
+        $pdf->Cell(105, 10, 'Obs.', 1, 1, 'L');
+
+        // Dados da tabela
+        $pdf->SetFont('Arial', '', 10);
+        foreach ($marmitexs as $marmitex) {
+            $pdf->Cell(15, 10, $marmitex->id_pedidos, 1, 0, 'L');
+            $pdf->Cell(50, 10, mb_convert_encoding($marmitex->cli_p, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(20, 10, mb_convert_encoding($marmitex->nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(105, 10, mb_convert_encoding($marmitex->obs_cardapio, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L');
+        }
+
+        // Saída do PDF
+        $pdf->Output('D', 'relatorio_marmitex.pdf');
     }
     public function filtro()
     {

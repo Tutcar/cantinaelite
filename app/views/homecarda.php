@@ -454,17 +454,17 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                                 <textarea
                                     id="obs_cardapio_<?php echo $prato->id_produtos; ?>"
                                     name="obs_cardapio"
-                                    style="width: 100%; height: 100px;"
-                                    maxlength="200"
+                                    style="width: 100%; height: 50px;"
+                                    maxlength="40"
                                     oninput="updateCounter(this)">
 </textarea>
                                 <small>
-                                    <span id="charCount_<?php echo $prato->id_produtos; ?>">200</span> caracteres restantes
+                                    <span id="charCount_<?php echo $prato->id_produtos; ?>">40</span> caracteres restantes
                                 </small>
 
                                 <script>
                                     function updateCounter(textarea) {
-                                        const maxLength = 200; // Defina o limite máximo de caracteres
+                                        const maxLength = 40; // Defina o limite máximo de caracteres
                                         const charCountId = `charCount_${textarea.id.split('_')[2]}`; // Pegue o ID do contador de forma dinâmica
                                         const charCount = document.getElementById(charCountId);
 
@@ -518,7 +518,7 @@ $mostrarModal = !empty($qrcodeUrl); // Verifica se há um valor para mostrar o m
                         <td><img style="width: 40px; height: 40px" src="<?php echo URL_IMAGEM . $bebida->foto ?>"></td>
                         <td><?php echo $bebida->descricao ?></td>
                         <td><?php echo moedaBR($bebida->venda) ?></td>
-                        <td><button onclick="adicionarAoCarrinho(<?php echo $bebida->id_produtos ?>,'produtos','<?php echo $bebida->descricao ?>', <?php echo $bebida->venda; ?>, event); return false;" class="botao-personalizado2">Pedir</button></td>
+                        <td><button onclick="adicionarAoCarrinho(<?php echo $bebida->id_produtos ?>,'produtos','<?php echo $bebida->descricao ?>', <?php echo $bebida->venda; ?>, event, '.'); return false;" class="botao-personalizado2">Pedir</button></td>
                     </tr>
                 </tbody>
             <?php } ?>

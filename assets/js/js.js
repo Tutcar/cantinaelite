@@ -72,7 +72,7 @@ function pedidoVer(obj) {
 			} else {
 				var modalContent = '<h3>Itens do Pedido nr:' + id + '</h3>';
 				modalContent += '<table border="1" width="100%">';
-				modalContent += '<thead><tr><th>Produto</th><th>Quant.</th><th>Valor</th></tr></thead>';
+				modalContent += '<thead><tr><th>Produto</th><th>Observação</th><th>Quant.</th><th>Valor</th></tr></thead>';
 				modalContent += '<tbody>';
 		
 				// Itera sobre o array de itens e exibe os campos específicos
@@ -84,6 +84,7 @@ function pedidoVer(obj) {
 					if (item.nome && item.quant && item.valor) {
 						modalContent += '<tr class="' + rowClass + '">';
 						modalContent += '<td>' + item.nome + '</td>';
+						modalContent += '<td>' + item.obs_cardapio + '</td>';
 						modalContent += '<td style="text-align: center;">' + item.quant + '</td>';
 						modalContent += '<td style="text-align: right;">' + new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.valor) + '</td>';
 						modalContent += '</tr>';

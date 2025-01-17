@@ -243,9 +243,12 @@ class HomepageController extends Controller
          // Itera sobre os itens do carrinho e grava no banco de dados
          $texto = "";
          $texto .= "Nr. Pedido: {$nrPedido}\n";
+         $observacao = "";
          foreach ($carrinho as $item) {
             $id = $item['id'];
-            $observacao = $item['observacao'];
+            if ($item['observacao'] !== '') {
+               $observacao = $item['observacao'];
+            }
             $Cli_p = Service::get("pedidoCli_p", "nr_pedido", $nrPedido);
             $produtos = new \stdClass();
             $source = array('.', ',');

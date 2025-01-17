@@ -13,6 +13,9 @@
                         <li><a href="<?php echo URL_BASE . "user/edit/" . $_SESSION[SESSION_LOGIN]->id_user ?>"><i class="ico usuario"></i>Usuário: <?php echo (isset($_SESSION[SESSION_LOGIN]->login_cli)) ? $_SESSION[SESSION_LOGIN]->login_cli : ""; ?></a></li>
                     <?php endif; ?>
                     <?php if ($_SESSION["verifCx"] > 0) : ?>
+                        <li><a href="<?php echo URL_BASE . "pedidos/marmitex" ?>"><i class="ico sair"></i>Marmitex</a></li>
+                    <?php endif; ?>
+                    <?php if ($_SESSION["verifCx"] > 0) : ?>
                         <li><a href="<?php echo URL_BASE . "compromisso/pedidosDia" ?>"><i class="ico sair"></i>Pedidos</a></li>
                     <?php endif; ?>
                     <?php if ($_SESSION["verifCx"] > 0) : ?>
@@ -37,6 +40,9 @@
                 <?php endif; ?>
                 <?php if ($_SESSION[SESSION_LOGIN]->id_user <> 1) : ?>
                     <li><a href="#"></i>Usuário: <?php echo (isset($_SESSION[SESSION_LOGIN]->login_cli)) ? $_SESSION[SESSION_LOGIN]->login_cli : ""; ?></a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION["verifCx"] > 0) : ?>
+                    <li><a href="<?php echo URL_BASE . "pedidos/marmitex" ?>"><i class="ico sair"></i>Marmitex</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION["verifCx"] > 0) : ?>
                     <li><a href="<?php echo URL_BASE . "compromisso/pedidosDia" ?>"><i class="ico sair"></i>Pedidos</a></li>

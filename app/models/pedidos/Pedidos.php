@@ -30,6 +30,106 @@ class Pedidos
         }
         return false;
     }
+    public function marmitexDia($db)
+    {
+        try {
+            // Query SQL ajustada para verificar obs_cardapio diferente de 'N'
+            $sql = "SELECT * FROM pedido WHERE obs_cardapio != :obs_cardapio AND data_encomendas = :data_encomendas AND id_produto != :id_produto";
+            $stmt = $db->prepare($sql);
+
+            // Valor para obs_cardapio ('N')
+            $stmt->bindValue(':obs_cardapio', '.', \PDO::PARAM_STR);
+            // Valor para obs_cardapio ('N')
+            $stmt->bindValue(':id_produto', '', \PDO::PARAM_STR);
+
+            // Data atual
+            $dataAtual = date('Y-m-d');
+            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // Retorna a quantidade de registros encontrados
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return false;
+    }
+    public function marmitexDiaImp($db)
+    {
+        try {
+            // Query SQL ajustada
+            $sql = "SELECT * 
+                FROM pedido 
+                WHERE obs_cardapio != :obs_cardapio 
+                  AND data_encomendas = :data_encomendas 
+                  AND id_produto IS NOT NULL";
+
+            $stmt = $db->prepare($sql);
+
+            // Define os valores para os parâmetros
+            $stmt->bindValue(':obs_cardapio', '.', \PDO::PARAM_STR); // Verifica registros diferentes de 'N'
+
+            // Data atual
+            $dataAtual = date('Y-m-d');
+            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // Retorna os registros encontrados como objetos
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return false;
+    }
+
+    public function marmitexDiaContar($db)
+    {
+        try {
+            // Query SQL ajustada para verificar obs_cardapio diferente de 'N'
+            // Inclui contagem e soma do valor
+            $sql = "SELECT COUNT(*) as total_registros, SUM(valor) as soma_total 
+                FROM pedido 
+                WHERE obs_cardapio != :obs_cardapio 
+                AND data_encomendas = :data_encomendas 
+                AND id_produto != :id_produto";
+
+            $stmt = $db->prepare($sql);
+
+            // Valor para obs_cardapio ('N')
+            $stmt->bindValue(':obs_cardapio', '.', \PDO::PARAM_STR);
+
+            // Valor para id_produto
+            $stmt->bindValue(':id_produto', '', \PDO::PARAM_STR);
+
+            // Data atual
+            $dataAtual = date('Y-m-d');
+            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // Obtendo o resultado
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+            // Retorna um array com a quantidade de registros e soma do valor
+            if ($result) {
+                return [
+                    'total_registros' => $result->total_registros,
+                    'soma_total' => $result->soma_total
+                ];
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return false;
+    }
+
+
+
     public function pedidosImp($pago = null)
     {
         if ($pago !== null) {
