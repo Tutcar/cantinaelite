@@ -2,11 +2,38 @@
 
 namespace app\core;
 
+use DateTime;
 use PDO;
 use PDOException;
 
 class Flash
 {
+    public static function calcularSemanaCiclica($data = 'today') //'today'
+    {
+        // Data inicial que corresponde ao início do ciclo de 5 semanas
+        $dataInicial = new DateTime('2024-12-29'); // Ajuste aqui para o início real do ciclo
+        $dataAtual = new DateTime($data);
+
+        // Calcula a diferença em dias entre a data inicial e a data atual
+        $diferencaDias = $dataInicial->diff($dataAtual)->days;
+
+        // Calcula o dia relativo dentro do ciclo de 5 semanas
+        $diaNoCiclo = $diferencaDias % (7 * 5); // Total de dias no ciclo (35 dias)
+
+        // Calcula a semana dentro do ciclo (1 a 5)
+        $semanaCiclica = (int)($diaNoCiclo / 7) + 1;
+
+        // Logs para depuração
+        // echo "Data inicial: {$dataInicial->format('Y-m-d')}\n";
+        // echo "Data atual: {$dataAtual->format('Y-m-d')}\n";
+        // echo "Diferença em dias: $diferencaDias\n";
+        // echo "Dia no ciclo: $diaNoCiclo\n";
+        // echo "Semana cíclica calculada: $semanaCiclica\n";
+
+        return $semanaCiclica;
+    }
+
+
     public static function vendaAno($pdo, $dataCompleta = null)
     {
         try {

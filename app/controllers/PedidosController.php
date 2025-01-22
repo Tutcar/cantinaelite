@@ -168,17 +168,17 @@ class PedidosController extends Controller
         // Cabeçalho da tabela
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(15, 10, 'Pedido', 1, 0, 'L');
-        $pdf->Cell(50, 10, 'Cliente', 1, 0, 'L');
-        $pdf->Cell(20, 10, 'Prato', 1, 0, 'L');
-        $pdf->Cell(105, 10, 'Obs.', 1, 1, 'L');
+        $pdf->Cell(40, 10, 'Cliente', 1, 0, 'L');
+        $pdf->Cell(35, 10, 'Prato', 1, 0, 'L');
+        $pdf->Cell(100, 10, 'Obs.', 1, 1, 'L');
 
         // Dados da tabela
         $pdf->SetFont('Arial', '', 10);
         foreach ($marmitexs as $marmitex) {
             $pdf->Cell(15, 10, $marmitex->id_pedidos, 1, 0, 'L');
-            $pdf->Cell(50, 10, mb_convert_encoding($marmitex->cli_p, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(20, 10, mb_convert_encoding($marmitex->nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(105, 10, mb_convert_encoding($marmitex->obs_cardapio, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L');
+            $pdf->Cell(40, 10, mb_convert_encoding($marmitex->cli_p, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(35, 10, mb_convert_encoding($marmitex->nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(100, 10, mb_convert_encoding($marmitex->obs_cardapio, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L');
         }
 
         // Saída do PDF

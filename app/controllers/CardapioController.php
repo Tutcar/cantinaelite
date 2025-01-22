@@ -82,10 +82,11 @@ class CardapioController extends Controller
             $produtos->id_produtos = null;
         }
         $produtos->quant = 0;
-        $produtos->nome = rmvCarctEsp($_POST["nome"]);
+        $produtos->nome = ucfirst(mb_strtolower(rmvCarctEsp($_POST["nome"]), "UTF-8"));
         $produtos->dia = $_POST["dia"];
+        $produtos->semana_p = $_POST["semana_p"];
         $produtos->categorias = "prato";
-        $produtos->descricao = rmvCarctEsp($_POST["descricao"]);
+        $produtos->descricao = ucfirst(mb_strtolower(rmvCarctEsp($_POST["descricao"]), "UTF-8"));
         $produtos->tipo = "Produção";
         $produtos->custo = $_POST["custo"];
         $get_venda = $_POST["venda"];

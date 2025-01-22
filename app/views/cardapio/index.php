@@ -2,7 +2,7 @@
     var coluOr = 1;
 </script>
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Lista dos cardapio</div>
+    <div class="thead"><i class="ico lista"></i> Lista do cardapio</div>
     <div class="base-lista">
         <div>
             <div class="rows">
@@ -42,6 +42,7 @@
                         <th align="left">Foto</th>
                         <th align="center">Nome</th>
                         <th align="center">Dia Semana</th>
+                        <th align="center">Semana</th>
                         <th align="center">Descrição</th>
                         <th hidden align="left">ID</th>
                         <th align="right">Venda</th>
@@ -65,6 +66,7 @@
                             <td><img style="width: 50px; height: 50px" src="<?php echo URL_IMAGEM . $imagem ?>"></td>
                             <td><?php echo substr($cardapio->nome, 0, 20) ?></td>
                             <td><?php echo substr($diasemana, 0, 20) ?></td>
+                            <td><?php echo $cardapio->semana_p ?></td>
                             <td><?php echo substr($cardapio->descricao, 0, 20) ?></td>
                             <td hidden><?php echo $cardapio->id_cardapio ?></td>
                             <td align="right"><?php echo moedaBR($cardapio->venda) ?></td>

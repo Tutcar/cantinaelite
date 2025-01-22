@@ -78,9 +78,10 @@ class HomepageController extends Controller
       $dados["bebidas"] = $filtrados = array_filter($produtos, function ($produto) use ($categoria) {
          return $produto->categorias === $categoria;
       });
+      $semana_p = Flash::calcularSemanaCiclica();
       $dados["dia"] = diasemanaExtenso(date(hoje()));
-      $dados["pratos"] = Service::get("produtos", "dia", $diaSemanaNumero = date('w', strtotime(hoje())), true);
-      $dados["pratoss"] = Service::get("produtos", "categorias", "prato", true);
+      $dados["pratos"] = Service::get2("produtos", "dia", $diaSemanaNumero = date('w', strtotime(hoje())), "semana_p", $semana_p, true);
+      $dados["pratoss"] = Service::get2("produtos", "categorias", "prato", "semana_p", $semana_p, true);
       // Loop para processar cada dia
       foreach ($dados["pratoss"] as $dia) {
          if (array_key_exists($dia->dia, $this->diasDaSemana)) {

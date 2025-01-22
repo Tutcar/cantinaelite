@@ -72,6 +72,19 @@
                                 </div>
                                 <div class="rows">
                                     <div class="col-12">
+                                        <label>Semana</label>
+                                        <select name="semana_p" class="form-campo" required>
+                                            <option value="1" <?= (isset($cardapio->semana_p) && $cardapio->semana_p == '1') ? 'selected' : '' ?>>Semana 1</option>
+                                            <option value="2" <?= (isset($cardapio->semana_p) && $cardapio->semana_p == '2') ? 'selected' : '' ?>>Semana 2</option>
+                                            <option value="3" <?= (isset($cardapio->semana_p) && $cardapio->semana_p == '3') ? 'selected' : '' ?>>Semana 3</option>
+                                            <option value="4" <?= (isset($cardapio->semana_p) && $cardapio->semana_p == '4') ? 'selected' : '' ?>>Semana 4</option>
+                                            <option value="5" <?= (isset($cardapio->semana_p) && $cardapio->semana_p == '5') ? 'selected' : '' ?>>Semana 5</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="rows">
+                                    <div class="col-12">
                                         <label>Descrição</label>
                                         <input name="descricao"
                                             value="<?php echo isset($cardapio->descricao) ? $cardapio->descricao : null ?>"

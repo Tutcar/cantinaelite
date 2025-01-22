@@ -3,13 +3,15 @@
 </script>
 
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Quantidade Marmitex: <?php echo $marmitexsContar["total_registros"]; ?> Valor: <?php echo moedaBr($marmitexsContar["soma_total"]); ?></div>
+    <div class="thead"><i class="ico lista"></i> Quantidade Marmitex: <?php echo ($marmitexsContar["total_registros"] > 0) ? $marmitexsContar["total_registros"] : 0; ?> Valor: <?php echo ($marmitexsContar["soma_total"] > 0) ? moedaBr($marmitexsContar["soma_total"]) : moedaBr(0); ?></div>
     <div class="base-lista">
         <div class="rows">
             <div class="text-end d-flex col-12">
                 <a title="Voltar" href="<?php echo URL_BASE . "painel" ?>"><img style="width: 30px; height: 30px"
                         src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>&nbsp;
-                <a title="Imprimir relatorio" href="<?php echo URL_BASE . "Pedidos/marmitexImp" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . 'imprimirped.png'; ?>"></a>
+                <?php if ($marmitexsContar["total_registros"] > 0) : ?>
+                    <a title="Imprimir relatorio" href="<?php echo URL_BASE . "Pedidos/marmitexImp" ?>" class="d-inline-block mb-2"><img style="width: 30px; height: 30px" src="<?php echo URL_IMAGEM . 'imprimirped.png'; ?>"></a>
+                <?php endif; ?>
             </div>
 
         </div>

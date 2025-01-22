@@ -34,7 +34,7 @@ class Pedidos
     {
         try {
             // Query SQL ajustada para verificar obs_cardapio diferente de 'N'
-            $sql = "SELECT * FROM pedido WHERE obs_cardapio != :obs_cardapio AND data_encomendas = :data_encomendas AND id_produto != :id_produto";
+            $sql = "SELECT * FROM pedido WHERE obs_cardapio != :obs_cardapio AND data_ab_pedido = :data_ab_pedido AND id_produto != :id_produto";
             $stmt = $db->prepare($sql);
 
             // Valor para obs_cardapio ('N')
@@ -44,7 +44,7 @@ class Pedidos
 
             // Data atual
             $dataAtual = date('Y-m-d');
-            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+            $stmt->bindValue(':data_ab_pedido', $dataAtual, \PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -63,7 +63,7 @@ class Pedidos
             $sql = "SELECT * 
                 FROM pedido 
                 WHERE obs_cardapio != :obs_cardapio 
-                  AND data_encomendas = :data_encomendas 
+                  AND data_ab_pedido = :data_ab_pedido 
                   AND id_produto IS NOT NULL";
 
             $stmt = $db->prepare($sql);
@@ -73,7 +73,7 @@ class Pedidos
 
             // Data atual
             $dataAtual = date('Y-m-d');
-            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+            $stmt->bindValue(':data_ab_pedido', $dataAtual, \PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -94,7 +94,7 @@ class Pedidos
             $sql = "SELECT COUNT(*) as total_registros, SUM(valor) as soma_total 
                 FROM pedido 
                 WHERE obs_cardapio != :obs_cardapio 
-                AND data_encomendas = :data_encomendas 
+                AND data_ab_pedido = :data_ab_pedido 
                 AND id_produto != :id_produto";
 
             $stmt = $db->prepare($sql);
@@ -107,7 +107,7 @@ class Pedidos
 
             // Data atual
             $dataAtual = date('Y-m-d');
-            $stmt->bindValue(':data_encomendas', $dataAtual, \PDO::PARAM_STR);
+            $stmt->bindValue(':data_ab_pedido', $dataAtual, \PDO::PARAM_STR);
 
             $stmt->execute();
 
