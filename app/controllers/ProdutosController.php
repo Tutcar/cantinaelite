@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\models\service\Service;
 use app\core\Conexao;
 use app\core\Flash;
+use app\models\pedidos\Pedidos;
 use app\models\service\ProdutosService;
 use app\util\UtilService;
 
@@ -72,6 +73,7 @@ class ProdutosController extends Controller
         } else {
             $produtos->id_produtos = null;
         }
+
         $produtos->quant = $_POST["quant"];
         $produtos->nome = rmvCarctEsp($_POST["nome"]);
         $produtos->categorias = $_POST["categorias"];
@@ -81,9 +83,15 @@ class ProdutosController extends Controller
         $produtos->custo = str_replace($source, $replace, $get_custo);
         $get_venda = $_POST["venda"];
         $produtos->venda = str_replace($source, $replace, $get_venda);
-
-
-
+        if ((int)$produtos->id_produtos === 154 || (int)$produtos->id_produtos === 155) {
+            if (isset($produtos->venda)) {
+                $pedidos = new Pedidos();
+                $pedidos->precosMarmitex($this->db, $produtos->id_produtos, $produtos->venda);
+            } else {
+                // Log ou tratamento de erro caso $produtos->venda não esteja definido
+                error_log("Erro: O campo 'venda' não está definido para o produto ID {$produtos->id_produtos}");
+            }
+        }
 
         Flash::setForm($produtos);
         if (ProdutosService::salvar($produtos, $this->campo, $this->tabela)) {

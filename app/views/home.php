@@ -103,7 +103,7 @@
 															data-quantPd="<?php echo $item->quant ?>"
 															data-idPd="<?php echo $item->id_pedidos ?>"
 															data-nm_nomePd="<?php echo $item->nome ?>"><img
-																style="width: 15px; height: 15px"
+																style="width: 20px; height: 20px"
 																src="<?php echo URL_IMAGEM . "checar.png"; ?>"></a>
 														<a href="javascript:;" onclick="excluir3(this)" data-entidade="pedidos" data-id="<?php echo $item->id_pedidos ?>"><img style="width: 20px; height: 20px" src="<?php echo URL_IMAGEM . "del.png"; ?>"></a>
 													</td>
@@ -302,12 +302,16 @@
 					<input class="form-campo" id="nomePd" name="nome" type="text" value="">
 				</div>
 				<div class="col-12">
-					<span class="label text-label">Quantidade</span>
+					<span class="label text-label">Quantidades</span>
 					<input class="form-campo" id="quantPd" name="quant" type="number" value="">
 				</div>
 				<div class="col-12 ocDiv">
 					<span class="label text-label">Valor Unitario</span>
 					<input class="form-campo" id="valorPd" name="valor2" type="text" value="">
+				</div>
+				<div class="col-12">
+					<span class="label text-label">Obs.Marmitex</span>
+					<input class="form-campo" id="obs_cardapioPd" name="obs_cardapio" type="text" value="">
 				</div>
 				<div class="col-12 mt-3">
 					<input id="alteraPedido2" type="submit" class="btn">

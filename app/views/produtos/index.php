@@ -1,5 +1,5 @@
 <script>
-    var coluOr = 1;
+    var coluOr = 2;
 </script>
 <section class="caixa">
     <div class="thead"><i class="ico lista"></i> Lista dos Produtos</div>

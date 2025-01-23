@@ -96,7 +96,7 @@
                                         <label>Prato Pequeno</label>
                                         <input id="venda" name="venda"
                                             value="<?php echo isset($cardapio->venda) ? moedaBr($cardapio->venda) : moedaBr(0) ?>"
-                                            type="text" placeholder="Valor prato pequeno" class="form-campo">
+                                            type="text" placeholder="Valor prato pequeno" class="form-campo" readonly>
                                     </div>
                                 </div>
                                 <div class="rows">
@@ -104,7 +104,7 @@
                                         <label>Prato Grande</label>
                                         <input id="venda_g" name="venda_g"
                                             value="<?php echo isset($cardapio->venda_g) ? moedaBr($cardapio->venda_g) : moedaBr(0) ?>"
-                                            type="text" placeholder="Valor prato grande" class="form-campo">
+                                            type="text" placeholder="Valor prato grande" class="form-campo" readonly>
                                     </div>
                                 </div>
                                 <div class="rows">

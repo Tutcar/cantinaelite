@@ -163,22 +163,33 @@ class PedidosController extends Controller
 
         // Quantidade total
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(190, 10, 'Quantidade Marmitex: ' . $marmitexsContar['total_registros'], 1, 1, 'L');
+        $pdf->Cell(190, 10, 'Marmitex pequeno: ' . $marmitexsContar["total_pequeno"] . ' grande: ' . $marmitexsContar["total_grande"] .  ' Total: ' . $marmitexsContar["total_registros"], 1, 1, 'L');
 
         // Cabeçalho da tabela
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(15, 10, 'Pedido', 1, 0, 'L');
-        $pdf->Cell(40, 10, 'Cliente', 1, 0, 'L');
-        $pdf->Cell(35, 10, 'Prato', 1, 0, 'L');
-        $pdf->Cell(100, 10, 'Obs.', 1, 1, 'L');
+        $pdf->Cell(14, 10, 'Pedido', 1, 0, 'L');
+        $pdf->Cell(20, 10, 'Tamanho', 1, 0, 'L');
+        $pdf->Cell(46, 10, 'Cliente', 1, 0, 'L');
+        $pdf->Cell(110, 10, 'Obs.', 1, 1, 'L');
 
         // Dados da tabela
         $pdf->SetFont('Arial', '', 10);
         foreach ($marmitexs as $marmitex) {
-            $pdf->Cell(15, 10, $marmitex->id_pedidos, 1, 0, 'L');
-            $pdf->Cell(40, 10, mb_convert_encoding($marmitex->cli_p, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(35, 10, mb_convert_encoding($marmitex->nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(100, 10, mb_convert_encoding($marmitex->obs_cardapio, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L');
+
+            $nomeCompleto = $marmitex->cli_p;
+            $partesNome = explode(' ', $nomeCompleto);
+            $primeiroNome = $partesNome[0];
+            $ultimoNome = $partesNome[count($partesNome) - 1];
+            $cli_p = $primeiroNome . " " . $ultimoNome;
+
+            $tamanho = $marmitex->nome;
+            $tamanho1 = explode(' ', $tamanho);
+            $tamanhoM = $tamanho1[count($tamanho1) - 1];
+
+            $pdf->Cell(14, 10, $marmitex->id_pedidos, 1, 0, 'L');
+            $pdf->Cell(20, 10, mb_convert_encoding($tamanhoM, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(46, 10, mb_convert_encoding($cli_p, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(110, 10, mb_convert_encoding($marmitex->obs_cardapio, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L');
         }
 
         // Saída do PDF
@@ -230,7 +241,6 @@ class PedidosController extends Controller
             $pedidos->data_ab_pedido = date("Y-m-d H:i:s");
             $pedidos->id_caixaabre = $dados["idAbre"];
             $pedidos->id_cliente = $cliente ? $cliente->id_cliente : null;
-
             Flash::setForm($pedidos);
             if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
                 $dados["lista"] = Service::lista("pedido");
@@ -436,6 +446,9 @@ class PedidosController extends Controller
             echo json_encode('Produto com restrição de venda.');
             die();
         }
+        if ($pedidos->nome == "Marmitex grande" || $pedidos->nome == "Marmitex pequeno") {
+            $pedidos->obs_cardapio = "(Completo)";
+        }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             $tabela = "pedidoo";
@@ -636,6 +649,7 @@ class PedidosController extends Controller
         if ($pedidos->tipo_pg == "Pix") {
             $pedidos->pago = "N";
         }
+
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             if ($pedidos->tipo_pg <> "Pix") {
@@ -681,6 +695,11 @@ class PedidosController extends Controller
         $pedidos = new \stdClass();
         $pedidos->id_pedidos = $_POST["id_pedidos"];
         $pedidos->quant = $_POST["quant"];
+        if ($_POST["obs_cardapio"] != "") {
+            if ($_POST["nome"] == "Marmitex grande" || $_POST["nome"] == "Marmitex pequeno") {
+                $pedidos->obs_cardapio = $_POST["obs_cardapio"];
+            }
+        }
         Flash::setForm($pedidos);
         if (PedidosService::salvar($pedidos, $this->campo, $this->tabela)) {
             echo json_encode('Item alterado.');

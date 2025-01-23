@@ -53,7 +53,7 @@
                                         <label>Nome</label>
                                         <input name="nome"
                                             value="<?php echo isset($produtos->nome) ? $produtos->nome : null ?>"
-                                            type="text" placeholder="Insira um nome" class="form-campo">
+                                            type="text" placeholder="Insira um nome" class="form-campo" <?php echo ($produtos->id_produtos == 154 || $produtos->id_produtos == 155) ? "readonly" : "" ?>>
                                     </div>
                                 </div>
                                 <div class="rows">

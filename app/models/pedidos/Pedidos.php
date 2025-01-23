@@ -17,6 +17,25 @@ class Pedidos
     {
         $this->db = Conexao::getConexao();
     }
+    public function precosMarmitex($db, $id, $valor)
+    {
+        // Verifica qual campo deve ser atualizado
+        if ($id == 154) {
+            $query = "UPDATE produtos SET venda = :valor WHERE  categorias = :categorias";
+        } elseif ($id == 155) {
+            $query = "UPDATE produtos SET venda_g = :valor WHERE  categorias = :categorias";
+        } else {
+            return false; // ID inválido, nenhuma atualização necessária
+        }
+
+        // Prepara e executa a query
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':valor', $valor, PDO::PARAM_STR);
+        $stmt->bindValue(':categorias', 'prato', \PDO::PARAM_STR);
+
+        return $stmt->execute(); // Retorna true se a execução for bem-sucedida, false caso contrário
+    }
+
     public function novoPedido($db, $nrPedido)
     {
         try {
@@ -33,29 +52,34 @@ class Pedidos
     public function marmitexDia($db)
     {
         try {
-            // Query SQL ajustada para verificar obs_cardapio diferente de 'N'
-            $sql = "SELECT * FROM pedido WHERE obs_cardapio != :obs_cardapio AND data_ab_pedido = :data_ab_pedido AND id_produto != :id_produto";
+            // Consulta SQL para selecionar pedidos
+            $sql = "SELECT * FROM pedido 
+                WHERE obs_cardapio != :obs_cardapio 
+                  AND data_ab_pedido = :data_ab_pedido 
+                  AND id_produto != :id_produto 
+                ORDER BY cli_p";
+
             $stmt = $db->prepare($sql);
 
-            // Valor para obs_cardapio ('N')
-            $stmt->bindValue(':obs_cardapio', '.', \PDO::PARAM_STR);
-            // Valor para obs_cardapio ('N')
+            // Parâmetros com valores definidos
+            $stmt->bindValue(':obs_cardapio', 'N', \PDO::PARAM_STR);
             $stmt->bindValue(':id_produto', '', \PDO::PARAM_STR);
 
             // Data atual
             $dataAtual = date('Y-m-d');
             $stmt->bindValue(':data_ab_pedido', $dataAtual, \PDO::PARAM_STR);
 
+            // Executa a consulta
             $stmt->execute();
 
-            // Retorna a quantidade de registros encontrados
+            // Retorna todos os registros encontrados como objetos
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
+            // Lança exceção em caso de erro no banco
             throw new \Exception($e->getMessage());
         }
-
-        return false;
     }
+
     public function marmitexDiaImp($db)
     {
         try {
@@ -85,13 +109,50 @@ class Pedidos
 
         return false;
     }
+    public function mamitexPeqGde($db)
+    {
+        try {
+            // Query para encontrar o menor valor ("Marmitex pequeno") e o maior valor ("Marmitex grande")
+            $sql = "SELECT 
+                    MIN(venda) AS menor_valor, 
+                    MAX(venda) AS maior_valor 
+                FROM produtos 
+                WHERE categorias = :categorias";
+
+            $stmt = $db->prepare($sql);
+
+            // Bind do parâmetro para categoria
+            $stmt->bindValue(':categorias', 'pratodia', \PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // Obtendo os resultados
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+            // Retornando o menor e maior valores, caso existam
+            if ($result) {
+                return [
+                    'marmitex_pequeno' => $result->menor_valor,
+                    'marmitex_grande' => $result->maior_valor,
+                ];
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return false;
+    }
+
 
     public function marmitexDiaContar($db)
     {
         try {
-            // Query SQL ajustada para verificar obs_cardapio diferente de 'N'
-            // Inclui contagem e soma do valor
-            $sql = "SELECT COUNT(*) as total_registros, SUM(valor) as soma_total 
+            // Query SQL ajustada para incluir contagem separada por tipo de marmitex
+            $sql = "SELECT 
+                    COUNT(*) as total_registros, 
+                    SUM(valor) as soma_total,
+                    SUM(CASE WHEN nome = 'Marmitex pequeno' THEN 1 ELSE 0 END) as total_pequeno,
+                    SUM(CASE WHEN nome = 'Marmitex grande' THEN 1 ELSE 0 END) as total_grande
                 FROM pedido 
                 WHERE obs_cardapio != :obs_cardapio 
                 AND data_ab_pedido = :data_ab_pedido 
@@ -114,11 +175,13 @@ class Pedidos
             // Obtendo o resultado
             $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-            // Retorna um array com a quantidade de registros e soma do valor
+            // Retorna um array com os dados necessários
             if ($result) {
                 return [
                     'total_registros' => $result->total_registros,
-                    'soma_total' => $result->soma_total
+                    'soma_total' => $result->soma_total,
+                    'total_pequeno' => $result->total_pequeno,
+                    'total_grande' => $result->total_grande,
                 ];
             }
         } catch (\PDOException $e) {
@@ -127,6 +190,7 @@ class Pedidos
 
         return false;
     }
+
 
 
 

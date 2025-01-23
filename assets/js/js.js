@@ -668,11 +668,11 @@ $('#alteraPedido2').submit(function (e) {
 	var nome = $('#nomePd').val();
 	var quant = $('#quantPd').val();
 	var valor = $('#valorPd').val();
-
+	var obs_cardapio = $('#obs_cardapioPd').val();
 	$.ajax({
 		url: base_url + "Pedidos/alteraPedido2Json/",
 		type: 'POST',
-		data: { id_pedidos: id_pedidos, nome: nome, quant: quant, valor: valor },
+		data: { id_pedidos: id_pedidos, nome: nome, quant: quant, valor: valor, obs_cardapio: obs_cardapio },
 		dataType: 'json',
 		success: function (r) {
 			window.location.reload();
