@@ -9,6 +9,7 @@ use app\core\Conexao;
 use app\models\pagseguro\ReqPagSeguroCartao;
 use app\models\pagseguro\ReqPagSeguroCartaoCredito;
 use app\models\pagseguro\ReqPagSeguroPix;
+use app\models\pedidos\Pedidos;
 use app\models\service\PedidosService;
 use app\models\service\Service;
 use app\util\UtilService;
@@ -245,6 +246,8 @@ class HomepageController extends Controller
          $texto = "";
          $texto .= "Nr. Pedido: {$nrPedido}\n";
          $observacao = "";
+         $peqgde = new Pedidos();
+         $resultado = $peqgde->mamitexPeqGde($this->db);
          foreach ($carrinho as $item) {
             $id = $item['id'];
             if ($item['observacao'] !== '') {
@@ -255,7 +258,6 @@ class HomepageController extends Controller
             $source = array('.', ',');
             $replace = array('', '.');
             $produtos = Service::get("produtos", "id_produtos", $id);
-
             $pedidos = new \stdClass();
             $pedidos->id_pedidos = null;
             $pedidos->nr_pedido = $nrPedido;
@@ -284,6 +286,14 @@ class HomepageController extends Controller
             $get_valor = str_replace(',', '.', $get_valor);
 
             $pedidos->valor = (float) $get_valor;
+            if ($pedidos->nome == "Prato Dia") {
+               if ($pedidos->valor == $resultado["marmitex_pequeno"]) {
+                  $pedidos->nome = "Marmitex pequeno";
+               } else {
+                  $pedidos->nome = "Marmitex grande";
+               }
+            }
+
             $total_p = ++$produtos->venda;
             Flash::setForm($pedidos);
             PedidosService::salvar($pedidos, $this->campo, $this->tabela);
