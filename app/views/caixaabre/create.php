@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                                 <div class="rows">
-                                    <div class="col-12">
+                                    <div hidden class="col-12">
                                         <label>Retirada</label>
                                         <input id="retirada" name="retirada" value="<?php echo isset($caixaabre->retirada) ? moedaBr($caixaabre->retirada) : moedaBr(0) ?>" type="text" placeholder="Insira o valor da retirada" class="form-campo">
                                     </div>

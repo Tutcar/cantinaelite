@@ -8,7 +8,7 @@
     <?php if ($idAbre == 0) : ?>
         <p><?php $this->verMsg(); ?> </p>
     <?php elseif ($idAbre == 1) : ?>
-        <div class="thead"><i class="ico lista"></i> Valor inicial:<?php echo moedaBr($dataCx->entrada); ?> - Venda do dia:<?php echo moedaBr($dinheiro); ?> - Retirada:<?php echo moedaBr($dataCx->retirada); ?> - Caixa final:<?php echo moedaBr($idAbreValor + $dinheiro); ?></div>
+        <!-- <div class="thead"><i class="ico lista"></i> Valor inicial:<?php echo moedaBr($dataCx->entrada); ?> - Venda do dia:<?php echo moedaBr($dinheiro); ?> - Retirada:<?php echo moedaBr($dataCx->retirada); ?> - Caixa final:<?php echo moedaBr($idAbreValor + $dinheiro); ?></div> -->
     <?php endif; ?>
     <div class="base-lista">
         <div>

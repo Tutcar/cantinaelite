@@ -76,8 +76,11 @@
                                 <a title="Editar" href="<?php echo URL_BASE . "produtos/edit/" . $produtos->id_produtos ?>"><img
                                         style="width: 25px; height: 25px"
                                         src="<?php echo URL_IMAGEM . "editar.jpeg"; ?>"></a>
-                                <a title="Excluir" href="javascript:;" onclick="excluir(this)" data-entidade="produtos" data-id="<?php echo $produtos->id_produtos ?>"><img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>"></a>
-
+                                <?php if ($produtos->nome != "Marmitex pequeno" && $produtos->nome != "Marmitex grande") : ?>
+                                    <a title="Excluir" href="javascript:;" onclick="excluir(this)" data-entidade="produtos" data-id="<?php echo $produtos->id_produtos ?>">
+                                        <img style="width: 25px; height: 25px" src="<?php echo URL_IMAGEM . "excluir.png"; ?>">
+                                    </a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php } ?>

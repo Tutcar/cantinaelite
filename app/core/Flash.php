@@ -8,6 +8,55 @@ use PDOException;
 
 class Flash
 {
+    public static function calcularCredDeb($db)
+    {
+        try {
+            // Query para obter a soma de créditos e débitos agrupados pela descrição
+            $query = "
+                SELECT 
+                    c.descricao, 
+                    COALESCE(SUM(c.valor_credito), 0) AS total_credito, 
+                    COALESCE(SUM(c.valor_debito), 0) AS total_debito
+                FROM corrente c
+                LEFT JOIN cliente cl ON c.descricao = cl.nm_nome
+                WHERE cl.nm_nome IS NULL OR cl.limite = 0
+                GROUP BY c.descricao
+            ";
+
+            $stmt = $db->prepare($query);
+            $stmt->execute();
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Variáveis para armazenar os totais gerais
+            $soma_total_credito = 0;
+            $soma_total_debito = 0;
+
+            // Exibir os resultados por descrição
+            foreach ($resultados as $row) {
+                $saldo = $row['total_credito'] - $row['total_debito'];
+
+                // Acumular os totais gerais
+                $soma_total_credito += $row['total_credito'];
+                $soma_total_debito += $row['total_debito'];
+            }
+
+            // Calcular saldo geral
+            $saldo_geral = $soma_total_credito - $soma_total_debito;
+
+
+            return [
+                'detalhamento' => $resultados,
+                'total_credito' => $soma_total_credito,
+                'total_debito' => $soma_total_debito,
+                'saldo_geral' => $saldo_geral
+            ];
+        } catch (PDOException $e) {
+            echo "Erro: " . $e->getMessage();
+            return false;
+        }
+    }
+
+
     public static function calcularSemanaCiclica($data = 'today') //'today'
     {
         // Data inicial que corresponde ao início do ciclo de 5 semanas

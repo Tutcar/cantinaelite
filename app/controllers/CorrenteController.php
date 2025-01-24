@@ -31,6 +31,7 @@ class CorrenteController extends Controller
     }
     public function index()
     {
+
         $dados = array(
             'saldo' => "",
             'compenssar' => "",
@@ -73,6 +74,17 @@ class CorrenteController extends Controller
         $dados["saldo_total"] = Flash::saldoTotal($this->db);
         $dados["lista"] = Flash::limeteSaldos($this->db);
         $dados["view"]  = "corrente/limites";
+        $this->load("template", $dados);
+    }
+    public function creditosSaldos()
+    {
+        $totcrd = Flash::calcularCredDeb($this->db);
+        $dados["creditosSaldos"] =  $totcrd["detalhamento"];
+        $dados["total_credito"] =  $totcrd["total_credito"];
+        $dados["total_debito"] =  $totcrd["total_debito"];
+        $dados["saldo_geral"] =  $totcrd["saldo_geral"];
+
+        $dados["view"]  = "corrente/creditosSaldos";
         $this->load("template", $dados);
     }
     public function obterCorrentes($idCliente = null)

@@ -83,10 +83,10 @@ class ProdutosController extends Controller
         $produtos->custo = str_replace($source, $replace, $get_custo);
         $get_venda = $_POST["venda"];
         $produtos->venda = str_replace($source, $replace, $get_venda);
-        if ((int)$produtos->id_produtos === 154 || (int)$produtos->id_produtos === 155) {
+        if ($produtos->nome == "Marmitex pequeno" || $produtos->nome != "Marmitex grande") {
             if (isset($produtos->venda)) {
                 $pedidos = new Pedidos();
-                $pedidos->precosMarmitex($this->db, $produtos->id_produtos, $produtos->venda);
+                $pedidos->precosMarmitex($this->db, $produtos->nome, $produtos->venda);
             } else {
                 // Log ou tratamento de erro caso $produtos->venda não esteja definido
                 error_log("Erro: O campo 'venda' não está definido para o produto ID {$produtos->id_produtos}");

@@ -20,9 +20,9 @@ class Pedidos
     public function precosMarmitex($db, $id, $valor)
     {
         // Verifica qual campo deve ser atualizado
-        if ($id == 154) {
+        if ($id == "Marmitex pequeno") {
             $query = "UPDATE produtos SET venda = :valor WHERE  categorias = :categorias";
-        } elseif ($id == 155) {
+        } elseif ($id == "Marmitex grande") {
             $query = "UPDATE produtos SET venda_g = :valor WHERE  categorias = :categorias";
         } else {
             return false; // ID inválido, nenhuma atualização necessária
@@ -62,7 +62,7 @@ class Pedidos
             $stmt = $db->prepare($sql);
 
             // Parâmetros com valores definidos
-            $stmt->bindValue(':obs_cardapio', 'N', \PDO::PARAM_STR);
+            $stmt->bindValue(':obs_cardapio', '.', \PDO::PARAM_STR);
             $stmt->bindValue(':id_produto', '', \PDO::PARAM_STR);
 
             // Data atual
@@ -88,7 +88,8 @@ class Pedidos
                 FROM pedido 
                 WHERE obs_cardapio != :obs_cardapio 
                   AND data_ab_pedido = :data_ab_pedido 
-                  AND id_produto IS NOT NULL";
+                  AND id_produto IS NOT NULL
+                  ORDER BY cli_p";
 
             $stmt = $db->prepare($sql);
 

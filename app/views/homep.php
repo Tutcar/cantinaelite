@@ -39,6 +39,7 @@
                 <ul class="submenu">
                     <li><a href="<?php echo URL_BASE . "corrente/index/?id_corretora=1" ?>">Contas</a></li>
                     <li><a href="<?php echo URL_BASE . "corrente/limites" ?>">Limites</a></li>
+                    <li><a href="<?php echo URL_BASE . "corrente/creditosSaldos" ?>">Créditos</a></li>
                 </ul>
             </li>
             <li>
