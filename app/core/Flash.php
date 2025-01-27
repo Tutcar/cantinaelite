@@ -949,7 +949,7 @@ class Flash
     //Contador de visitas
     public static function contador($db)
     {
-        $current_date = date('Y-m-d');
+        $current_date = date('Y-m-d H:i:s');
         $user_ip = $_SERVER['REMOTE_ADDR'];
 
         try {

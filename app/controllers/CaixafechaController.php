@@ -232,7 +232,6 @@ class CaixafechaController extends Controller
                 $caixafecha->conferido = "N";
             }
         }
-
         $id = $_POST['id_caixaabre'];
         $caixafecha->id_caixaabre = $id;
         $dt = $_POST['data_fch_caixa'];
@@ -260,7 +259,11 @@ class CaixafechaController extends Controller
                         $_SESSION["verifCx"] =  Flash::maximo($this->db, "caixaabre", "fechado", "N");
                     }
                 }
-
+                //Excluir pedidos não pagos
+                $tabela = "pedido";
+                $campo = "pago";
+                $id = "N";
+                Service::excluir($tabela, $campo, $id);
                 $this->redirect(URL_BASE . "painel");
             }
         }

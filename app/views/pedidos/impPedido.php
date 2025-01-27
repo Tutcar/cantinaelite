@@ -8,7 +8,8 @@
         <div>
             <div class="text-end d-flex">
                 &nbsp;&nbsp;&nbsp;<a data-element="#minhaDiv" href="" class="d-inline-block mb-2 btn-toggle"><i aria-hidden="true"></i> <img style="width: 35px; height: 35px" src="<?php echo URL_IMAGEM . "filtrar.jpeg"; ?>"></a>
-                &nbsp;&nbsp;&nbsp;<a href="<?php echo URL_BASE . "Compromisso/pedidosDia" ?>"><img style="width: 40px; height: 30px"
+                &nbsp;&nbsp;&nbsp;
+                <a href="<?php echo URL_BASE . "Compromisso/pedidosDia" ?>"><img style="width: 40px; height: 30px"
                         src="<?php echo URL_IMAGEM . "voltar.png"; ?>"></a>
             </div>
         </div>
