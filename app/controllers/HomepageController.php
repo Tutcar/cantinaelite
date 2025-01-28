@@ -65,6 +65,7 @@ class HomepageController extends Controller
             $dados["saldoAluno"] = 0;
          };
       }
+      $_SESSION['CLIENTE']->id_cliente;
       $produtos  = Flash::restricaoAluno($this->db, $_SESSION['CLIENTE']->id_cliente);
       $dados["carrinho"] = isset($_SESSION['carrinho']) ? $_SESSION['carrinho'] : [];
       $categoria = "salgados";

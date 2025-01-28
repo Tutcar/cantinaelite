@@ -51,12 +51,6 @@
                     <li><a href="<?php echo URL_BASE . "Balanco/index" ?>">Balanço</a></li>
                 </ul>
             </li>
-            <li>
-                <div class="link"><i class="fa fa-database"></i>Home<i class="fa fa-chevron-down"></i></div>
-                <ul class="submenu">
-                    <li><a href="<?php echo URL_BASE ?>">Home Page</a></li>
-                </ul>
-            </li>
         </ul>
 
     </div>

@@ -2,7 +2,7 @@
     var coluOr = 0;
 </script>
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Limites <?php echo moedaBr($saldo_total->saldo_total); ?></div>
+    <div class="thead"><i class="ico lista"></i> Limites: <?php echo moedaBr($saldo_total->total_limite); ?> Créditos: <?php echo moedaBr($saldo_total->total_credito); ?> Débitos: <?php echo moedaBr($saldo_total->total_credito + $saldo_total->total_limite - $saldo_total->saldo_total); ?> Saldo:<?php echo moedaBr($saldo_total->saldo_total); ?> Devendo: <?php echo moedaBr($saldo_total->total_limite - $saldo_total->saldo_total); ?></div>
     <div class="base-lista">
 
         <div>

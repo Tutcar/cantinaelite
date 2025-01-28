@@ -3,7 +3,7 @@
 </script>
 
 <section class="caixa">
-    <div class="thead"><i class="ico lista"></i> Marmitex: pequeno <?php echo ($marmitexsContar["total_pequeno"] > 0) ? $marmitexsContar["total_pequeno"] : 0; ?> grande <?php echo ($marmitexsContar["total_grande"] > 0) ? $marmitexsContar["total_grande"] : 0; ?> Valor: <?php echo ($marmitexsContar["soma_total"] > 0) ? moedaBr($marmitexsContar["soma_total"]) : moedaBr(0); ?><?php echo " - " . databr(hoje()); ?></div>
+    <div class="thead"><i class="ico lista"></i> Marmitex: pequeno <?php echo ($marmitexsContar["total_pequeno"] > 0) ? $marmitexsContar["total_pequeno"] : 0; ?> grande <?php echo ($marmitexsContar["total_grande"] > 0) ? $marmitexsContar["total_grande"] : 0; ?> <?php echo " - " . databr(hoje()); ?></div>
     <div class="base-lista">
         <div class="rows">
             <div class="text-end d-flex col-12">

@@ -344,15 +344,19 @@ class Flash
     public static function saldoTotal($db)
     {
         try {
-            // Consulta SQL revisada para calcular o saldo total, evitando duplicidade nos valores
+            // Consulta SQL revisada para calcular o saldo total, total de créditos e total do limite
             $sql = "
             SELECT 
-                SUM(saldo_cliente) AS saldo_total
+                SUM(saldo_cliente) AS saldo_total,
+                SUM(total_credito) AS total_credito,
+                SUM(total_limite) AS total_limite
             FROM (
                 SELECT 
                     cl.limite + 
                     IFNULL(creditos.total_credito, 0) - 
-                    IFNULL(debitos.total_debito, 0) AS saldo_cliente
+                    IFNULL(debitos.total_debito, 0) AS saldo_cliente,
+                    IFNULL(creditos.total_credito, 0) AS total_credito,
+                    cl.limite AS total_limite
                 FROM 
                     cliente cl
                 LEFT JOIN (
@@ -378,7 +382,7 @@ class Flash
                 GROUP BY 
                     cl.nm_nome, cl.limite
             ) AS subconsulta;
-        ";
+            ";
 
             // Preparar a consulta
             $stmt = $db->prepare($sql);
@@ -386,13 +390,15 @@ class Flash
             // Executar a consulta
             $stmt->execute();
 
-            // Retornar o resultado (saldo total)
+            // Retornar o resultado (saldo total, total de créditos e total do limite)
             return $stmt->fetch(\PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
             // Lançar exceção com mensagem de erro
             throw new \Exception('Erro ao buscar o saldo total: ' . $e->getMessage());
         }
     }
+
+
 
 
 
